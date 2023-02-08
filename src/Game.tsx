@@ -1,5 +1,6 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import GameBoard from './components/GameBoard';
+import Dice from './components/Dice';
 
 interface board {
     players: any,
@@ -35,8 +36,8 @@ const Game = () => {
         name: string,
         location: number,
         turnOrder: number,
-        dice1: number, 
-        dice2: number, 
+        dice1: {number: number, hasRolled: boolean}, 
+        dice2: {number: number, hasRolled: boolean}, 
         money: number, 
         cards: [], 
         owned: []
@@ -56,7 +57,16 @@ const Game = () => {
     const populatePlayers = () => {
         const players = []
         for(let i = 1; i <= 4; i++) {
-            const newPlayer = createPlayer(`player ${i}`, 1, i, 0, 0, 1000, [], []);
+            const newPlayer = createPlayer(
+                `player ${i}`,
+                1,
+                i, 
+                {number: 1, hasRolled: false}, 
+                {number: 1, hasRolled: false}, 
+                1000, 
+                [], 
+                []
+            );
             players.push(newPlayer);
         } 
         return players;
@@ -66,19 +76,25 @@ const Game = () => {
         {
             players: populatePlayers(),
             round: 1,
-            turn: '/*players name*/',
+            turn: 'player 1',
             squares: populateSquares(),
             chance: [],
             prize: [],
         }
     );
 
+    const choosePlayer = () => {
+        return gameBoard.players[0];
+    }
+
+    const [localPlayer, setLocalPlayer] = useState<any>(choosePlayer())
+
     const [playerTemplate, setPlayerTemplate] = useState<object>(
         {
             name: '',
             location: 1,
             turnOrder: 1,
-            dice1: 6,
+            dice1: {number: 6, hasRolled: false},
             dice2: 6,
             money: 0,
             cards: [],
@@ -100,9 +116,55 @@ const Game = () => {
         console.log(gameBoard);
     }, [loading]);
 
+    const syncPlayer = (user: {turnOrder: number}) => {
+        const board = {...gameBoard};
+        const players = [...gameBoard.players];
+        switch(user.turnOrder) {
+            case 1: 
+                players[0] = user
+                break;
+            case 2:
+                players[1] = user
+                break;
+            case 3:
+                players[2] = user
+                break;
+            case 4: 
+                players[3] = user
+                break;
+        }
+        board.players = players;
+        setGameBoard(board);
+    }
+
+    const moveSpaces = (rolledNum: number, user:{location: number}) => {
+        user.location += rolledNum;
+        return user;
+    }
+
+    const rollDice = (diceNum: number) => {
+        if(gameBoard.turn !== localPlayer.name) return;
+        const ran = Math.ceil(Math.random() * 6);
+        let user = {...localPlayer};
+        if(user.dice1.hasRolled && diceNum === 1) return;
+        if(user.dice2.hasRolled && diceNum === 2) return; 
+        if(diceNum === 1) {
+            user.dice1.number = ran
+            user.dice1.hasRolled = true;
+        } else {
+            user.dice2.number = ran;
+            user.dice2.hasRolled = true;
+        }
+        user = moveSpaces(ran, user)
+        setLocalPlayer(user);
+        syncPlayer(user);
+    }
+
     return(
         <div className="game-screen" >
-            {!loading && <GameBoard gameBoard={gameBoard} />}
+            {<GameBoard gameBoard={gameBoard} />}
+            {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
+            {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
             <button onClick={() => {
                 const abc = {...gameBoard};
                 const cba = [...abc.players];

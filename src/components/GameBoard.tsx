@@ -19,12 +19,16 @@ const GameBoard = ( {gameBoard}: Props ) => {
     }
 
     useEffect(() => {
+        console.log("ha")
+    }, [gameBoard]);
+
+    useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
     }, [loading]);
 
     return(
         <div id="game-board">
-            {!loading ? mapSquares() : undefined}
+            {mapSquares()}
         </div>
     )
 }
