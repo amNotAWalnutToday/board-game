@@ -34,7 +34,7 @@ const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
     }
 
     return (
-        <div className="square">
+        <div className={`square square-${index}`}>
             <div className="players">
                 {mapPlayers()}
             </div>

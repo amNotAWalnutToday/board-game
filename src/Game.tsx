@@ -313,8 +313,10 @@ const Game = () => {
     return(
         <div className="game-screen" >
             {<GameBoard gameBoard={gameBoard} localPlayer={localPlayer} changeTurn={changeTurn} />}
-            {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
-            {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
+            <div className="dice-holder">
+                {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
+                {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
+            </div>
             {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}
         </div>
     )
