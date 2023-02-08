@@ -1,9 +1,9 @@
-const Player = () => {
-    return (
-        <div>
-            <div className="player"></div>
-        </div>
-    )
+type Props = {
+    index: number;
+}
+
+const Player = ({index}: Props) => {
+    return <div className="player">{index}</div>
 }
 
 export default Player;

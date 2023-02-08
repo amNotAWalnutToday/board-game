@@ -11,23 +11,63 @@ interface board {
     prize: [],
 }
 
+type Player = {
+    name: string,
+    location: number,
+    turnOrder: number,
+    dice1: number,
+    dice2: number,
+    money: number,
+    cards: [],
+    prize: [],
+}
+
 const Game = () => {
     const [loading, setLoading] = useState(true);
 
     const createSquare = (
         name:string, 
         number:number,
-        ownedBy:string, 
-        properties:number,
+        ownedBy:string | null = null, 
+        properties:number = 0,
+        cost: number = 0,
     ) => {
-        return { name, number, ownedBy, properties };
+        return { name, number, ownedBy, properties, cost };
+    }
+
+    const checkExceptions = (num: number) => {
+        const exceptions = [
+            num === 1,
+            num === 11,
+            num === 21,
+            num === 31,
+        ];
+        if(exceptions.some(Boolean)) return true;
+        else return false;
+    }
+
+    const populateExceptionSquares = (num: number) => {
+        const squares = [
+            createSquare('go', 1),
+            createSquare('jail', 11),
+            createSquare('free parking', 21),
+            createSquare('go to jail', 31),
+        ];
+        for(let i = 0; i < squares.length; i++) {
+            if(squares[i].number === num) return squares[i];
+        } 
     }
 
     const populateSquares = () => {
         const squares = [];
         for(let i = 1; i <= 40; i++) {
-            const square = createSquare('', i, 'market', 0);
-            squares.push(square);
+            if(!checkExceptions(i)){
+                const square = createSquare('', i, 'market', 0, 200);
+                squares.push(square);
+            } else {
+                const exceptionSquare = populateExceptionSquares(i);
+                squares.push(exceptionSquare);
+            }
         }
         return squares;
     }
@@ -106,7 +146,8 @@ const Game = () => {
             name: 'go',
             number: 1,
             ownedBy: 'none',
-            properties: 0
+            properties: 0,
+            cost: 0,
         }
     )
 
@@ -116,7 +157,7 @@ const Game = () => {
         console.log(gameBoard);
     }, [loading]);
 
-    const syncPlayer = (user: {turnOrder: number}) => {
+    const syncPlayer = (user: Player) => {
         const board = {...gameBoard};
         const players = [...gameBoard.players];
         switch(user.turnOrder) {
@@ -137,10 +178,11 @@ const Game = () => {
         setGameBoard(board);
     }
 
-    const moveSpaces = (rolledNum: number, user:{location: number}) => {
+    const moveSpaces = (rolledNum: number, user: Player) => {
         if(user.location + rolledNum > 40) {
             const difference = 40 - (user.location + rolledNum);
             user.location = 0 - difference;
+            user.money += 200;
         } else {
             user.location += rolledNum;
         }
@@ -163,7 +205,12 @@ const Game = () => {
         user = moveSpaces(ran, user)
         setLocalPlayer(user);
         syncPlayer(user);
+        console.log('money', user.money);
     }
+
+    const locationEventController = () => {
+
+    } 
 
     return(
         <div className="game-screen" >
@@ -182,3 +229,9 @@ const Game = () => {
 }
 
 export default Game;
+
+// next step => specify squares
+// square types => irregular { go, jail, free, go to jail }
+//                 card spots { community, chance }
+//                 normal { properties }
+//                 normal { stations }

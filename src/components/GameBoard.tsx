@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Player from './Player';
 import Square from './Square';
 
 type Props = {

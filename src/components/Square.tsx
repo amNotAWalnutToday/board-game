@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-type Player = {
-    [index: number]: {
-        name: string,
-        location: number,
-        turnOrder: number,
-        dice1: number,
-        dice2: number,
-        money: number,
-        cards: [],
-        prize: [],
-    }
-}
+import Player from './Player';
 
 type Props = {
     players: any,
@@ -37,7 +25,7 @@ const Square = ({players, square, index}: Props) => {
         return currentPlayers.map((item:any, i:number) => {
             return(
                 <div key={i}>
-                    <p>{item.name}</p>
+                    <Player index={currentPlayers[i].turnOrder} />
                 </div>
             )
         });
@@ -45,8 +33,14 @@ const Square = ({players, square, index}: Props) => {
 
     return (
         <div className="square">
-            {mapPlayers()}
+            <div className="players">
+                {mapPlayers()}
+            </div>
+            <div>
+                {square.name}
+            </div>
             {square.ownedBy}
+            {`£${square.cost} `}
             {index + 1}
         </div>
     )
