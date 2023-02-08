@@ -138,7 +138,12 @@ const Game = () => {
     }
 
     const moveSpaces = (rolledNum: number, user:{location: number}) => {
-        user.location += rolledNum;
+        if(user.location + rolledNum > 40) {
+            const difference = 40 - (user.location + rolledNum);
+            user.location = 0 - difference;
+        } else {
+            user.location += rolledNum;
+        }
         return user;
     }
 
@@ -146,8 +151,8 @@ const Game = () => {
         if(gameBoard.turn !== localPlayer.name) return;
         const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
-        if(user.dice1.hasRolled && diceNum === 1) return;
-        if(user.dice2.hasRolled && diceNum === 2) return; 
+        //if(user.dice1.hasRolled && diceNum === 1) return;
+        //if(user.dice2.hasRolled && diceNum === 2) return; 
         if(diceNum === 1) {
             user.dice1.number = ran
             user.dice1.hasRolled = true;

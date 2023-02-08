@@ -19,10 +19,6 @@ const GameBoard = ( {gameBoard}: Props ) => {
     }
 
     useEffect(() => {
-        console.log("ha")
-    }, [gameBoard]);
-
-    useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
     }, [loading]);
 
