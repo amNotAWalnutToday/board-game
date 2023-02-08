@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Dice from './components/Dice';
+import BuyPrompt from './components/BuyPrompt';
 
 interface board {
     players: any,
@@ -24,6 +25,7 @@ type Player = {
 
 const Game = () => {
     const [loading, setLoading] = useState(true);
+    const [canBuy, setCanBuy] = useState(false);
 
     const createSquare = (
         name:string, 
@@ -70,6 +72,14 @@ const Game = () => {
             }
         }
         return squares;
+    }
+
+    const getSquare = (user: Player):{cost: number, ownedBy: string} => {
+        let result = {cost: 100 * 100, ownedBy: ''};
+        gameBoard.squares.forEach((square: any) => {
+            if(square.number === user.location) result = square
+        })
+        return result;
     }
 
     const createPlayer = (
@@ -203,13 +213,47 @@ const Game = () => {
             user.dice2.hasRolled = true;
         }
         user = moveSpaces(ran, user)
+        locationEventController(user);
         setLocalPlayer(user);
         syncPlayer(user);
-        console.log('money', user.money);
     }
 
-    const locationEventController = () => {
+    const closeBuyPrompt = () => setCanBuy(false);
 
+    const locationEventBuy = () => {
+        const user = {...localPlayer};
+        const square = getSquare(user);
+        if(localPlayer.money > square.cost) {
+            square.ownedBy = localPlayer.name;
+            user.money -= square.cost;
+        }
+        setLocalPlayer(user);
+        syncPlayer(user);
+        closeBuyPrompt();
+        console.log(gameBoard);
+        console.log(user.money)
+        return square;
+    }
+
+    const locationEventMerch = (user: Player) => {
+        const square = getSquare(user);
+        console.log(square);
+        console.log(localPlayer);
+        if(square.ownedBy !== 'market') return;
+        setCanBuy(true);
+    }
+
+    const locationEventController = (user: Player) => {
+        const exceptions = [
+            user.location === 1,
+            user.location === 11,
+            user.location === 21,
+            user.location === 31,
+        ]
+        if(exceptions.some(Boolean)) return;
+        else {
+            locationEventMerch(user)
+        }
     } 
 
     return(
@@ -217,6 +261,7 @@ const Game = () => {
             {<GameBoard gameBoard={gameBoard} />}
             {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
             {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
+            {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}
             <button onClick={() => {
                 const abc = {...gameBoard};
                 const cba = [...abc.players];
