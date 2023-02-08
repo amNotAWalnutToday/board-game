@@ -31,7 +31,7 @@
   gap: 0.1rem;
   padding: 0.1rem;
   margin-top: 1rem;
-  background: linear-gradient(goldenrod, gold);
+  background-color: darkcyan;
   box-shadow: 0px 0px 5px 5px black;
 }
 
@@ -262,9 +262,61 @@
 }
 
 .square {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 0 0 0; 
   background: linear-gradient(#000000, #444444);
   color: white;
+  text-align: center;
+  box-shadow: 0px 0px 2px 2px brown;
 }
+
+.brown,
+.cyan,
+.pink,
+.orange,
+.red,
+.yellow,
+.green,
+.navy {
+  width: 100%;
+  height: 10px;
+}
+
+.brown {
+  background-color: brown;
+}
+
+.cyan {
+  background-color: cyan;
+}
+
+.pink {
+  background-color: pink;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+}
+
+.navy {
+  background-color: navy;
+}
+
 
 .player {
   display: flex;

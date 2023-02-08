@@ -44,9 +44,9 @@ const Game = () => {
         properties:number = 0,
         cost: number = 0,
         rent: number[] = [100, 200, 300, 400, 500],
-        group: string | null = null,
+        group: string | null = 'navy',
     ) => {
-        return { name, number, ownedBy, properties, cost, rent };
+        return { name, number, ownedBy, properties, cost, rent, group };
     }
 
     const checkExceptions = (num: number) => {
@@ -201,6 +201,7 @@ const Game = () => {
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         if(gameBoard.squares.length < 40) populateSquares();
+        console.log(gameBoard.squares)
     }, [loading]);
 
     const syncPlayer = (user: Player) => {

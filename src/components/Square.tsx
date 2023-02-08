@@ -35,14 +35,14 @@ const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
 
     return (
         <div className={`square square-${index}`}>
+            <p>{square.name}</p>
             <div className="players">
                 {mapPlayers()}
             </div>
-            <div>
-                {square.name}
+            <p>{square.cost > 0 ? `£${square.cost} ` : ' '}</p>
+            <div className={square.group} >
+
             </div>
-            {square.ownedBy}
-            {`£${square.cost} `}
         </div>
     )
 }
