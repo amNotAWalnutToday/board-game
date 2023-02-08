@@ -72,7 +72,7 @@ const Game = () => {
         const squares = [];
         for(let i = 1; i <= 40; i++) {
             if(!checkExceptions(i)){
-                const square = createSquare(`square ${i}`, i, 'market', 0, 200);
+                const square = createSquare(`square ${i}`, i, 'player 1', 0, 200);
                 squares.push(square);
             } else {
                 const exceptionSquare = populateExceptionSquares(i);
@@ -164,7 +164,6 @@ const Game = () => {
         board.turn = currentTurn.name;
         setLocalPlayer(currentTurn);
         setGameBoard(board);
-        console.log(currentTurn);
     }
 
     const choosePlayer = () => {
@@ -198,7 +197,6 @@ const Game = () => {
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         if(gameBoard.squares.length < 40) populateSquares();
-        console.log(gameBoard);
     }, [loading]);
 
     const syncPlayer = (user: Player) => {
@@ -254,6 +252,20 @@ const Game = () => {
 
     const closeBuyPrompt = () => setCanBuy(false);
 
+    const locationEventPayRent = (user: Player, square: Square) => {
+        const board = {...gameBoard};
+        const players = [...board.players];
+        players.forEach((player: Player) => {
+            if(player.name === square.ownedBy) {
+                player.money += square.cost
+            }
+        });
+        user.money -= square.cost;
+        setLocalPlayer(user);
+        syncPlayer(user);
+        setGameBoard(board);
+    }
+
     const locationEventBuy = () => {
         const user = {...localPlayer};
         const square = getSquare(user);
@@ -263,7 +275,6 @@ const Game = () => {
             user.money -= square.cost;
             user.owned.push(square.name);
         }
-        console.log(user);
         setLocalPlayer(user);
         syncPlayer(user);
         closeBuyPrompt();
@@ -272,11 +283,15 @@ const Game = () => {
 
     const locationEventMerch = (user: Player) => {
         const square = getSquare(user);
-        if(!square) return;
-        if(square.ownedBy !== 'market'
-        || !localPlayer.dice1.hasRolled
+
+        if(!square 
+        || !localPlayer.dice1.hasRolled 
         || !localPlayer.dice2.hasRolled) return;
-        setCanBuy(true);
+
+        if(square.ownedBy !== 'market' 
+        && square.ownedBy !== user.name) locationEventPayRent(user, square);
+
+        else setCanBuy(true);
     }
 
     const locationEventController = (user: Player) => {
@@ -316,3 +331,5 @@ export default Game;
 //                 card spots { community, chance }
 //                 normal { properties } <= current
 //                 normal { stations }
+//
+// don't pay yourself;
