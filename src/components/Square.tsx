@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Player from './Player';
 
 type Props = {
+    localPlayer: any,
     players: any,
     square: any,
     index: number,
 }
 
-const Square = ({players, square, index}: Props) => {
+const Square = ({localPlayer, players, square, index}: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
 
     useEffect(() => {
@@ -25,7 +26,7 @@ const Square = ({players, square, index}: Props) => {
         return currentPlayers.map((item:any, i:number) => {
             return(
                 <div key={i}>
-                    <Player index={currentPlayers[i].turnOrder} />
+                    <Player  localPlayer={localPlayer} player={item} index={currentPlayers[i].turnOrder} />
                 </div>
             )
         });

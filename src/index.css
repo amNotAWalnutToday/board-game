@@ -62,6 +62,15 @@
   box-shadow: 1px -1px 5px 1px white;
 }
 
+.player-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #ffffff99;
+  width: 300px;
+  height: 500px;
+}
+
 a {
   padding: 5rem;
   background-color: black;

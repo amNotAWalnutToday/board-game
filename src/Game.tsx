@@ -12,7 +12,7 @@ interface board {
     prize: [],
 }
 
-type Player = {
+export type Player = {
     name: string,
     location: number,
     turnOrder: number,
@@ -20,7 +20,7 @@ type Player = {
     dice2: number,
     money: number,
     cards: [],
-    prize: [],
+    owned: [],
 }
 
 const Game = () => {
@@ -258,7 +258,7 @@ const Game = () => {
 
     return(
         <div className="game-screen" >
-            {<GameBoard gameBoard={gameBoard} />}
+            {<GameBoard gameBoard={gameBoard} localPlayer={localPlayer} />}
             {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
             {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
             {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}
@@ -278,5 +278,5 @@ export default Game;
 // next step => specify squares
 // square types => irregular { go, jail, free, go to jail }
 //                 card spots { community, chance }
-//                 normal { properties }
+//                 normal { properties } <= current
 //                 normal { stations }
