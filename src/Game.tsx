@@ -27,8 +27,10 @@ export type Square = {
     name:string, 
     number:number,
     ownedBy:string | null, 
-    properties:number,
+    properties: 0|1|2|3|4,
     cost: number,
+    rent: number[],
+    group: 'brown'|'cyan'|'pink'|'orange'|'red'|'yellow'|'green'|'navy'|null,
 }
 
 const Game = () => {
@@ -41,8 +43,10 @@ const Game = () => {
         ownedBy:string | null = null, 
         properties:number = 0,
         cost: number = 0,
+        rent: number[] = [100, 200, 300, 400, 500],
+        group: string | null = null,
     ) => {
-        return { name, number, ownedBy, properties, cost };
+        return { name, number, ownedBy, properties, cost, rent };
     }
 
     const checkExceptions = (num: number) => {
@@ -72,7 +76,7 @@ const Game = () => {
         const squares = [];
         for(let i = 1; i <= 40; i++) {
             if(!checkExceptions(i)){
-                const square = createSquare(`square ${i}`, i, 'player 1', 0, 200);
+                const square = createSquare(`square ${i}`, i, 'market', 0, 200);
                 squares.push(square);
             } else {
                 const exceptionSquare = populateExceptionSquares(i);
@@ -257,10 +261,10 @@ const Game = () => {
         const players = [...board.players];
         players.forEach((player: Player) => {
             if(player.name === square.ownedBy) {
-                player.money += square.cost
+                player.money += square.rent[square.properties];
             }
         });
-        user.money -= square.cost;
+        user.money -= square.rent[square.properties];
         setLocalPlayer(user);
         syncPlayer(user);
         setGameBoard(board);
@@ -290,10 +294,9 @@ const Game = () => {
 
         if(square.ownedBy !== 'market' 
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
-
-        else setCanBuy(true);
+        else if(square.ownedBy !== user.name)setCanBuy(true);
     }
-
+    
     const locationEventController = (user: Player) => {
         const exceptions = [
             user.location === 1,
@@ -313,13 +316,6 @@ const Game = () => {
             {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
             {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
             {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}
-            <button onClick={() => {
-                const abc = {...gameBoard};
-                const cba = [...abc.players];
-                cba[0].location+=1;
-                abc.players = cba;
-                setGameBoard(abc);
-            }} >gooooooooo</button>
         </div>
     )
 }
@@ -327,9 +323,8 @@ const Game = () => {
 export default Game;
 
 // next step => specify squares
-// square types => irregular { go, jail, free, go to jail }
+// square types => irregular { go, jail, free, go to jail } <= current
 //                 card spots { community, chance }
-//                 normal { properties } <= current
+//                 normal { properties } 
 //                 normal { stations }
 //
-// don't pay yourself;
