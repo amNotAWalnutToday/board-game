@@ -102,7 +102,7 @@ const Game = () => {
             createSquare('kent road', 2, 'market', 0, 200, [1,2,3,4,5], 'brown'),
             createSquare('chest', 3, 'market', 0, 0),
             createSquare('white chapel road', 4, 'market', 0, 200, [1,2,3,4,5], 'brown'),
-            createSquare('income tax £200', 5),
+            createSquare('income tax £200', 5, 'free parking'),
             createSquare('king cross station', 6, 'market', 0, 200, [1,2,3,4,5]),
             createSquare('angel islington', 7, 'market', 0, 200, [1,2,3,4,5], 'cyan'),
             createSquare('chance', 8),
@@ -136,7 +136,7 @@ const Game = () => {
             createSquare('liverpool station', 36, 'market', 0, 200, [1,2,3,4,5]),
             createSquare('chance', 37),
             createSquare('park lane', 38, 'market', 0, 200, [1,2,3,4,5], 'navy'),
-            createSquare('super tax £100', 39),
+            createSquare('super tax £100', 39, 'free parking'),
             createSquare('mayfair', 40, 'market', 0, 200, [1,2,3,4,5], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
@@ -310,7 +310,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 6);
+        const ran = Math.ceil(Math.random() * 1);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -329,15 +329,41 @@ const Game = () => {
 
     const closeBuyPrompt = () => setCanBuy(false);
 
-    const locationEventPayRent = (user: Player, square: Square) => {
-        const board = {...gameBoard};
-        const players = [...board.players];
-        players.forEach((player: Player) => {
-            if(player.name === square.ownedBy) {
-                player.money += square.rent[square.properties];
+    const locationEventFreeParking = (user: Player) => {
+        const square = getSquare(user);
+        if(!square) return;
+        user.money += square.cost;
+        square.cost = 0;
+        setLocalPlayer(user);
+    }
+
+    const locationEventPayTax = (user:Player, board:board) => {
+        board.squares.forEach((square: Square) => {
+            if(square.number === 21 && user.location === 39) {
+                square.cost += 100;
+                user.money -= 100;
+            } else if(square.number === 21 && user.location === 5) {
+                square.cost += 200;
+                user.money -= 200;
             }
         });
-        user.money -= square.rent[square.properties];
+        setLocalPlayer(user);
+        console.log(board);
+        return board;
+    }
+
+    const locationEventPayRent = (user: Player, square: Square) => {
+        let board = {...gameBoard};
+        const players = [...board.players];
+        if(square.number === 39 || square.number === 5) board = locationEventPayTax(user, board);
+        else {
+            players.forEach((player: Player) => {
+                if(player.name === square.ownedBy) {
+                    player.money += square.rent[square.properties];
+                }
+            });
+            user.money -= square.rent[square.properties];
+        }
         setLocalPlayer(user);
         syncPlayer(user);
         setGameBoard(board);
@@ -368,7 +394,11 @@ const Game = () => {
         if(square.ownedBy !== 'market'
         && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
-        else if(square.ownedBy !== user.name)setCanBuy(true);
+        else if(square.ownedBy !== user.name && square.cost)setCanBuy(true);
+    }
+
+    const locationEventSpecial = (user: Player) => {
+        if(user.location === 21) return locationEventFreeParking(user);
     }
     
     const locationEventController = (user: Player) => {
@@ -378,7 +408,7 @@ const Game = () => {
             user.location === 21,
             user.location === 31,
         ]
-        if(exceptions.some(Boolean)) return;
+        if(exceptions.some(Boolean)) return locationEventSpecial(user);
         else {
             locationEventMerch(user)
         }
