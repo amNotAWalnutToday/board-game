@@ -4,6 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 
 .title-menu {
@@ -319,6 +320,7 @@
 
 
 .player {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,6 +330,18 @@
   background-color: black;
   color: wheat;
   box-shadow: 1px -1px 5px 1px white;
+}
+
+.player-1 {
+  transform: translateX(-30px);
+}
+
+.player-2 {
+  transform: translateY(-30px);
+}
+
+.player-3 {
+  transform: translate(-30px, -30px);
 }
 
 .player-overlay {

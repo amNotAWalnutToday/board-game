@@ -11,7 +11,7 @@ type Props = {
 const Player = ({localPlayer, index, player, changeTurn}: Props) => {
     return (
         <>
-            <div className="player">
+            <div className={`player player-${player.turnOrder}`}>
                 {index}
             </div>
             {

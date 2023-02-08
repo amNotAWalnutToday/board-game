@@ -44,7 +44,7 @@ const Game = () => {
         properties:number = 0,
         cost: number = 0,
         rent: number[] = [100, 200, 300, 400, 500],
-        group: string | null = 'navy',
+        group: string | null = null,
     ) => {
         return { name, number, ownedBy, properties, cost, rent, group };
     }
@@ -52,9 +52,45 @@ const Game = () => {
     const checkExceptions = (num: number) => {
         const exceptions = [
             num === 1,
+            num === 2,
+            num === 3,
+            num === 4,
+            num === 5,
+            num === 6,
+            num === 7,
+            num === 8,
+            num === 9,
+            num === 10,
             num === 11,
+            num === 12,
+            num === 13,
+            num === 14,
+            num === 15,
+            num === 16,
+            num === 17,
+            num === 18,
+            num === 19,
+            num === 20,
             num === 21,
+            num === 22,
+            num === 23,
+            num === 24,
+            num === 25,
+            num === 26,
+            num === 27,
+            num === 28,
+            num === 29,
+            num === 30,
             num === 31,
+            num === 32,
+            num === 33,
+            num === 34,
+            num === 35,
+            num === 36,
+            num === 37,
+            num === 38,
+            num === 39,
+            num === 40,
         ];
         if(exceptions.some(Boolean)) return true;
         else return false;
@@ -63,9 +99,45 @@ const Game = () => {
     const populateExceptionSquares = (num: number) => {
         const squares = [
             createSquare('go', 1),
+            createSquare('kent road', 2, 'market', 0, 200, [1,2,3,4,5], 'brown'),
+            createSquare('chest', 3, 'market', 0, 0),
+            createSquare('white chapel road', 4, 'market', 0, 200, [1,2,3,4,5], 'brown'),
+            createSquare('income tax £200', 5),
+            createSquare('king cross station', 6, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('angel islington', 7, 'market', 0, 200, [1,2,3,4,5], 'cyan'),
+            createSquare('chance', 8),
+            createSquare('euston road', 9, 'market', 0, 200, [1,2,3,4,5], 'cyan'),
+            createSquare('penton ville road', 10, 'market', 0, 200, [1,2,3,4,5], 'cyan'),
             createSquare('jail', 11),
+            createSquare('pall mall', 12, 'market', 0, 200, [1,2,3,4,5], 'pink'),
+            createSquare('electric company', 13, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('whitehall', 14, 'market', 0, 200, [1,2,3,4,5], 'pink'),
+            createSquare('umberland avenue', 15, 'market', 0, 200, [1,2,3,4,5], 'pink'),
+            createSquare('marylbone station', 16, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('bow street', 17, 'market', 0, 200, [1,2,3,4,5], 'orange'),
+            createSquare('chest', 18),
+            createSquare('borough street', 19, 'market', 0, 200, [1,2,3,4,5], 'orange'),
+            createSquare('vine street', 20, 'market', 0, 200, [1,2,3,4,5], 'orange'),
             createSquare('free parking', 21),
+            createSquare('strand', 22, 'market', 0, 200, [1,2,3,4,5], 'red'),
+            createSquare('chance', 23),
+            createSquare('fleet street', 24, 'market', 0, 200, [1,2,3,4,5], 'red'),
+            createSquare('trafalgar square', 25, 'market', 0, 200, [1,2,3,4,5], 'red'),
+            createSquare('fenchurch station', 26, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('leicester square', 27, 'market', 0, 200, [1,2,3,4,5], 'yellow'),
+            createSquare('coventry street', 28, 'market', 0, 200, [1,2,3,4,5], 'yellow'),
+            createSquare('water works', 29, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('piccadilly', 30, 'market', 0, 200, [1,2,3,4,5], 'yellow'),
             createSquare('go to jail', 31),
+            createSquare('regent street', 32, 'market', 0, 200, [1,2,3,4,5], 'green'),
+            createSquare('oxford street', 33, 'market', 0, 200, [1,2,3,4,5], 'green'),
+            createSquare('chest', 34),
+            createSquare('bond street', 35, 'market', 0, 200, [1,2,3,4,5], 'green'),
+            createSquare('liverpool station', 36, 'market', 0, 200, [1,2,3,4,5]),
+            createSquare('chance', 37),
+            createSquare('park lane', 38, 'market', 0, 200, [1,2,3,4,5], 'navy'),
+            createSquare('super tax £100', 39),
+            createSquare('mayfair', 40, 'market', 0, 200, [1,2,3,4,5], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
             if(squares[i].number === num) return squares[i];
@@ -293,7 +365,8 @@ const Game = () => {
         || !localPlayer.dice1.hasRolled 
         || !localPlayer.dice2.hasRolled) return;
 
-        if(square.ownedBy !== 'market' 
+        if(square.ownedBy !== 'market'
+        && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
         else if(square.ownedBy !== user.name)setCanBuy(true);
     }
