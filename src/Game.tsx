@@ -23,6 +23,14 @@ export type Player = {
     owned: [],
 }
 
+export type Square = {
+    name:string, 
+    number:number,
+    ownedBy:string | null, 
+    properties:number,
+    cost: number,
+}
+
 const Game = () => {
     const [loading, setLoading] = useState(true);
     const [canBuy, setCanBuy] = useState(false);
@@ -64,7 +72,7 @@ const Game = () => {
         const squares = [];
         for(let i = 1; i <= 40; i++) {
             if(!checkExceptions(i)){
-                const square = createSquare('', i, 'market', 0, 200);
+                const square = createSquare(`square ${i}`, i, 'market', 0, 200);
                 squares.push(square);
             } else {
                 const exceptionSquare = populateExceptionSquares(i);
@@ -74,9 +82,10 @@ const Game = () => {
         return squares;
     }
 
-    const getSquare = (user: Player):{cost: number, ownedBy: string} => {
-        let result = {cost: 100 * 100, ownedBy: ''};
-        gameBoard.squares.forEach((square: any) => {
+    const getSquare = (user: Player):Square | undefined => {
+        const squares = [...gameBoard.squares];
+        let result;
+        squares.forEach((square: any) => {
             if(square.number === user.location) result = square
         })
         return result;
@@ -132,6 +141,31 @@ const Game = () => {
             prize: [],
         }
     );
+
+    const changeTurn = () => {
+        const board = {...gameBoard}
+        const players = [...board.players]
+        let currentTurn:any;
+        players.forEach((player:Player) => {
+            if(player.name === board.turn) currentTurn = player;
+        });
+        if(currentTurn.turnOrder < 4) {
+            const nextTurn = currentTurn.turnOrder + 1;
+            players.forEach((player: Player) => {
+                if(player.turnOrder === nextTurn) currentTurn = player;
+            });
+        } else {
+            players.forEach((player: Player) => {
+                if(player.turnOrder === 1) currentTurn = player;
+            })
+        }
+        currentTurn.dice1.hasRolled = false;
+        currentTurn.dice2.hasRolled = false;
+        board.turn = currentTurn.name;
+        setLocalPlayer(currentTurn);
+        setGameBoard(board);
+        console.log(currentTurn);
+    }
 
     const choosePlayer = () => {
         return gameBoard.players[0];
@@ -203,8 +237,8 @@ const Game = () => {
         if(gameBoard.turn !== localPlayer.name) return;
         const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
-        //if(user.dice1.hasRolled && diceNum === 1) return;
-        //if(user.dice2.hasRolled && diceNum === 2) return; 
+        if(user.dice1.hasRolled && diceNum === 1) return;
+        if(user.dice2.hasRolled && diceNum === 2) return; 
         if(diceNum === 1) {
             user.dice1.number = ran
             user.dice1.hasRolled = true;
@@ -223,23 +257,25 @@ const Game = () => {
     const locationEventBuy = () => {
         const user = {...localPlayer};
         const square = getSquare(user);
+        if(!square) return;
         if(localPlayer.money > square.cost) {
-            square.ownedBy = localPlayer.name;
+            square.ownedBy = localPlayer.name; 
             user.money -= square.cost;
+            user.owned.push(square.name);
         }
+        console.log(user);
         setLocalPlayer(user);
         syncPlayer(user);
         closeBuyPrompt();
-        console.log(gameBoard);
-        console.log(user.money)
         return square;
     }
 
     const locationEventMerch = (user: Player) => {
         const square = getSquare(user);
-        console.log(square);
-        console.log(localPlayer);
-        if(square.ownedBy !== 'market') return;
+        if(!square) return;
+        if(square.ownedBy !== 'market'
+        || !localPlayer.dice1.hasRolled
+        || !localPlayer.dice2.hasRolled) return;
         setCanBuy(true);
     }
 
@@ -258,7 +294,7 @@ const Game = () => {
 
     return(
         <div className="game-screen" >
-            {<GameBoard gameBoard={gameBoard} localPlayer={localPlayer} />}
+            {<GameBoard gameBoard={gameBoard} localPlayer={localPlayer} changeTurn={changeTurn} />}
             {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
             {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
             {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}

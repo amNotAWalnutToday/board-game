@@ -1,5 +1,7 @@
+import { Square } from '../Game';
+
 type Props = {
-    buyProperty: () => {};
+    buyProperty: () => Square | undefined;
     dontBuy: () => void
 }
 

@@ -4,11 +4,12 @@ import Player from './Player';
 type Props = {
     localPlayer: any,
     players: any,
+    changeTurn: () => void,
     square: any,
     index: number,
 }
 
-const Square = ({localPlayer, players, square, index}: Props) => {
+const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
 
     useEffect(() => {
@@ -26,7 +27,7 @@ const Square = ({localPlayer, players, square, index}: Props) => {
         return currentPlayers.map((item:any, i:number) => {
             return(
                 <div key={i}>
-                    <Player  localPlayer={localPlayer} player={item} index={currentPlayers[i].turnOrder} />
+                    <Player  localPlayer={localPlayer} player={item} changeTurn={changeTurn} index={currentPlayers[i].turnOrder} />
                 </div>
             )
         });
@@ -42,7 +43,6 @@ const Square = ({localPlayer, players, square, index}: Props) => {
             </div>
             {square.ownedBy}
             {`£${square.cost} `}
-            {index + 1}
         </div>
     )
 }
