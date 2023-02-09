@@ -67,6 +67,7 @@
   background-color: #00000045;
 }
 
+.company-card,
 .station-card,
 .special-card,
 .property-card {
@@ -80,6 +81,7 @@
   color: white;
 }
 
+.inspect .company-card,
 .inspect .station-card,
 .inspect .special-card,
 .inspect .property-card {
@@ -87,6 +89,8 @@
   height: 45%;
 }
 
+.buy-popup .company-card,
+.buy-popup .station-card,
 .buy-popup .property-card {
   width: 240px;
   height: 309px;
@@ -99,6 +103,10 @@
   display:flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+.company-card li:not(.card-name):not(.card-owner) {
+  margin: 0 1rem;
 }
 
 .special-card li:not(.card-name) {

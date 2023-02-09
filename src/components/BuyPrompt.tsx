@@ -1,5 +1,6 @@
 import { Square } from '../Game';
 import PropertyCard from './cards/PropertyCard';
+import StationCard from './cards/StationCard';
 
 type Props = {
     buyProperty: () => Square | undefined;
@@ -8,12 +9,21 @@ type Props = {
 }
 
 const BuyPrompt = ({buyProperty, dontBuy, inspectionTarget}: Props) => {
+    const checkIfStation = () => {
+        const num = inspectionTarget?.number;
+        return num === 6 || num === 16 || num === 26 || num === 36
+            ? true
+            : false;
+    }
+
     return (
         <>
             <div className="underlay" onClick={dontBuy} />
             <div className="buy-popup">
                 <div className="buy-menu">
-                    <PropertyCard inspectionTarget={inspectionTarget} />
+                    {checkIfStation() 
+                    ? <StationCard inspectionTarget={inspectionTarget} />
+                    : <PropertyCard inspectionTarget={inspectionTarget} />}
                     <div className="btn-group">
                         <button 
                             className="buy-btn" 

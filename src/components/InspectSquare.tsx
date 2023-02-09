@@ -3,6 +3,7 @@ import { Square as SquareType } from '../Game';
 import PropertyCard from './cards/PropertyCard';
 import SpecialCard from './cards/SpecialCard';
 import StationCard from './cards/StationCard';
+import CompanyCard from './cards/CompanyCard';
 
 type Props = {
     inspectionTarget: SquareType | undefined;
@@ -77,6 +78,11 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
                 }
                 {inspectType === 'station'
                 && <StationCard 
+                        inspectionTarget={inspectionTarget}   
+                    />
+                }
+                {inspectType === 'company'
+                && <CompanyCard 
                         inspectionTarget={inspectionTarget}    
                     />
                 }
