@@ -70,12 +70,18 @@ const InspectSquare = ( {inspectionTarget}: Props ) => {
                         <span>£{inspectionTarget?.rent[4]}</span>
                     </li>
                     <hr />
-                    <li>House Cost £{inspectionTarget?.cost}</li>
-                    <li>Hotel Cost £</li>
+                    <li>
+                        House Cost 
+                        <span>£{inspectionTarget?.cost.house} each</span>
+                    </li>
+                    <li>
+                        Hotel Cost 
+                        <span>£{inspectionTarget?.cost.hotel} each</span>
+                    </li>
                     <li className="card-owner" >
                         <span>
                             {inspectionTarget?.ownedBy === 'market'
-                            ? `Available To Purchase £${inspectionTarget?.cost}`
+                            ? `Available To Purchase £${inspectionTarget?.cost.deed}`
                             : inspectionTarget?.ownedBy}
                         </span>
                     </li>

@@ -16,7 +16,8 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
 
     const toggleInspect = () => setShowInspect(!showInspect);
 
-    const inspectSquare = (square: SquareType) => {
+    const inspectSquare = (e:any, square: SquareType) => {
+        if(e.target.value === "end-turn") return;
         toggleInspect();
         setInspectionTarget(square);
     }

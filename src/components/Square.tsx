@@ -6,7 +6,7 @@ type Props = {
     localPlayer: any,
     players: any,
     changeTurn: () => void,
-    inspectSquare: (square: SquareType) => void,
+    inspectSquare: (e:any, square: SquareType) => void,
     square: any,
     index: number,
 }
@@ -46,15 +46,15 @@ const Square = ({localPlayer, players, changeTurn, inspectSquare, square, index}
     }
 
     return (
-        <div className={`square square-${index}`} onClick={() => inspectSquare(square)} >
+        <div className={`square square-${index}`} onClick={(e) => inspectSquare(e, square)} >
             <p>{square.name}</p>
             <div className="players">
                 {mapPlayers()}
             </div>
             {square.ownedBy === "market" || !square.ownedBy
             ?<p>
-                {square.cost > 0 && square.ownedBy === 'market' 
-                    ? `£${square.cost} ` 
+                {square.cost.deed > 0 && square.ownedBy === 'market' 
+                    ? `£${square.cost.deed} ` 
                     : ''}
             </p>
             : <div className="house-group" >{mapProperties()}</div>}

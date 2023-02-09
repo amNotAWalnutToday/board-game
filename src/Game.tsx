@@ -29,7 +29,7 @@ export type Square = {
     number:number,
     ownedBy:string | null, 
     properties: 0|1|2|3|4|5,
-    cost: number,
+    cost: {deed: number, house: number, hotel: number},
     rent: number[],
     group: 'brown'|'cyan'|'pink'|'orange'|'red'|'yellow'|'green'|'navy'|null,
 }
@@ -43,7 +43,7 @@ const Game = () => {
         number:number,
         ownedBy:string | null = null, 
         properties:number = 0,
-        cost: number = 0,
+        cost: {deed: number, house: number, hotel: number} = {deed: 200, house: 100, hotel: 500},
         rent: number[] = [100, 200, 300, 400, 500, 600],
         group: string | null = null,
     ) => {
@@ -100,45 +100,45 @@ const Game = () => {
     const populateExceptionSquares = (num: number) => {
         const squares = [
             createSquare('go', 1),
-            createSquare('kent road', 2, 'market', 0, 200, [1,2,3,4,5,5], 'brown'),
-            createSquare('chest', 3, 'market', 0, 0),
-            createSquare('white chapel road', 4, 'market', 0, 200, [1,2,3,4,5,5], 'brown'),
+            createSquare('kent road', 2, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
+            createSquare('chest', 3, 'market', 0),
+            createSquare('white chapel road', 4, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
             createSquare('income tax £200', 5, 'free parking'),
-            createSquare('king cross station', 6, 'market', 0, 200, [1,2,3,4,5,5]),
-            createSquare('angel islington', 7, 'market', 0, 200, [1,2,3,4,5,5], 'cyan'),
+            createSquare('king cross station', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('angel islington', 7, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'cyan'),
             createSquare('chance', 8),
-            createSquare('euston road', 9, 'market', 0, 200, [1,2,3,4,5,5], 'cyan'),
-            createSquare('penton ville road', 10, 'market', 0, 200, [1,2,3,4,5,5], 'cyan'),
+            createSquare('euston road', 9, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'cyan'),
+            createSquare('penton ville road', 10, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'cyan'),
             createSquare('jail', 11),
-            createSquare('pall mall', 12, 'market', 0, 200, [1,2,3,4,5,5], 'pink'),
-            createSquare('electric company', 13, 'market', 0, 200, [1,2,3,4,5,5]),
-            createSquare('whitehall', 14, 'market', 0, 200, [1,2,3,4,5,5], 'pink'),
-            createSquare('umberland avenue', 15, 'market', 0, 200, [1,2,3,4,5,5], 'pink'),
-            createSquare('marylbone station', 16, 'market', 0, 200, [1,2,3,4,5,5]),
-            createSquare('bow street', 17, 'market', 0, 200, [1,2,3,4,5,5], 'orange'),
+            createSquare('pall mall', 12, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'pink'),
+            createSquare('electric company', 13, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('whitehall', 14, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'pink'),
+            createSquare('umberland avenue', 15, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'pink'),
+            createSquare('marylbone station', 16, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('bow street', 17, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'orange'),
             createSquare('chest', 18),
-            createSquare('borough street', 19, 'market', 0, 200, [1,2,3,4,5,5], 'orange'),
-            createSquare('vine street', 20, 'market', 0, 200, [1,2,3,4,5,5], 'orange'),
+            createSquare('borough street', 19, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'orange'),
+            createSquare('vine street', 20, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'orange'),
             createSquare('free parking', 21),
-            createSquare('strand', 22, 'market', 0, 200, [1,2,3,4,5,5], 'red'),
+            createSquare('strand', 22, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'red'),
             createSquare('chance', 23),
-            createSquare('fleet street', 24, 'market', 0, 200, [1,2,3,4,5,5], 'red'),
-            createSquare('trafalgar square', 25, 'market', 0, 200, [1,2,3,4,5,5], 'red'),
-            createSquare('fenchurch station', 26, 'market', 0, 200, [1,2,3,4,5,5]),
-            createSquare('leicester square', 27, 'market', 0, 200, [1,2,3,4,5,5], 'yellow'),
-            createSquare('coventry street', 28, 'market', 0, 200, [1,2,3,4,5,5], 'yellow'),
-            createSquare('water works', 29, 'market', 0, 200, [1,2,3,4,5,5]),
-            createSquare('piccadilly', 30, 'market', 0, 200, [1,2,3,4,5,5], 'yellow'),
+            createSquare('fleet street', 24, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'red'),
+            createSquare('trafalgar square', 25, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'red'),
+            createSquare('fenchurch station', 26, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('leicester square', 27, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'yellow'),
+            createSquare('coventry street', 28, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'yellow'),
+            createSquare('water works', 29, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('piccadilly', 30, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'yellow'),
             createSquare('go to jail', 31),
-            createSquare('regent street', 32, 'market', 0, 200, [1,2,3,4,5,5], 'green'),
-            createSquare('oxford street', 33, 'market', 0, 200, [1,2,3,4,5,5], 'green'),
+            createSquare('regent street', 32, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'green'),
+            createSquare('oxford street', 33, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'green'),
             createSquare('chest', 34),
-            createSquare('bond street', 35, 'market', 0, 200, [1,2,3,4,5,5], 'green'),
-            createSquare('liverpool station', 36, 'market', 0, 200, [1,2,3,4,5,5]),
+            createSquare('bond street', 35, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'green'),
+            createSquare('liverpool station', 36, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
             createSquare('chance', 37),
-            createSquare('park lane', 38, 'market', 0, 200, [1,2,3,4,5,5], 'navy'),
+            createSquare('park lane', 38, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'navy'),
             createSquare('super tax £100', 39, 'free parking'),
-            createSquare('mayfair', 40, 'market', 0, 200, [1,2,3,4,5,5], 'navy'),
+            createSquare('mayfair', 40, 'market', 0, {deed: 200, house: 100, hotel: 500}, [1,2,3,4,5,5], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
             if(squares[i].number === num) return squares[i];
@@ -149,7 +149,7 @@ const Game = () => {
         const squares = [];
         for(let i = 1; i <= 40; i++) {
             if(!checkExceptions(i)){
-                const square = createSquare(`square ${i}`, i, 'market', 0, 200);
+                const square = createSquare(`square ${i}`, i, 'market', 0, {deed: 200, house: 100, hotel: 100});
                 squares.push(square);
             } else {
                 const exceptionSquare = populateExceptionSquares(i);
@@ -343,10 +343,10 @@ const Game = () => {
     const locationEventPayTax = (user:Player, board:board) => {
         board.squares.forEach((square: Square) => {
             if(square.number === 21 && user.location === 39) {
-                square.cost += 100;
+                square.cost.deed += 100;
                 user.money -= 100;
             } else if(square.number === 21 && user.location === 5) {
-                square.cost += 200;
+                square.cost.deed += 200;
                 user.money -= 200;
             }
         });
@@ -375,9 +375,9 @@ const Game = () => {
         const user = {...localPlayer};
         const square = getSquare(user);
         if(!square) return;
-        if(localPlayer.money > square.cost) {
+        if(localPlayer.money > square.cost.deed) {
             square.ownedBy = localPlayer.name; 
-            user.money -= square.cost;
+            user.money -= square.cost.deed;
             user.owned.push(square.name);
         }
         setLocalPlayer(user);
@@ -396,14 +396,14 @@ const Game = () => {
         if(square.ownedBy !== 'market'
         && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
-        else if(square.ownedBy !== user.name && square.cost)setCanBuy(true);
+        else if(square.ownedBy !== user.name && square.cost.deed)setCanBuy(true);
     }
 
     const locationEventFreeParking = (user: Player) => {
         const square = getSquare(user);
         if(!square) return;
-        user.money += square.cost;
-        square.cost = 0;
+        user.money += square.cost.deed;
+        square.cost.deed = 0;
         setLocalPlayer(user);
     }
 
