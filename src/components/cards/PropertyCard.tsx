@@ -1,4 +1,4 @@
-import { Square as SquareType } from '../Game';
+import { Square as SquareType } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareType | undefined;

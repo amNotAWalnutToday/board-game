@@ -1,5 +1,5 @@
 import { Square } from '../Game';
-import PropertyCard from './PropertyCard';
+import PropertyCard from './cards/PropertyCard';
 
 type Props = {
     buyProperty: () => Square | undefined;

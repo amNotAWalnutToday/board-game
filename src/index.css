@@ -67,6 +67,7 @@
   background-color: #00000045;
 }
 
+.special-card,
 .property-card {
   display: flex;
   flex-direction: column;
@@ -78,6 +79,7 @@
   color: white;
 }
 
+.inspect .special-card,
 .inspect .property-card {
   width: 35%;
   height: 45%;
@@ -88,12 +90,16 @@
   height: 309px;
 }
 
-
+.special-card li:not(.card-name),
 .property-card li:not(.card-name):not(.card-owner) {
   margin: 0 1rem;
   display:flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+.special-card li:not(.card-name) {
+  justify-content: center;
 }
 
 .buy-popup .card-name,
@@ -112,6 +118,20 @@
   background: var(--light-background);
   color: white;
   border-radius: 0 0 5px 5px;
+}
+
+.jailed-players li:last-child {
+  color: crimson;
+}
+
+.free-parking-prize,
+.jail-description {
+  padding-bottom: 0.5rem;
+}
+
+.free-parking-prize {
+  justify-content: space-between !important;
+  font-size: 30px;
 }
 
 .test { /*use when adding items under inspect*/
@@ -186,6 +206,10 @@ li .house-group {
   height: 10px;
 }
 
+.plain {
+  background: var(--light-background);
+}
+
 .brown {
   background-color: brown;
 }
@@ -203,7 +227,7 @@ li .house-group {
 }
 
 .red {
-  background-color: red;
+  background-color: crimson;
 }
 
 .yellow {
@@ -216,6 +240,10 @@ li .house-group {
 
 .navy {
   background-color: navy;
+}
+
+.money {
+  color: springgreen;
 }
 
 

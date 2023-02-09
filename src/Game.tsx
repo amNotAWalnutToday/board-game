@@ -48,7 +48,7 @@ const Game = () => {
             deed: number, 
             house: number, 
             hotel: number
-        } = {deed: 200, house: 100, hotel: 500},
+        } = {deed: 0, house: 100, hotel: 500},
         rent: number[] = [100, 200, 300, 400, 500, 600],
         group: string | null = null,
     ) => {
@@ -302,7 +302,7 @@ const Game = () => {
         board.players = players;
         setGameBoard(board);
     }
-    // if first dice in jail second dice can break free !bug!
+    
     const checkJail = (user: Player) => {
         const board = {...gameBoard};
         let inJail;
@@ -464,7 +464,8 @@ const Game = () => {
                 <GameBoard 
                     gameBoard={gameBoard} 
                     localPlayer={localPlayer} 
-                    changeTurn={changeTurn} 
+                    changeTurn={changeTurn}
+                    jailedPlayers={gameBoard.jail}
                 />
             }
             <div className="dice-holder">

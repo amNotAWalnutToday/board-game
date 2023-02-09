@@ -7,9 +7,10 @@ type Props = {
     gameBoard: any,
     localPlayer: any,
     changeTurn: () => void,
+    jailedPlayers: object[];
 }
 
-const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
+const GameBoard = ( {gameBoard, localPlayer, changeTurn, jailedPlayers}: Props ) => {
     const [loading, setLoading] = useState(true);
     const [showInspect, setShowInspect] = useState(false);
     const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
@@ -48,7 +49,9 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
             {mapSquares()}
             {showInspect 
             && <InspectSquare 
-                    inspectionTarget={inspectionTarget} 
+                    inspectionTarget={inspectionTarget}
+                    gameBoard={gameBoard}
+                    jailedPlayers={jailedPlayers}
                 />
             }
         </div>
