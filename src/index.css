@@ -67,6 +67,7 @@
   background-color: #00000045;
 }
 
+.station-card,
 .special-card,
 .property-card {
   display: flex;
@@ -79,6 +80,7 @@
   color: white;
 }
 
+.inspect .station-card,
 .inspect .special-card,
 .inspect .property-card {
   width: 35%;
@@ -90,6 +92,7 @@
   height: 309px;
 }
 
+.station-card li:not(.card-name):not(.card-owner),
 .special-card li:not(.card-name),
 .property-card li:not(.card-name):not(.card-owner) {
   margin: 0 1rem;

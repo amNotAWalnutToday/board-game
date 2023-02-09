@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Square as SquareType } from '../Game';
 import PropertyCard from './cards/PropertyCard';
 import SpecialCard from './cards/SpecialCard';
+import StationCard from './cards/StationCard';
 
 type Props = {
     inspectionTarget: SquareType | undefined;
@@ -72,6 +73,11 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
                         inspectionTarget={inspectionTarget}
                         gameBoard={gameBoard}
                         jailedPlayers={jailedPlayers}
+                    />
+                }
+                {inspectType === 'station'
+                && <StationCard 
+                        inspectionTarget={inspectionTarget}    
                     />
                 }
             </div>
