@@ -33,13 +33,29 @@ const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
         });
     }
 
+    const mapProperties = () => {
+        const props = [];
+        for(let i = 0; i < square.properties; i++) props.push(i);
+        return props.length < 5
+            ? props.map((item, i) => {
+                return <div key={i} className="house" ></div>
+            })
+            : <div className="hotel"></div>
+    }
+
     return (
         <div className={`square square-${index}`}>
             <p>{square.name}</p>
             <div className="players">
                 {mapPlayers()}
             </div>
-            <p>{square.cost > 0 ? `£${square.cost} ` : ' '}</p>
+            {square.ownedBy === "market" || !square.ownedBy
+            ?<p>
+                {square.cost > 0 && square.ownedBy === 'market' 
+                    ? `£${square.cost} ` 
+                    : ''}
+            </p>
+            : <div className="house-group" >{mapProperties()}</div>}
             <div className={square.group} >
 
             </div>
