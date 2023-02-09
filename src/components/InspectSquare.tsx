@@ -58,7 +58,6 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
 
     useEffect(() => {
         getSquareType();
-        console.log(inspectType);
     }, []);
 
     return (

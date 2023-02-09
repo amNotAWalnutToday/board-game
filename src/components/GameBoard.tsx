@@ -19,7 +19,12 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn, jailedPlayers}: Props )
 
     const inspectSquare = (e:any, square: SquareType) => {
         if(e.target.value === "end-turn") return;
-        toggleInspect();
+        if((inspectionTarget?.name === square.name && showInspect)
+        || (!showInspect)) toggleInspect();
+        else {
+            toggleInspect();
+            setTimeout(() => setShowInspect(true), 50);
+        }
         setInspectionTarget(square);
     }
 
