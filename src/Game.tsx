@@ -10,14 +10,15 @@ interface board {
     squares: any,
     chance: [],
     prize: [],
+    jail: Player[],
 }
 
 export type Player = {
     name: string,
     location: number,
     turnOrder: number,
-    dice1: number,
-    dice2: number,
+    dice1: {number: number, hasRolled: boolean},
+    dice2: {number: number, hasRolled: boolean},
     money: number,
     cards: [],
     owned: [],
@@ -194,7 +195,7 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                1,
+                29,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
@@ -215,6 +216,7 @@ const Game = () => {
             squares: populateSquares(),
             chance: [],
             prize: [],
+            jail: [],
         }
     );
 
@@ -273,7 +275,6 @@ const Game = () => {
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         if(gameBoard.squares.length < 40) populateSquares();
-        console.log(gameBoard.squares)
     }, [loading]);
 
     const syncPlayer = (user: Player) => {
@@ -295,6 +296,15 @@ const Game = () => {
         }
         board.players = players;
         setGameBoard(board);
+    }
+    // if first dice in jail second dice can break free !bug!
+    const checkJail = (user: Player) => {
+        const board = {...gameBoard};
+        let inJail;
+        board.jail.forEach((player: Player) => {
+            if(player.name === user.name) inJail = true;
+        });
+        return inJail;
     }
 
     const moveSpaces = (rolledNum: number, user: Player) => {
@@ -321,6 +331,7 @@ const Game = () => {
             user.dice2.number = ran;
             user.dice2.hasRolled = true;
         }
+        if(checkJail(user)) return locationEventJailRollCheck(user);
         user = moveSpaces(ran, user)
         locationEventController(user);
         setLocalPlayer(user);
@@ -328,14 +339,6 @@ const Game = () => {
     }
 
     const closeBuyPrompt = () => setCanBuy(false);
-
-    const locationEventFreeParking = (user: Player) => {
-        const square = getSquare(user);
-        if(!square) return;
-        user.money += square.cost;
-        square.cost = 0;
-        setLocalPlayer(user);
-    }
 
     const locationEventPayTax = (user:Player, board:board) => {
         board.squares.forEach((square: Square) => {
@@ -348,7 +351,6 @@ const Game = () => {
             }
         });
         setLocalPlayer(user);
-        console.log(board);
         return board;
     }
 
@@ -397,11 +399,44 @@ const Game = () => {
         else if(square.ownedBy !== user.name && square.cost)setCanBuy(true);
     }
 
+    const locationEventFreeParking = (user: Player) => {
+        const square = getSquare(user);
+        if(!square) return;
+        user.money += square.cost;
+        square.cost = 0;
+        setLocalPlayer(user);
+    }
+
+    const locationEventLeaveJail = (user: Player) => {
+        const board = {...gameBoard};
+        for(let i = 0; i < board.jail.length; i++) {
+            if(user.name === board.jail[i].name) board.jail.splice(i, 1);
+        }
+        console.log(board.jail);
+        setGameBoard(board);
+    }
+
+    const locationEventJailRollCheck = (user: Player) => {      
+        setLocalPlayer(user);
+        if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
+        if(user.dice1.number === user.dice2.number) locationEventLeaveJail(user);
+    }
+
+    const locationEventGoToJail = (user: Player) => {
+        const board = {...gameBoard};
+        gameBoard.jail.push(user);
+        user.location = 11;
+        setLocalPlayer(user);
+        setGameBoard(board);
+    }
+
     const locationEventSpecial = (user: Player) => {
         if(user.location === 21) return locationEventFreeParking(user);
+        if(user.location === 31) return locationEventGoToJail(user);
     }
     
     const locationEventController = (user: Player) => {
+        if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
         const exceptions = [
             user.location === 1,
             user.location === 11,
@@ -429,8 +464,16 @@ const Game = () => {
 export default Game;
 
 // next step => specify squares
-// square types => irregular { go, jail, free, go to jail } <= current
+// square types => irregular { go, jail, free, go to jail } <= complete
 //                 card spots { community, chance }
 //                 normal { properties } 
 //                 normal { stations }
+// next step => normal { properties } place house/hotels
+// next step => fill in square information
+//
+// next step => add overlay when hovering squares for extra info
+//              improve buy prompt
+//
+// next step => add chance/chest cards
+// next step => add icons to board spots and update user icons
 //

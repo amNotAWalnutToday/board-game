@@ -22,7 +22,7 @@ const Player = ({localPlayer, index, player, changeTurn}: Props) => {
                         <li>£{player.money}</li>
                         <li>properties:- {player.owned}</li>
                     </ul>
-                    <button onClick={changeTurn} >End Turn</button>
+                    <button className="end-turn" onClick={changeTurn} >End Turn</button>
                 </div>
                 : ''
             }
