@@ -27,7 +27,14 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
         const squares = board.squares;
         return squares.map((item:any, i:number) => {
             return <React.Fragment key={i}>
-                <Square localPlayer={localPlayer} players={gameBoard.players} changeTurn={changeTurn} inspectSquare={inspectSquare} square={item} index={i} />
+                <Square 
+                    localPlayer={localPlayer} 
+                    players={gameBoard.players} 
+                    changeTurn={changeTurn} 
+                    inspectSquare={inspectSquare} 
+                    square={item} 
+                    index={i}
+                 />
             </React.Fragment>
         })
     }
@@ -39,7 +46,11 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
     return(
         <div id="game-board">
             {mapSquares()}
-            {showInspect && <InspectSquare inspectionTarget={inspectionTarget} />}
+            {showInspect 
+            && <InspectSquare 
+                    inspectionTarget={inspectionTarget} 
+                />
+            }
         </div>
     )
 }

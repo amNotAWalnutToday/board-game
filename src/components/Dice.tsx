@@ -15,8 +15,16 @@ type Props = {
 
 const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
     return(
-        <div className="dice" onClick={() => rollDice(diceNum)}>
-            <p>{diceNum === 1 ? localPlayer.dice1.number : localPlayer.dice2.number}</p>
+        <div 
+            className="dice" 
+            onClick={() => rollDice(diceNum)}
+        >
+            <p>
+                {diceNum === 1 
+                    ? localPlayer.dice1.number 
+                    : localPlayer.dice2.number
+                }
+            </p>
         </div>
     )
 }

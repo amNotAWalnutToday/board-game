@@ -7,7 +7,9 @@ type Props = {
 const PropertyCard = ( {inspectionTarget}: Props ) => {
     return (
         <ul className={`property-card`} >
-            <li className={`card-name ${inspectionTarget?.group}`} >{inspectionTarget?.name}</li>
+            <li className={`card-name ${inspectionTarget?.group}`}>
+                {inspectionTarget?.name}
+            </li>
             <li>
                 Rent
                 <span>£{inspectionTarget?.rent[0]}</span>

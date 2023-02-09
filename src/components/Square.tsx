@@ -11,7 +11,15 @@ type Props = {
     index: number,
 }
 
-const Square = ({localPlayer, players, changeTurn, inspectSquare, square, index}: Props) => {
+const Square = ( 
+    {
+        localPlayer, 
+        players, 
+        changeTurn, 
+        inspectSquare, 
+        square, 
+        index
+    }: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
 
     useEffect(() => {
@@ -29,7 +37,12 @@ const Square = ({localPlayer, players, changeTurn, inspectSquare, square, index}
         return currentPlayers.map((item:any, i:number) => {
             return(
                 <div key={i}>
-                    <Player  localPlayer={localPlayer} player={item} changeTurn={changeTurn} index={currentPlayers[i].turnOrder} />
+                    <Player 
+                        localPlayer={localPlayer} 
+                        player={item} 
+                        changeTurn={changeTurn} 
+                        index={currentPlayers[i].turnOrder} 
+                    />
                 </div>
             )
         });
@@ -46,7 +59,10 @@ const Square = ({localPlayer, players, changeTurn, inspectSquare, square, index}
     }
 
     return (
-        <div className={`square square-${index}`} onClick={(e) => inspectSquare(e, square)} >
+        <div 
+            className={`square square-${index}`} 
+            onClick={(e) => inspectSquare(e, square)} 
+        >
             <p>{square.name}</p>
             <div className="players">
                 {mapPlayers()}

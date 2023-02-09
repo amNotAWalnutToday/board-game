@@ -6,8 +6,14 @@ const RouteSwitch = () => {
     return(
         <Router>
             <Routes>
-                <Route path='/' element={<App />} />
-                <Route path='/game' element={<Game />} ></Route>
+                <Route 
+                    path='/' 
+                    element={<App />} 
+                />
+                <Route 
+                    path='/game' 
+                    element={<Game />} 
+                />
             </Routes>
         </Router>
     )

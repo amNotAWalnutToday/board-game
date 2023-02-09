@@ -15,8 +15,18 @@ const BuyPrompt = ({buyProperty, dontBuy, inspectionTarget}: Props) => {
                 <div className="buy-menu">
                     <PropertyCard inspectionTarget={inspectionTarget} />
                     <div className="btn-group">
-                        <button className="buy-btn" onClick={buyProperty} >Buy Property £{inspectionTarget?.cost.deed}</button>
-                        <button className="dont-buy-btn" onClick={dontBuy} >Don't Buy</button>
+                        <button 
+                            className="buy-btn" 
+                            onClick={buyProperty} 
+                        >
+                            Buy Property £{inspectionTarget?.cost.deed}
+                        </button>
+                        <button 
+                            className="dont-buy-btn" 
+                            onClick={dontBuy} 
+                        >
+                            Don't Buy
+                        </button>
                     </div>
                 </div>
             </div>

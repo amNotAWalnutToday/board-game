@@ -44,7 +44,11 @@ const Game = () => {
         number:number,
         ownedBy:string | null = null, 
         properties:number = 0,
-        cost: {deed: number, house: number, hotel: number} = {deed: 200, house: 100, hotel: 500},
+        cost: {
+            deed: number, 
+            house: number, 
+            hotel: number
+        } = {deed: 200, house: 100, hotel: 500},
         rent: number[] = [100, 200, 300, 400, 500, 600],
         group: string | null = null,
     ) => {
@@ -358,8 +362,9 @@ const Game = () => {
     const locationEventPayRent = (user: Player, square: Square) => {
         let board = {...gameBoard};
         const players = [...board.players];
-        if(square.number === 39 || square.number === 5) board = locationEventPayTax(user, board);
-        else {
+        if(square.number === 39 || square.number === 5) {
+            board = locationEventPayTax(user, board);
+        } else {
             players.forEach((player: Player) => {
                 if(player.name === square.ownedBy) {
                     player.money += square.rent[square.properties];
@@ -455,12 +460,36 @@ const Game = () => {
 
     return(
         <div className="game-screen" >
-            {<GameBoard gameBoard={gameBoard} localPlayer={localPlayer} changeTurn={changeTurn} />}
+            {
+                <GameBoard 
+                    gameBoard={gameBoard} 
+                    localPlayer={localPlayer} 
+                    changeTurn={changeTurn} 
+                />
+            }
             <div className="dice-holder">
-                {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
-                {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
+                {!loading 
+                && <Dice 
+                        localPlayer={localPlayer} 
+                         diceNum={1} 
+                        rollDice={rollDice}
+                    />
+                }
+                {!loading 
+                && <Dice 
+                        localPlayer={localPlayer} 
+                        diceNum={2} 
+                        rollDice={rollDice}
+                    />
+                }
             </div>
-            {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt} inspectionTarget={buyableSquare} />}
+            {canBuy 
+            && <BuyPrompt 
+                    buyProperty={locationEventBuy} 
+                    dontBuy={closeBuyPrompt} 
+                    inspectionTarget={buyableSquare} 
+                />
+            }
         </div>
     )
 }

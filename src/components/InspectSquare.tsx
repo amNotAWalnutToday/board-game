@@ -9,7 +9,9 @@ const InspectSquare = ( {inspectionTarget}: Props ) => {
     return (
         <>
             <div className="inspect" >
-                <PropertyCard inspectionTarget={inspectionTarget} />
+                <PropertyCard 
+                    inspectionTarget={inspectionTarget} 
+                />
             </div>
         </>
     )
