@@ -37,6 +37,7 @@ export type Square = {
 const Game = () => {
     const [loading, setLoading] = useState(true);
     const [canBuy, setCanBuy] = useState(false);
+    const [buyableSquare, setBuyableSquare] = useState<Square>()
 
     const createSquare = (
         name:string, 
@@ -101,7 +102,7 @@ const Game = () => {
         const squares = [
             createSquare('go', 1),
             createSquare('kent road', 2, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
-            createSquare('chest', 3, 'market', 0),
+            createSquare('chest', 3),
             createSquare('white chapel road', 4, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
             createSquare('income tax £200', 5, 'free parking'),
             createSquare('king cross station', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
@@ -396,7 +397,10 @@ const Game = () => {
         if(square.ownedBy !== 'market'
         && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
-        else if(square.ownedBy !== user.name && square.cost.deed)setCanBuy(true);
+        else if(square.ownedBy !== user.name && square.cost.deed) {
+            setCanBuy(true);
+            setBuyableSquare(square);
+        }
     }
 
     const locationEventFreeParking = (user: Player) => {
@@ -456,7 +460,7 @@ const Game = () => {
                 {!loading && <Dice localPlayer={localPlayer} diceNum={1} rollDice={rollDice}/>}
                 {!loading && <Dice localPlayer={localPlayer} diceNum={2} rollDice={rollDice}/>}
             </div>
-            {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt}/>}
+            {canBuy && <BuyPrompt buyProperty={locationEventBuy} dontBuy={closeBuyPrompt} inspectionTarget={buyableSquare} />}
         </div>
     )
 }
