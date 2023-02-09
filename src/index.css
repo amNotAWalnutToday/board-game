@@ -256,6 +256,9 @@ li .house-group {
   color: springgreen;
 }
 
+.tax {
+  color: crimson;
+}
 
 .player {
   position: absolute;

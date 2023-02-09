@@ -12,19 +12,19 @@ const StationCard = ({inspectionTarget}: Props) => {
             </li>
             <li>
                 Rent
-                <span>£{inspectionTarget?.rent[0]}</span>
-            </li>
-            <li>
-                With 2 Stations
                 <span>£{inspectionTarget?.rent[1]}</span>
             </li>
             <li>
-                With 3 Stations
+                With 2 Stations
                 <span>£{inspectionTarget?.rent[2]}</span>
             </li>
             <li>
-                With 4 Stations
+                With 3 Stations
                 <span>£{inspectionTarget?.rent[3]}</span>
+            </li>
+            <li>
+                With 4 Stations
+                <span>£{inspectionTarget?.rent[4]}</span>
             </li>
             <li className="card-owner" >
                 <span>

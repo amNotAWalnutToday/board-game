@@ -21,7 +21,7 @@ export type Player = {
     dice2: {number: number, hasRolled: boolean},
     money: number,
     cards: [],
-    owned: [],
+    owned: string[],
 }
 
 export type Square = {
@@ -107,8 +107,8 @@ const Game = () => {
             createSquare('go', 1),
             createSquare('kent road', 2, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
             createSquare('chest', 3),
-            createSquare('white chapel road', 4, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
-            createSquare('income tax £200', 5, 'free parking'),
+            createSquare('white road', 4, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'brown'),
+            createSquare('income tax', 5, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
             createSquare('king cross station', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
             createSquare('angel islington', 7, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'cyan'),
             createSquare('chance', 8),
@@ -142,7 +142,7 @@ const Game = () => {
             createSquare('liverpool station', 36, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5]),
             createSquare('chance', 37),
             createSquare('park lane', 38, 'market', 0, {deed: 200, house: 100, hotel: 100}, [1,2,3,4,5,5], 'navy'),
-            createSquare('super tax £100', 39, 'free parking'),
+            createSquare('super tax', 39, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
             createSquare('mayfair', 40, 'market', 0, {deed: 200, house: 100, hotel: 500}, [1,2,3,4,5,5], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
@@ -173,6 +173,12 @@ const Game = () => {
         return result;
     }
 
+    const checkIfStation = (num: number | undefined) => {
+        return num === 6 || num === 16 || num === 26 || num === 36
+            ? true
+            : false;
+    }
+
     const createPlayer = (
         name: string,
         location: number,
@@ -200,7 +206,7 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                29,
+                22,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
@@ -253,7 +259,7 @@ const Game = () => {
         return gameBoard.players[0];
     }
 
-    const [localPlayer, setLocalPlayer] = useState<any>(choosePlayer())
+    const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer())
 
     const [playerTemplate, setPlayerTemplate] = useState<object>(
         {
@@ -325,7 +331,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 2);
+        const ran = Math.ceil(Math.random() * 1);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -377,6 +383,27 @@ const Game = () => {
         setGameBoard(board);
     }
 
+    const setStationRent = () => {
+        const board = {...gameBoard}
+        let stations:0|1|2|3|4 = 0;
+        board.squares.forEach((square: Square) => {
+            if(checkIfStation(square.number) && square.ownedBy === localPlayer.name) {
+                stations += 1;
+            } 
+        });
+        board.squares.forEach((square: Square) => {
+            if(checkIfStation(square.number) && square.ownedBy === localPlayer.name) {
+                square.properties = stations;
+            } 
+        });
+        setGameBoard(board);
+        console.log(gameBoard.squares);
+    }
+
+    const setUtilityRent = () => {
+        
+    }
+
     const locationEventBuy = () => {
         const user = {...localPlayer};
         const square = getSquare(user);
@@ -385,6 +412,7 @@ const Game = () => {
             square.ownedBy = localPlayer.name; 
             user.money -= square.cost.deed;
             user.owned.push(square.name);
+            if(checkIfStation(square.number)) setStationRent();
         }
         setLocalPlayer(user);
         syncPlayer(user);
@@ -488,7 +516,8 @@ const Game = () => {
             && <BuyPrompt 
                     buyProperty={locationEventBuy} 
                     dontBuy={closeBuyPrompt} 
-                    inspectionTarget={buyableSquare} 
+                    inspectionTarget={buyableSquare}
+                    checkIfStation={checkIfStation} 
                 />
             }
         </div>
@@ -501,12 +530,19 @@ export default Game;
 // square types => irregular { go, jail, free, go to jail } <= complete
 //                 card spots { community, chance }
 //                 normal { properties } 
-//                 normal { stations }
+//                 normal { stations } <= complete
+//                 normal {  utility}  <= current
 // next step => normal { properties } place house/hotels
 // next step => fill in square information
 //
 // next step => add overlay when hovering squares for extra info
-//              improve buy prompt
+//              properties <= complete
+//              stations <= complete
+//              utility <= complete
+//              special
+//              chance 
+//              tax
+//              improve buy prompt <= started(onhold)
 //
 // next step => add chance/chest cards
 // next step => add icons to board spots and update user icons

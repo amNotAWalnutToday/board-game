@@ -69,11 +69,18 @@ const Square = (
             </div>
             {square.ownedBy === "market" || !square.ownedBy
             ?<p>
-                {square.cost.deed > 0 && square.ownedBy === 'market' 
+                {square.cost.deed > 0 && square.ownedBy === 'market'
                     ? `£${square.cost.deed} ` 
                     : ''}
             </p>
             : <div className="house-group" >{mapProperties()}</div>}
+            {/*specific exceptions*/}
+            {square.number === 21
+                ? <p className='money'>£{square.cost.deed}</p>
+                : undefined}
+            {square.number === 5 || square.number === 39
+                ? <p className='tax'>£{square.cost.deed}</p>
+                : undefined}
             <div className={`square-name ${square.group}`} >
 
             </div>
