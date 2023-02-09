@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { Square as SquareType } from '../Game';
 import Player from './Player';
 
 type Props = {
     localPlayer: any,
     players: any,
     changeTurn: () => void,
+    inspectSquare: (square: SquareType) => void,
     square: any,
     index: number,
 }
 
-const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
+const Square = ({localPlayer, players, changeTurn, inspectSquare, square, index}: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
 
     useEffect(() => {
@@ -44,7 +46,7 @@ const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
     }
 
     return (
-        <div className={`square square-${index}`}>
+        <div className={`square square-${index}`} onClick={() => inspectSquare(square)} >
             <p>{square.name}</p>
             <div className="players">
                 {mapPlayers()}
@@ -56,7 +58,7 @@ const Square = ({localPlayer, players, changeTurn, square, index}: Props) => {
                     : ''}
             </p>
             : <div className="house-group" >{mapProperties()}</div>}
-            <div className={square.group} >
+            <div className={`square-name ${square.group}`} >
 
             </div>
         </div>

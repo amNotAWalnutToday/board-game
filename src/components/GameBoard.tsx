@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Square as SquareType } from '../Game';
 import Square from './Square';
+import InspectSquare from './InspectSquare';
 
 type Props = {
     gameBoard: any,
@@ -9,12 +11,22 @@ type Props = {
 
 const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
     const [loading, setLoading] = useState(true);
+    const [showInspect, setShowInspect] = useState(false);
+    const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
+
+    const toggleInspect = () => setShowInspect(!showInspect);
+
+    const inspectSquare = (square: SquareType) => {
+        toggleInspect();
+        setInspectionTarget(square);
+    }
+
     const mapSquares:any = () => {
         const board = {...gameBoard};
         const squares = board.squares;
         return squares.map((item:any, i:number) => {
             return <React.Fragment key={i}>
-                <Square localPlayer={localPlayer} players={gameBoard.players} changeTurn={changeTurn} square={item} index={i} />
+                <Square localPlayer={localPlayer} players={gameBoard.players} changeTurn={changeTurn} inspectSquare={inspectSquare} square={item} index={i} />
             </React.Fragment>
         })
     }
@@ -26,6 +38,7 @@ const GameBoard = ( {gameBoard, localPlayer, changeTurn}: Props ) => {
     return(
         <div id="game-board">
             {mapSquares()}
+            {showInspect && <InspectSquare inspectionTarget={inspectionTarget} />}
         </div>
     )
 }
