@@ -8,6 +8,7 @@ type Props = {
     dontBuy: () => void
     inspectionTarget: Square | undefined;
     checkIfStation: (num: number | undefined) => Boolean;
+    checkIfUtility: (num: number | undefined) => Boolean;
 }
 
 const BuyPrompt = (
@@ -15,15 +16,9 @@ const BuyPrompt = (
         buyProperty, 
         dontBuy, 
         inspectionTarget, 
-        checkIfStation
+        checkIfStation,
+        checkIfUtility,
     }: Props) => {
-    const checkIfUtility = () => {
-        return inspectionTarget?.number === 13 
-            || inspectionTarget?.number === 29
-                ? true
-                : false
-    }
-    
     return (
         <>
             <div className="underlay" onClick={dontBuy} />
@@ -31,7 +26,7 @@ const BuyPrompt = (
                 <div className="buy-menu">
                     {checkIfStation(inspectionTarget?.number) 
                     ? <StationCard inspectionTarget={inspectionTarget} />
-                    : checkIfUtility() 
+                    : checkIfUtility(inspectionTarget?.number) 
                         ? <CompanyCard inspectionTarget={inspectionTarget}/>
                         : <PropertyCard inspectionTarget={inspectionTarget} />}
                     <div className="btn-group">
