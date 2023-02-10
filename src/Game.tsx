@@ -142,7 +142,7 @@ const Game = () => {
             createSquare('liverpool station', 36, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
             createSquare('chance', 37),
             createSquare('park lane', 38, 'market', 0, {deed: 350, house: 200, hotel: 200}, [35,175,550,1100,1300,1500], 'navy'),
-            createSquare('window tax', 39, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
+            createSquare('window tax', 39, 'free parking', 0, {deed: 100, house: 0, hotel: 0}),
             createSquare('mayfair', 40, 'market', 0, {deed: 400, house: 200, hotel: 200}, [50,200,669,1400,1700,2000], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {

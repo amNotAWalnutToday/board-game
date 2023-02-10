@@ -9,6 +9,7 @@ type Props = {
     cursorMode: string,
     inspectSquare: (e:any, square: SquareType) => void,
     placeOnSquare: (e:any, square: SquareType) => void;
+    sellFromSquare: (e:any, square: SquareType) => void;
     square: any,
     index: number,
 }
@@ -21,6 +22,7 @@ const Square = (
         cursorMode, 
         inspectSquare, 
         placeOnSquare,
+        sellFromSquare,
         square,
         index
     }: Props) => {
@@ -66,9 +68,16 @@ const Square = (
         <div 
             className={`square square-${index}`} 
             onClick={(e) => { 
-                cursorMode === 'inspect'
-                    ? inspectSquare(e, square) 
-                    : placeOnSquare(e, square);
+                    switch(cursorMode) {
+                        case 'inspect':
+                            inspectSquare(e, square);
+                            break;
+                        case 'place':
+                            placeOnSquare(e, square);
+                            break;
+                        case 'sell':
+                            sellFromSquare(e, square);
+                    }
                 }
             }
         >

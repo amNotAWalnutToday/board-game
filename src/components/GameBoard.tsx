@@ -4,12 +4,13 @@ import Square from './Square';
 import InspectSquare from './InspectSquare';
 import Stats from './Stats';
 import BuyPrompt from './BuyPrompt';
+import SellPrompt from './SellPrompt';
 
 type Props = {
     gameBoard: any,
     /*buyProperty: (square: SquareType | undefined) => void | undefined;*/
     localPlayer: Player,
-    rollDice: any;
+    rollDice: any;/*not in use atm*/
     changeTurn: () => void,
     jailedPlayers: Player[];
     checkIfStation: (num: number | undefined) => boolean;
@@ -17,7 +18,7 @@ type Props = {
     checkForSet: (user: Player, group: string) => boolean;
 }
 
-type Mode = 'inspect' | 'place';
+type Mode = 'inspect' | 'place' | 'sell';
 
 const GameBoard = ( 
     {
@@ -36,17 +37,14 @@ const GameBoard = (
     const [cursorMode, setCursorMode] = useState<Mode>('inspect');
     const [showInspect, setShowInspect] = useState<Boolean>(false);
     const [showBuyHouse, setShowBuyHouse] = useState<Boolean>(false);
+    const [showSellHouse, setShowSellHouse] = useState<Boolean>(true);
     const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
 
     const toggleStats = () => setShowStats(!showStats);
     const toggleInspect = () => setShowInspect(!showInspect);
     const toggleBuyHouse = () => setShowBuyHouse(!showBuyHouse);
-    const toggleMode = () => {
-        cursorMode === 'inspect' 
-            ? setCursorMode('place')
-            : setCursorMode('inspect');
-        console.log(cursorMode);
-    }
+    const toggleSellHouse = () => setShowSellHouse(!showSellHouse);
+    const toggleMode = (mode: Mode) => setCursorMode(mode);
 
     const inspectSquare = (e:any, square: SquareType) => {
         if(e.target.value === "end-turn" || cursorMode !== 'inspect') return;
@@ -60,15 +58,41 @@ const GameBoard = (
     }
 
     const placeOnSquare = (e:any, square: SquareType) => {
-        if(e.target.value === "end-turn") return;
-        if(localPlayer.name !== square.ownedBy) return;
+        if(e.target.value === "end-turn" || cursorMode !== 'place') return;
+        if(localPlayer.name !== square.ownedBy || !square.group) return;
         if(square.properties >= 5) return;
         if(inspectionTarget?.name === square.name) toggleBuyHouse();
         setInspectionTarget(square);
     }
 
+    const sellFromSquare = (e:any, square: SquareType) => {
+        if(e.target.value === "end-turn" || cursorMode !== 'sell') return;
+        if(localPlayer.name !== square.ownedBy) return;
+        if(inspectionTarget?.name === square.name) toggleSellHouse();
+        setInspectionTarget(square);
+    }
+
+    const sellHouse = (square: SquareType | undefined) => {
+        if(!square) return;
+        if(square.properties === 0 
+        || checkIfStation(square.number)
+        || checkIfUtility(square.number)) {
+            for(let i = 0; i < localPlayer.owned.length; i++) {
+                if(square.name === localPlayer.owned[i].name) {
+                    localPlayer.owned.splice(i, 1);
+                    square.ownedBy = 'market';
+                }
+            }
+            localPlayer.money += square.cost.deed / 2;
+        } else if (square.properties > 0) {
+            square.properties -= 1;
+            localPlayer.money += square.cost.house / 2;
+        }
+        toggleSellHouse();
+    }
+
     const placeHouse = (square: SquareType | undefined) => {
-        if(!square) return
+        if(!square || !square.group) return
         if(square.group && !checkForSet(localPlayer, square.group)) return;
         if(localPlayer.money > square.cost.house && square.properties < 4){
             square.properties += 1;
@@ -93,6 +117,7 @@ const GameBoard = (
                     cursorMode={cursorMode}
                     inspectSquare={inspectSquare}
                     placeOnSquare={placeOnSquare}
+                    sellFromSquare={sellFromSquare}
                     square={item} 
                     index={i}
                  />
@@ -130,6 +155,17 @@ const GameBoard = (
                     buyType="building"
                 />
             }
+            {showSellHouse
+            && <SellPrompt 
+                    buyProperty={sellHouse}
+                    dontBuy={toggleSellHouse}
+                    localPlayer={localPlayer}
+                    inspectionTarget={inspectionTarget}
+                    checkIfStation={checkIfStation}
+                    checkIfUtility={checkIfUtility}
+                    buyType="sell"
+                />
+            }
             <div className="player-overlay">
                 <ul>
                     <li>{localPlayer.name}</li>
@@ -144,7 +180,9 @@ const GameBoard = (
                 >
                     End Turn
             </button>
-            <button onClick={toggleMode}  className="test" >place mode(temp)</button>
+            <button onClick={() => toggleMode('place')}  className="test" >place mode(temp)</button>
+            <button onClick={() => toggleMode('sell')} className='test3' >Sell mode(temp)</button>
+            <button onClick={() => toggleMode('inspect')} className='test4' >Inspect mode(temp)</button>
             <button onClick={toggleStats} className="test2">show stats</button>
         </div>
     )
