@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 type Props = {
     localPlayer: {
         dice1: {
@@ -14,10 +16,14 @@ type Props = {
 }
 
 const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
+
     return(
         <div 
             className="dice" 
-            onClick={() => rollDice(diceNum)}
+            onDragLeave={(e) => {
+                rollDice(diceNum);
+            }}
+            draggable="true"
         >
             <p>
                 {diceNum === 1 

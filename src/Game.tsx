@@ -551,7 +551,8 @@ const Game = () => {
                 <GameBoard 
                     gameBoard={gameBoard}
                     /*buyProperty={placeHouse}*/
-                    localPlayer={localPlayer} 
+                    localPlayer={localPlayer}
+                    rollDice={rollDice} 
                     changeTurn={changeTurn}
                     jailedPlayers={gameBoard.jail}
                     checkIfStation={checkIfStation}
@@ -563,7 +564,7 @@ const Game = () => {
                 {!loading 
                 && <Dice 
                         localPlayer={localPlayer} 
-                         diceNum={1} 
+                        diceNum={1} 
                         rollDice={rollDice}
                     />
                 }
@@ -595,11 +596,13 @@ export default Game;
 // next step => specify squares
 // square types => irregular { go, jail, free, go to jail } <= complete
 //                 card spots { community, chance }
-//                 normal { properties }     add full set bonus with 0 props
+//                 normal { properties } add full set bonus with 0 props <= complete
 //                 normal { stations } <= complete
 //                 normal {  utility}  <= complete
-// next step => normal { properties } place house/hotels only when full set
-// next step => fill in square information
+// next step => normal { properties } place house/hotels only when full set <= complete
+// next step => fill in square information <= complete
+//
+// next step => allow selling deeds/props
 //
 // next step => add overlay when hovering squares for extra info
 //              properties <= complete
@@ -614,6 +617,9 @@ export default Game;
 // next step => add icons to board spots and update user icons
 //
 // next step => add player interface 
-//              statistic screen
+//              statistic screen <= complete?(can improve by adding props to list)
 //              improve end turn button
 //              change dice
+// next step => add sorting function for player owned properties
+//
+// next step => add win/lose conditions

@@ -9,6 +9,7 @@ type Props = {
     gameBoard: any,
     /*buyProperty: (square: SquareType | undefined) => void | undefined;*/
     localPlayer: Player,
+    rollDice: any;
     changeTurn: () => void,
     jailedPlayers: Player[];
     checkIfStation: (num: number | undefined) => boolean;
@@ -23,6 +24,7 @@ const GameBoard = (
         gameBoard, 
         /*buyProperty,*/ 
         localPlayer, 
+        rollDice,
         changeTurn, 
         jailedPlayers,
         checkIfStation,
@@ -103,7 +105,7 @@ const GameBoard = (
     }, [loading]);
 
     return(
-        <div id="game-board">
+        <div id="game-board" >
             {mapSquares()}
             {showInspect 
             && <InspectSquare 
@@ -128,6 +130,20 @@ const GameBoard = (
                     buyType="building"
                 />
             }
+            <div className="player-overlay">
+                <ul>
+                    <li>{localPlayer.name}</li>
+                    <li className='text-green' >£{localPlayer.money}</li>
+                    <li><strong>{cursorMode}</strong></li>
+                </ul>
+            </div>
+            <button 
+                    className="end-turn" 
+                    onClick={changeTurn} 
+                    value="end-turn" 
+                >
+                    End Turn
+            </button>
             <button onClick={toggleMode}  className="test" >place mode(temp)</button>
             <button onClick={toggleStats} className="test2">show stats</button>
         </div>
