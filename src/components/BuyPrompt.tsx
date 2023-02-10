@@ -4,11 +4,12 @@ import PropertyCard from './cards/PropertyCard';
 import StationCard from './cards/StationCard';
 
 type Props = {
-    buyProperty: () => Square | undefined;
+    buyProperty: (square: Square | undefined) => Square | void | undefined;
     dontBuy: () => void
     inspectionTarget: Square | undefined;
     checkIfStation: (num: number | undefined) => Boolean;
     checkIfUtility: (num: number | undefined) => Boolean;
+    buyType: string;
 }
 
 const BuyPrompt = (
@@ -18,6 +19,7 @@ const BuyPrompt = (
         inspectionTarget, 
         checkIfStation,
         checkIfUtility,
+        buyType,
     }: Props) => {
     return (
         <>
@@ -32,9 +34,15 @@ const BuyPrompt = (
                     <div className="btn-group">
                         <button 
                             className="buy-btn" 
-                            onClick={buyProperty} 
+                            onClick={() => buyProperty(inspectionTarget)} 
                         >
-                            Buy Property £{inspectionTarget?.cost.deed}
+                            { buyType === 'property'
+                                ? `Buy Property £${inspectionTarget?.cost.deed}`
+                                : inspectionTarget 
+                                && inspectionTarget?.properties < 4 
+                                    ? `Place House £${inspectionTarget?.cost.house}`
+                                    : `Place Hotel £${inspectionTarget?.cost.hotel}`
+                            }
                         </button>
                         <button 
                             className="dont-buy-btn" 

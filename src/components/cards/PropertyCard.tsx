@@ -16,7 +16,7 @@ const PropertyCard = ( {inspectionTarget}: Props ) => {
             </li>
             <li>
                 Rent with Color Set
-                <span>£{inspectionTarget?.rent[1]}</span>
+                <span>£0</span>
             </li>
             <li>
                 <span>
@@ -25,7 +25,7 @@ const PropertyCard = ( {inspectionTarget}: Props ) => {
                         <span className="house" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[2]}</span>
+                <span>£{inspectionTarget?.rent[1]}</span>
             </li>
             <li>
                 <span>
@@ -67,7 +67,7 @@ const PropertyCard = ( {inspectionTarget}: Props ) => {
                         <span className="hotel" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[4]}</span>
+                <span>£{inspectionTarget?.rent[5]}</span>
             </li>
             <hr />
             <li>
@@ -76,7 +76,10 @@ const PropertyCard = ( {inspectionTarget}: Props ) => {
             </li>
             <li>
                 Hotel Cost 
-                <span>£{inspectionTarget?.cost.hotel} each</span>
+                <span>£{inspectionTarget 
+                    ? inspectionTarget?.cost.hotel * 4
+                    : undefined
+                } total</span>
             </li>
             <li className="card-owner" >
                 <span>

@@ -6,7 +6,9 @@ type Props = {
     localPlayer: any,
     players: any,
     changeTurn: () => void,
+    cursorMode: string,
     inspectSquare: (e:any, square: SquareType) => void,
+    placeOnSquare: (e:any, square: SquareType) => void;
     square: any,
     index: number,
 }
@@ -15,9 +17,11 @@ const Square = (
     {
         localPlayer, 
         players, 
-        changeTurn, 
+        changeTurn,
+        cursorMode, 
         inspectSquare, 
-        square, 
+        placeOnSquare,
+        square,
         index
     }: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
@@ -61,7 +65,12 @@ const Square = (
     return (
         <div 
             className={`square square-${index}`} 
-            onClick={(e) => inspectSquare(e, square)} 
+            onClick={(e) => { 
+                cursorMode === 'inspect'
+                    ? inspectSquare(e, square) 
+                    : placeOnSquare(e, square);
+                }
+            }
         >
             <p>{square.name}</p>
             <div className="players">
