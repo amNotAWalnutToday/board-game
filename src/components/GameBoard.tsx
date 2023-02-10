@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Square as SquareType } from '../Game';
+import { Square as SquareType, Player } from '../Game';
 import Square from './Square';
 import InspectSquare from './InspectSquare';
 import Stats from './Stats';
@@ -8,11 +8,12 @@ import BuyPrompt from './BuyPrompt';
 type Props = {
     gameBoard: any,
     /*buyProperty: (square: SquareType | undefined) => void | undefined;*/
-    localPlayer: any,
+    localPlayer: Player,
     changeTurn: () => void,
-    jailedPlayers: object[];
+    jailedPlayers: Player[];
     checkIfStation: (num: number | undefined) => boolean;
     checkIfUtility: (num: number | undefined) => boolean;
+    checkForSet: (user: Player, group: string) => boolean;
 }
 
 type Mode = 'inspect' | 'place';
@@ -26,6 +27,7 @@ const GameBoard = (
         jailedPlayers,
         checkIfStation,
         checkIfUtility,
+        checkForSet,
     }: Props ) => {
     const [loading, setLoading] = useState(true);
     const [showStats, setShowStats] = useState(true);
@@ -65,6 +67,7 @@ const GameBoard = (
 
     const placeHouse = (square: SquareType | undefined) => {
         if(!square) return
+        if(square.group && !checkForSet(localPlayer, square.group)) return;
         if(localPlayer.money > square.cost.house && square.properties < 4){
             square.properties += 1;
             localPlayer.money -= square.cost.house;
@@ -118,6 +121,7 @@ const GameBoard = (
             && <BuyPrompt
                     buyProperty={placeHouse}
                     dontBuy={toggleBuyHouse}
+                    localPlayer={localPlayer}
                     inspectionTarget={inspectionTarget}
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}

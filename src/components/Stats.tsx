@@ -8,14 +8,14 @@ const Stats = ({players}: Props) => {
     const mapPlayerStats = () => {
         return players.map((item, i) => {
             return (
-                <div className="player-stats" >
+                <div key={i} className="player-stats" >
                     <p className='card-name plain' >{item.name}</p>
                     <p className='money' >£{item.money}</p>
                     <hr />
                     <p className="player-owned">
                         {item.owned.map((item, i) => {
                             return (
-                            <span className={`text-${item.group}`} >
+                            <span key={i} className={`text-${item.group}`} >
                                 {item.name}
                             </span>)
                         })}

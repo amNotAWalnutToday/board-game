@@ -185,6 +185,18 @@ const Game = () => {
             : false
     }
 
+    const checkForSet = (user:Player, group: string | null):boolean => {
+        let deeds = 0;
+        user.owned.forEach((square) => {
+                if(square.group === group) deeds += 1; 
+        });
+        if(group === 'navy' || group === 'brown') {
+            return deeds === 2 ? true : false;
+        } else {
+            return deeds === 3 ? true : false;
+        }
+    }
+
     const createPlayer = (
         name: string,
         location: number,
@@ -212,7 +224,7 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                4,
+                34,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
@@ -337,7 +349,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 6);
+        const ran = Math.ceil(Math.random() * 1);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -381,18 +393,27 @@ const Game = () => {
         let board = {...gameBoard};
         const players = [...board.players];
         if(square.number === 13 || square.number === 29) {
-            square =locationEventPayUtility(square);
+            square = locationEventPayUtility(square);
         }
 
         if(square.number === 39 || square.number === 5) {
             board = locationEventPayTax(user, board);
         } else {
+            let paidAmount = 0;
             players.forEach((player: Player) => {
-                if(player.name === square.ownedBy) {
+                if(checkForSet(player, square.group) 
+                && square.properties === 0
+                && player.name === square.ownedBy) {
+                    player.money += square.rent[0] * 2;
+                    paidAmount = square.rent[0] * 2;
+                    console.log(paidAmount);
+                } else if(player.name === square.ownedBy) {
                     player.money += square.rent[square.properties];
+                    paidAmount = square.rent[square.properties];
+                    console.log(paidAmount);
                 }
             });
-            user.money -= square.rent[square.properties];
+            user.money -= paidAmount;
         }
         setLocalPlayer(user);
         syncPlayer(user);
@@ -535,6 +556,7 @@ const Game = () => {
                     jailedPlayers={gameBoard.jail}
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}
+                    checkForSet={checkForSet}
                 />
             }
             <div className="dice-holder">
@@ -556,7 +578,8 @@ const Game = () => {
             {canBuy 
             && <BuyPrompt 
                     buyProperty={locationEventBuy} 
-                    dontBuy={closeBuyPrompt} 
+                    dontBuy={closeBuyPrompt}
+                    localPlayer={localPlayer}
                     inspectionTarget={buyableSquare}
                     checkIfStation={checkIfStation} 
                     checkIfUtility={checkIfUtility}

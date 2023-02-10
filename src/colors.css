@@ -1,3 +1,7 @@
+.text-plain {
+  color: var(--white);
+}
+
 .plain {
     background: var(--light-background);
 }

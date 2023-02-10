@@ -1,4 +1,4 @@
-import { Square } from '../Game';
+import { Square, Player } from '../Game';
 import CompanyCard from './cards/CompanyCard';
 import PropertyCard from './cards/PropertyCard';
 import StationCard from './cards/StationCard';
@@ -6,6 +6,7 @@ import StationCard from './cards/StationCard';
 type Props = {
     buyProperty: (square: Square | undefined) => Square | void | undefined;
     dontBuy: () => void
+    localPlayer: Player;
     inspectionTarget: Square | undefined;
     checkIfStation: (num: number | undefined) => Boolean;
     checkIfUtility: (num: number | undefined) => Boolean;
@@ -16,6 +17,7 @@ const BuyPrompt = (
     {
         buyProperty, 
         dontBuy, 
+        localPlayer,
         inspectionTarget, 
         checkIfStation,
         checkIfUtility,
@@ -31,6 +33,10 @@ const BuyPrompt = (
                     : checkIfUtility(inspectionTarget?.number) 
                         ? <CompanyCard inspectionTarget={inspectionTarget}/>
                         : <PropertyCard inspectionTarget={inspectionTarget} />}
+                    <p className='text-plain' >
+                        Your Money: 
+                        <span className='money'> £{localPlayer.money}</span>
+                    </p>
                     <div className="btn-group">
                         <button 
                             className="buy-btn" 

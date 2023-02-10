@@ -16,7 +16,10 @@ const PropertyCard = ( {inspectionTarget}: Props ) => {
             </li>
             <li>
                 Rent with Color Set
-                <span>£0</span>
+                <span>£{inspectionTarget 
+                    ? inspectionTarget?.rent[0] * 2
+                    : undefined}
+                </span>
             </li>
             <li>
                 <span>
