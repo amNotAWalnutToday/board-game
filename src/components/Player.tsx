@@ -20,7 +20,7 @@ const Player = ({localPlayer, index, player, changeTurn}: Props) => {
                     <ul>
                         <li>{player.name}</li>
                         <li>£{player.money}</li>
-                        <li>properties:- {player.owned}</li>
+                        <li>properties:- {player.owned.map((item) => item.name)}</li>
                     </ul>
                     <button 
                         className="end-turn" 

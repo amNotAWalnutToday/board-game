@@ -1,0 +1,76 @@
+.plain {
+    background: var(--light-background);
+}
+  
+  .text-brown {
+    color: var(--brown);
+  }
+  
+  .brown {
+    background-color: var(--brown);
+  }
+  
+  .text-cyan {
+    color: var(--cyan);
+  }
+  
+  .cyan {
+    background-color: var(--cyan);
+  }
+  
+  .text-pink {
+    color: var(--pink);
+  }
+  
+  .pink {
+    background-color: var(--pink);
+  }
+  
+  .text-orange {
+    color: var(--orange);
+  }
+  
+  .orange {
+    background-color: var(--orange);
+  }
+  
+  .text-red {
+    color: var(--red);
+  }
+  
+  .red {
+    background-color: var(--red);
+  }
+  
+  .text-yellow {
+    color: var(--yellow);
+  }
+  
+  .yellow {
+    background-color: var(--yellow);
+  }
+  
+  .text-green {
+    color: var(--green);
+  }
+  
+  .green {
+    background-color: var(--green);
+  }
+  
+  .text-navy {
+    color: var(--light-navy);
+  }
+  
+  .navy {
+    background-color: var(--navy);
+  }
+  
+  .money {
+    color: var(--money);
+  }
+  
+  .tax {
+    color: var(--tax);
+  }
+  

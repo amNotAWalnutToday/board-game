@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Square as SquareType } from '../Game';
 import Square from './Square';
 import InspectSquare from './InspectSquare';
+import Stats from './Stats';
 import BuyPrompt from './BuyPrompt';
 
 type Props = {
@@ -27,11 +28,13 @@ const GameBoard = (
         checkIfUtility,
     }: Props ) => {
     const [loading, setLoading] = useState(true);
+    const [showStats, setShowStats] = useState(true);
     const [cursorMode, setCursorMode] = useState<Mode>('inspect');
     const [showInspect, setShowInspect] = useState<Boolean>(false);
     const [showBuyHouse, setShowBuyHouse] = useState<Boolean>(false);
     const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
 
+    const toggleStats = () => setShowStats(!showStats);
     const toggleInspect = () => setShowInspect(!showInspect);
     const toggleBuyHouse = () => setShowBuyHouse(!showBuyHouse);
     const toggleMode = () => {
@@ -106,6 +109,11 @@ const GameBoard = (
                     jailedPlayers={jailedPlayers}
                 />
             }
+            {showStats 
+            && <Stats 
+                    players={gameBoard.players} 
+                />
+            }
             {showBuyHouse
             && <BuyPrompt
                     buyProperty={placeHouse}
@@ -116,7 +124,8 @@ const GameBoard = (
                     buyType="building"
                 />
             }
-            <button onClick={toggleMode} >place mode(temp)</button>
+            <button onClick={toggleMode}  className="test" >place mode(temp)</button>
+            <button onClick={toggleStats} className="test2">show stats</button>
         </div>
     )
 }

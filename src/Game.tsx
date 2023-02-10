@@ -21,7 +21,7 @@ export type Player = {
     dice2: {number: number, hasRolled: boolean},
     money: number,
     cards: [],
-    owned: string[],
+    owned: Square[],
 }
 
 export type Square = {
@@ -337,7 +337,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 1);
+        const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -442,7 +442,7 @@ const Game = () => {
         if(localPlayer.money > square.cost.deed) {
             square.ownedBy = localPlayer.name; 
             user.money -= square.cost.deed;
-            user.owned.push(square.name);
+            user.owned.push(square);
             if(checkIfStation(square.number)) setStationRent();
             if(checkIfUtility(square.number)) setUtilityRent();
         }
