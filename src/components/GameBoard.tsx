@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Square as SquareType, Player } from '../Game';
 import Square from './Square';
+import Dice from './Dice';
 import InspectSquare from './InspectSquare';
 import Stats from './Stats';
 import BuyPrompt from './BuyPrompt';
@@ -37,7 +38,7 @@ const GameBoard = (
     const [cursorMode, setCursorMode] = useState<Mode>('inspect');
     const [showInspect, setShowInspect] = useState<Boolean>(false);
     const [showBuyHouse, setShowBuyHouse] = useState<Boolean>(false);
-    const [showSellHouse, setShowSellHouse] = useState<Boolean>(true);
+    const [showSellHouse, setShowSellHouse] = useState<Boolean>(false);
     const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
 
     const toggleStats = () => setShowStats(!showStats);
@@ -132,6 +133,22 @@ const GameBoard = (
     return(
         <div id="game-board" >
             {mapSquares()}
+            <div className="dice-holder">
+                {!loading 
+                && <Dice 
+                        localPlayer={localPlayer} 
+                        diceNum={1} 
+                        rollDice={rollDice}
+                    />
+                }
+                {!loading 
+                && <Dice 
+                        localPlayer={localPlayer} 
+                        diceNum={2} 
+                        rollDice={rollDice}
+                    />
+                }
+            </div>
             {showInspect 
             && <InspectSquare 
                     inspectionTarget={inspectionTarget}

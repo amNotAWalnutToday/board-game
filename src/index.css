@@ -235,7 +235,11 @@
 
 .dice-holder {
   display:flex;
+  flex-direction: column;
   gap: 1rem;
+  grid-column: 10/11;
+  grid-row: 6/ 10;
+  z-index: 3;
 }
 
 .dice {
@@ -346,7 +350,7 @@ a {
   grid-row: 9 / 11;
   grid-column: 10 / 11;
   background-color: goldenrod;
-  z-index: 2;
+  z-index: 3;
 }
 
 .buy-popup {
@@ -397,4 +401,27 @@ a {
 
 .dont-buy-btn {
   background: var(--negative-btn);
+}
+
+.rolling {
+  animation: roll 1.5s 1 linear;
+  transition: transform  ease-out ;
+}
+
+.rolled {
+  filter: brightness(60%);
+}
+
+@keyframes roll {
+  from {
+    transform: scale(1) rotateX(0deg) ;
+  }
+
+  50% {
+    transform: scale(1.5) rotateX(360deg);
+  }
+  
+  to {
+    transform: scale(1) rotateX(0deg);
+  }
 }

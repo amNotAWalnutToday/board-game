@@ -349,7 +349,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 1);
+        const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -560,22 +560,6 @@ const Game = () => {
                     checkForSet={checkForSet}
                 />
             }
-            <div className="dice-holder">
-                {!loading 
-                && <Dice 
-                        localPlayer={localPlayer} 
-                        diceNum={1} 
-                        rollDice={rollDice}
-                    />
-                }
-                {!loading 
-                && <Dice 
-                        localPlayer={localPlayer} 
-                        diceNum={2} 
-                        rollDice={rollDice}
-                    />
-                }
-            </div>
             {canBuy 
             && <BuyPrompt 
                     buyProperty={locationEventBuy} 
@@ -602,7 +586,7 @@ export default Game;
 // next step => normal { properties } place house/hotels only when full set <= complete
 // next step => fill in square information <= complete
 //
-// next step => allow selling deeds/props
+// next step => allow selling deeds/props <= complete
 //
 // next step => add overlay when hovering squares for extra info
 //              properties <= complete
