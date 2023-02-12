@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GameBoard from './components/GameBoard';
-import Dice from './components/Dice';
+import ChancePrompt from './components/ChancePrompt';
 import BuyPrompt from './components/BuyPrompt';
 
 interface board {
@@ -36,6 +36,15 @@ export type Square = {
 
 const Game = () => {
     const [loading, setLoading] = useState(true);
+    const [luckCards, setLuckCards] = useState(
+        {
+            show: false,
+            type: 'chance',
+            number: 0,
+        }
+    );
+    const toggleLuckCards = () => setLuckCards({show: false, type: '', number: 0});
+
     const [canBuy, setCanBuy] = useState(false);
     const [buyableSquare, setBuyableSquare] = useState<Square>()
 
@@ -313,28 +322,6 @@ const Game = () => {
 
     const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer())
 
-    const [playerTemplate, setPlayerTemplate] = useState<object>(
-        {
-            name: '',
-            location: 1,
-            turnOrder: 1,
-            dice1: {number: 6, hasRolled: false},
-            dice2: 6,
-            money: 0,
-            cards: [],
-            owned: [{}],  
-        }
-    )
-    const [squareTemplate, setSquareTemplate] = useState<object>(
-        {
-            name: 'go',
-            number: 1,
-            ownedBy: 'none',
-            properties: 0,
-            cost: 0,
-        }
-    )
-
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         if(gameBoard.squares.length < 40) populateSquares();
@@ -559,16 +546,72 @@ const Game = () => {
         if(user.location === 21) return locationEventFreeParking(user);
         if(user.location === 31) return locationEventGoToJail(user);
     }
+
+    const useChance = () => {
+        let user = {...localPlayer};
+        const here = user.location;
+        switch(luckCards.number) {
+            case 0:
+                user = moveSpaces(41 - here, user);
+                break;
+            case 1: 
+                user = moveSpaces(40 - here, user);
+                break;
+            case 2:
+                user = moveSpaces(15 - here, user);
+                break;
+            case 3:
+                user = moveSpaces(36 - here, user);
+                break;
+            case 4:
+                user = moveSpaces(29 - here, user);
+                break;
+            case 5:
+                user = moveSpaces(3, user);
+                break;
+            case 6: 
+                user = moveSpaces(-3, user);
+                break;
+            case 7:
+                const ran = Math.ceil(Math.random() * 41);
+                user = moveSpaces(ran, user);
+                break;
+        }
+        locationEventController(user);
+        setLocalPlayer(user);
+        syncPlayer(user);
+        if(user.location !== 3 && user.location !== 8
+        && user.location !== 18 && user.location !== 23 
+        && user.location !== 34 && user.location !== 37){
+            toggleLuckCards();
+        }
+    }
+
+    const locationEventChance = (user: Player) => {
+        const ran = Math.floor(Math.random() * 8);
+        setLuckCards({show: true, type: 'chance', number: 7});
+    }
     
     const locationEventController = (user: Player) => {
         if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
+        
         const exceptions = [
             user.location === 1,
             user.location === 11,
             user.location === 21,
             user.location === 31,
-        ]
+        ];
+        const chances = [
+            user.location === 3,
+            user.location === 8,
+            user.location === 18,
+            user.location === 23,
+            user.location === 34,
+            user.location === 37,
+        ];
+
         if(exceptions.some(Boolean)) return locationEventSpecial(user);
+        else if(chances.some(Boolean)) return locationEventChance(user);
         else {
             locationEventMerch(user)
         }
@@ -606,6 +649,13 @@ const Game = () => {
                     buyType="property"
                 />
             }
+            {luckCards.show
+            && <ChancePrompt
+                    localPlayer={localPlayer}
+                    luckCards={luckCards}
+                    useChance={useChance}
+                />
+            }
         </div>
     )
 }
@@ -639,6 +689,6 @@ export default Game;
 //              statistic screen <= complete?(can improve by adding props to list)
 //              improve end turn button
 //              change dice
-// next step => add sorting function for player owned properties
+// next step => add sorting function for player owned properties <= complete
 //
 // next step => add win/lose conditions

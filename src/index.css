@@ -84,6 +84,7 @@
   z-index: 2;
 }
 
+.chance-card,
 .company-card,
 .station-card,
 .special-card,
@@ -106,6 +107,7 @@
   height: 45%;
 }
 
+.prompt .chance-card,
 .buy-popup .company-card,
 .buy-popup .station-card,
 .buy-popup .property-card {
@@ -369,6 +371,7 @@ a {
   z-index: 3;
 }
 
+.prompt,
 .buy-popup {
   position: absolute;
   top: 0;
@@ -383,6 +386,7 @@ a {
   height: 100vh;
 }
 
+.prompt-menu,
 .buy-menu {
   display: flex;
   flex-direction: column;
