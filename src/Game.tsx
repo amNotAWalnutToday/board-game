@@ -197,6 +197,40 @@ const Game = () => {
         }
     }
 
+    const sortByGroup = (user: Player) => {
+        const brown:Square[] = [];
+        const cyan:Square[] = [];
+        const pink:Square[] = [];
+        const orange:Square[] = [];
+        const red:Square[] = [];
+        const yellow:Square[] = [];
+        const green:Square[] = [];
+        const navy:Square[] = [];
+        const other:Square[] = [];
+
+        user.owned.forEach((square: Square) => {
+            if(square.group === 'brown') brown.push(square);
+            if(square.group === 'cyan') cyan.push(square);
+            if(square.group === 'pink') pink.push(square);
+            if(square.group === 'orange') orange.push(square);
+            if(square.group === 'red') red.push(square);
+            if(square.group === 'yellow') yellow.push(square);
+            if(square.group === 'green') green.push(square);
+            if(square.group === 'navy') navy.push(square);
+            if(!square.group) other.push(square);
+        });
+
+        return brown
+            .concat(cyan)
+            .concat(pink)
+            .concat(orange)
+            .concat(red)
+            .concat(yellow)
+            .concat(green)
+            .concat(navy)
+            .concat(other);
+    }
+
     const createPlayer = (
         name: string,
         location: number,
@@ -349,7 +383,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 6);
+        const ran = Math.ceil(Math.random() * 1);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -457,13 +491,14 @@ const Game = () => {
     }
 
     const locationEventBuy = () => {
-        const user = {...localPlayer};
+        let user = {...localPlayer};
         const square = getSquare(user);
         if(!square) return;
         if(localPlayer.money > square.cost.deed) {
             square.ownedBy = localPlayer.name; 
             user.money -= square.cost.deed;
             user.owned.push(square);
+            user.owned = sortByGroup(user);
             if(checkIfStation(square.number)) setStationRent();
             if(checkIfUtility(square.number)) setUtilityRent();
         }
