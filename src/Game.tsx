@@ -20,7 +20,7 @@ export type Player = {
     dice1: {number: number, hasRolled: boolean},
     dice2: {number: number, hasRolled: boolean},
     money: number,
-    cards: [],
+    cards: string[],
     owned: Square[],
 }
 
@@ -267,7 +267,7 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                34,
+                35,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
@@ -580,16 +580,61 @@ const Game = () => {
         locationEventController(user);
         setLocalPlayer(user);
         syncPlayer(user);
-        if(user.location !== 3 && user.location !== 8
-        && user.location !== 18 && user.location !== 23 
-        && user.location !== 34 && user.location !== 37){
-            toggleLuckCards();
-        }
+        toggleLuckCards(); 
     }
 
-    const locationEventChance = (user: Player) => {
+    const useChest = () => {
+        const board = {...gameBoard};
+        let user = {...localPlayer};
+        switch(luckCards.number) {
+            case 0:
+                user.money -= 100
+                break;
+            case 1:
+                user.money += 100
+                break;
+            case 2:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money -= 10
+                        user.money += 10
+                    }
+                });
+                break;
+            case 3:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money += 10
+                        user.money -= 10
+                    }
+                });
+                break;
+            case 4:
+                board.players.forEach((player: Player) => {
+                    const ran = Math.ceil(Math.random() * 41);
+                    if(!checkJail(player)) player.location = ran;
+                });
+                break;
+            case 5:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) locationEventGoToJail(player);
+                });
+                break;
+            case 6:
+                locationEventGoToJail(user);
+                break;
+            case 7:
+                user.cards.push('get out of jail');
+                break;
+        }
+        setLocalPlayer(user);
+        syncPlayer(user);
+        toggleLuckCards();
+    }
+
+    const locationEventChance = (type: string) => {
         const ran = Math.floor(Math.random() * 8);
-        setLuckCards({show: true, type: 'chance', number: 7});
+        setLuckCards({show: true, type: type, number: ran});
     }
     
     const locationEventController = (user: Player) => {
@@ -602,16 +647,19 @@ const Game = () => {
             user.location === 31,
         ];
         const chances = [
-            user.location === 3,
             user.location === 8,
-            user.location === 18,
             user.location === 23,
-            user.location === 34,
             user.location === 37,
+        ];
+        const chests = [
+            user.location === 3,
+            user.location === 18,
+            user.location === 34,
         ];
 
         if(exceptions.some(Boolean)) return locationEventSpecial(user);
-        else if(chances.some(Boolean)) return locationEventChance(user);
+        else if(chances.some(Boolean)) return locationEventChance('chance');
+        else if(chests.some(Boolean)) return locationEventChance('chest');
         else {
             locationEventMerch(user)
         }
@@ -654,6 +702,7 @@ const Game = () => {
                     localPlayer={localPlayer}
                     luckCards={luckCards}
                     useChance={useChance}
+                    useChest={useChest}
                 />
             }
         </div>

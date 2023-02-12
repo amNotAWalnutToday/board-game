@@ -8,10 +8,11 @@ type Props = {
         type: string,
         number: number,
     };
-    useChance: () => void
+    useChance: () => void,
+    useChest: () => void,
 }
 
-const ChancePrompt = ( {localPlayer, luckCards, useChance}: Props ) => {
+const ChancePrompt = ( {localPlayer, luckCards, useChance, useChest}: Props ) => {
     return (
         <>
             <div className="underlay"/>  
@@ -23,7 +24,13 @@ const ChancePrompt = ( {localPlayer, luckCards, useChance}: Props ) => {
                         <span className='money'> £{localPlayer.money}</span>
                     </p>
                     <div className="btn-group">
-                        <button className='buy-btn' onClick={useChance}>
+                        <button 
+                            className='buy-btn' 
+                            onClick={luckCards.type === 'chance'
+                                ? useChance
+                                : useChest 
+                            }
+                        >
                             Confirm
                         </button>
                     </div>

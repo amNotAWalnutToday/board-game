@@ -12,7 +12,7 @@ type Props = {
 
 const ChanceCard = ( {localPlayer, luckCards}: Props ) => {
     const [currentCard, setCurrentCard] = useState<string>();
-    const [cards, setCards] = useState<string[]>(
+    const [chanceCards, setChanceCards] = useState<string[]>(
         [
             'Advance to go',
             'Advance to last navy square',
@@ -24,9 +24,23 @@ const ChanceCard = ( {localPlayer, luckCards}: Props ) => {
             'Random location pass go',
         ]
     );
+    const [chestCards, setChestCards] = useState<string[]>(
+        [
+            'pay 100',
+            'receive 100',
+            'collect 10 from each player',
+            'give 10 to each player',
+            'every other player randomize locations but dont buy or pay tax',
+            'every other player goes to jail',
+            'go to jail',
+            'get outta jail free card',
+        ]
+    )
 
     useEffect(() => {
-        setCurrentCard(cards[luckCards.number]);
+        luckCards.type === 'chance'
+            ? setCurrentCard(chanceCards[luckCards.number])
+            : setCurrentCard(chestCards[luckCards.number]);
     }, []);
 
     return (
