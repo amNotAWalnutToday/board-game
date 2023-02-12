@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Player } from '../../Game';
 
 type Props = {
-    localPlayer: Player;
     luckCards: {
         show: boolean,
         type: string,
         number: number,
     };
+    flipped: string,
+    setFlipped: any,
 }
 
-const ChanceCard = ( {localPlayer, luckCards}: Props ) => {
+const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
     const [currentCard, setCurrentCard] = useState<string>();
     const [chanceCards, setChanceCards] = useState<string[]>(
         [
@@ -43,10 +43,25 @@ const ChanceCard = ( {localPlayer, luckCards}: Props ) => {
             : setCurrentCard(chestCards[luckCards.number]);
     }, []);
 
+    const toggleFlip = () => setFlipped('flipping');
+
     return (
-        <ul className="chance-card" >
-            <li className="card-name plain">Chance</li>
-            <li className='card-name' >{currentCard}</li>
+        <ul 
+            className={`chance-card ${flipped}`} 
+            onClick={flipped === 'flipped' ? undefined : toggleFlip}
+            onAnimationEnd={() => {
+                    flipped === 'flipping'
+                        ? setFlipped('flipped flipping-part-2')
+                        : setFlipped('flipped');
+                }
+            }
+            
+        >
+            {flipped !== 'flipped' && flipped !== 'flipped flipping-part-2' ? '' 
+            :<div>
+                <li className="card-name plain">{luckCards.type}</li>
+                <li className='card-name' >{currentCard}</li>
+            </div>}
         </ul>
     )
 }

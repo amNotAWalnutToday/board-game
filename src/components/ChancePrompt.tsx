@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Player } from '../Game';
 import ChanceCard from './cards/ChanceCard';
 
@@ -13,12 +14,18 @@ type Props = {
 }
 
 const ChancePrompt = ( {localPlayer, luckCards, useChance, useChest}: Props ) => {
+    const [flipped, setFlipped] = useState<string>('no-flip');
+
     return (
         <>
             <div className="underlay"/>  
             <div className="prompt" >
                 <div className="prompt-menu" >
-                    <ChanceCard localPlayer={localPlayer} luckCards={luckCards} />
+                    <ChanceCard 
+                        luckCards={luckCards} 
+                        flipped={flipped}
+                        setFlipped={setFlipped}
+                    />
                     <p className='text-plain' >
                         Your Money: 
                         <span className='money'> £{localPlayer.money}</span>
@@ -30,6 +37,7 @@ const ChancePrompt = ( {localPlayer, luckCards, useChance, useChest}: Props ) =>
                                 ? useChance
                                 : useChest 
                             }
+                            disabled={flipped !== 'flipped' ? true : false}
                         >
                             Confirm
                         </button>
