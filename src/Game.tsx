@@ -731,7 +731,9 @@ export default Game;
 //              tax
 //              improve buy prompt <= started(onhold)
 //
-// next step => add chance/chest cards
+// next step => add chance/chest cards <= complete
+//              add correct text to cards 
+//
 // next step => add icons to board spots and update user icons
 //
 // next step => add player interface 

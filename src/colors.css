@@ -11,7 +11,7 @@
   }
   
   .brown {
-    background-color: var(--brown);
+    background:  linear-gradient(var(--brown), rgb(122, 33, 33)) ;
   }
   
   .text-cyan {
@@ -19,7 +19,7 @@
   }
   
   .cyan {
-    background-color: var(--cyan);
+    background: linear-gradient(var(--cyan), darkcyan) ;
   }
   
   .text-pink {
@@ -27,7 +27,7 @@
   }
   
   .pink {
-    background-color: var(--pink);
+    background: linear-gradient(var(--pink), orchid);
   }
   
   .text-orange {
@@ -35,7 +35,7 @@
   }
   
   .orange {
-    background-color: var(--orange);
+    background: linear-gradient(var(--orange), darkorange);
   }
   
   .text-red {
@@ -43,7 +43,7 @@
   }
   
   .red {
-    background-color: var(--red);
+    background: linear-gradient(var(--red), darkred);
   }
   
   .text-yellow {
@@ -51,7 +51,8 @@
   }
   
   .yellow {
-    background-color: var(--yellow);
+    background: linear-gradient(var(--yellow), gold);
+    color: rgb(70, 70, 70);
   }
   
   .text-green {
@@ -59,7 +60,7 @@
   }
   
   .green {
-    background-color: var(--green);
+    background: linear-gradient(var(--green), darkgreen) ;
   }
   
   .text-navy {
@@ -67,7 +68,8 @@
   }
   
   .navy {
-    background-color: var(--navy);
+    background: linear-gradient(var(--light-navy), var(--navy));
+
   }
   
   .money {
