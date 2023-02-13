@@ -103,6 +103,7 @@
   background: var(--light-background);
 }
 
+.inspect .chance-card,
 .inspect .company-card,
 .inspect .station-card,
 .inspect .special-card,

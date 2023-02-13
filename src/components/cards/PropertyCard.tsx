@@ -2,11 +2,12 @@ import { Square as SquareType } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareType | undefined;
+    toggleInspect: any;
 }
 
-const PropertyCard = ( {inspectionTarget}: Props ) => {
+const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
     return (
-        <ul className={`property-card`} >
+        <ul className={`property-card`} onClick={toggleInspect}>
             <li className={`card-name ${inspectionTarget?.group}`}>
                 {inspectionTarget?.name}
             </li>

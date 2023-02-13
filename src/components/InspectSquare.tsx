@@ -4,14 +4,23 @@ import PropertyCard from './cards/PropertyCard';
 import SpecialCard from './cards/SpecialCard';
 import StationCard from './cards/StationCard';
 import CompanyCard from './cards/CompanyCard';
+import TaxCard from './cards/TaxCard';
+import ChestCard from './cards/ChestCard';
 
 type Props = {
     inspectionTarget: SquareType | undefined;
     gameBoard: any;
     jailedPlayers: object[];
+    toggleInspect: () => void,
 }
 
-const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) => {
+const InspectSquare = ( 
+    {
+        inspectionTarget, 
+        gameBoard, 
+        jailedPlayers,
+        toggleInspect,
+    }: Props ) => {
     const [inspectType, setInspectType] = useState<string>();
 
     const getSquareType = () => {
@@ -58,6 +67,7 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
 
     useEffect(() => {
         getSquareType();
+        /*eslint-disable-next-line*/
     }, []);
 
     return (
@@ -65,7 +75,8 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
             <div className="inspect" >
                 {inspectType === 'property' 
                 && <PropertyCard 
-                        inspectionTarget={inspectionTarget} 
+                        inspectionTarget={inspectionTarget}
+                        toggleInspect={toggleInspect} 
                     />
                 }
                 {inspectType === 'special' 
@@ -73,17 +84,32 @@ const InspectSquare = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) =>
                         inspectionTarget={inspectionTarget}
                         gameBoard={gameBoard}
                         jailedPlayers={jailedPlayers}
+                        toggleInspect={toggleInspect}
                     />
                 }
                 {inspectType === 'station'
                 && <StationCard 
-                        inspectionTarget={inspectionTarget}   
+                        inspectionTarget={inspectionTarget}
+                        toggleInspect={toggleInspect}   
                     />
                 }
                 {inspectType === 'company'
                 && <CompanyCard 
-                        inspectionTarget={inspectionTarget}    
+                        inspectionTarget={inspectionTarget} 
+                        toggleInspect={toggleInspect} 
                     />
+                }
+                {inspectType === 'tax'
+                && <TaxCard 
+                        inspectionTarget={inspectionTarget}
+                        toggleInspect={toggleInspect} 
+                    />
+                }
+                {inspectType === 'chance'
+                && <ChestCard
+                        inspectionTarget={inspectionTarget}
+                        toggleInspect={toggleInspect}    
+                    /> 
                 }
             </div>
         </>

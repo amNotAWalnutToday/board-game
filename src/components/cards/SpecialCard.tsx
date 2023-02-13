@@ -3,10 +3,17 @@ import { Square as SquareTemplate, Player} from '../../Game';
 type Props = {
     inspectionTarget: SquareTemplate | undefined;
     gameBoard: any;
-    jailedPlayers: any; 
+    jailedPlayers: any;
+    toggleInspect: any;
 }
 
-const SpecialCard = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) => {
+const SpecialCard = ( 
+    {
+        inspectionTarget, 
+        gameBoard, 
+        jailedPlayers,
+        toggleInspect,
+    }: Props ) => {
     const goText = "On passing go receive £200";
     const freeParkingText = "On landing here receive money that has collected from taxes";
     const goToJailText = "Go directly to jail, do not pass go, do not receive £200!";
@@ -38,7 +45,7 @@ const SpecialCard = ( {inspectionTarget, gameBoard, jailedPlayers}: Props ) => {
     }
 
     return (
-        <ul className="special-card">
+        <ul className="special-card" onClick={toggleInspect} >
             <li className="card-name plain" >{inspectionTarget?.name}</li>
             <div>
                 <li>

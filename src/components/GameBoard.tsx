@@ -154,6 +154,7 @@ const GameBoard = (
                     inspectionTarget={inspectionTarget}
                     gameBoard={gameBoard}
                     jailedPlayers={jailedPlayers}
+                    toggleInspect={toggleInspect}
                 />
             }
             {showStats 

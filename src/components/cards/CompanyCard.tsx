@@ -2,11 +2,12 @@ import { Square as SquareTemplate } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareTemplate | undefined;
+    toggleInspect:any;
 }
 
-const CompanyCard = ( {inspectionTarget}: Props ) => {
+const CompanyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
     return (
-        <ul className="company-card">
+        <ul className="company-card" onClick={toggleInspect}>
             <li className="card-name plain">
                 {inspectionTarget?.name}
             </li>

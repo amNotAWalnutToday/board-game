@@ -29,10 +29,20 @@ const SellPrompt = (
             <div className="buy-popup">
                 <div className="buy-menu">
                     {checkIfStation(inspectionTarget?.number) 
-                    ? <StationCard inspectionTarget={inspectionTarget} />
+                    ? <StationCard 
+                        inspectionTarget={inspectionTarget} 
+                        toggleInspect={undefined}
+                    />
                     : checkIfUtility(inspectionTarget?.number) 
-                        ? <CompanyCard inspectionTarget={inspectionTarget}/>
-                        : <PropertyCard inspectionTarget={inspectionTarget} />}
+                        ? <CompanyCard 
+                            inspectionTarget={inspectionTarget}
+                            toggleInspect={undefined}
+                        />
+                        : <PropertyCard 
+                            inspectionTarget={inspectionTarget} 
+                            toggleInspect={undefined}
+                        />
+                    }
                     <p className='text-plain' >
                         Your Money: 
                         <span className='money'> £{localPlayer.money}</span>
