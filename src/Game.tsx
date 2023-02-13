@@ -22,6 +22,7 @@ export type Player = {
     money: number,
     cards: string[],
     owned: Square[],
+    lost: boolean,
 }
 
 export type Square = {
@@ -248,7 +249,8 @@ const Game = () => {
         dice2: {number: number, hasRolled: boolean}, 
         money: number, 
         cards: [], 
-        owned: []
+        owned: [],
+        lost: false,
     ) => {
         return { 
             name,
@@ -258,7 +260,8 @@ const Game = () => {
             dice2, 
             money,
             cards,
-            owned, 
+            owned,
+            lost,
         }
     }
 
@@ -267,13 +270,14 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                35,
+                0,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
-                1000, 
+                2 - i, 
                 [], 
-                []
+                [],
+                false
             );
             players.push(newPlayer);
         } 
@@ -292,7 +296,7 @@ const Game = () => {
         }
     );
 
-    const changeTurn = () => {
+    /*const changeTurn:any = () => {
         const board = {...gameBoard}
         const players = [...board.players]
         let currentTurn:any;
@@ -312,8 +316,50 @@ const Game = () => {
         currentTurn.dice1.hasRolled = false;
         currentTurn.dice2.hasRolled = false;
         board.turn = currentTurn.name;
+        lose(currentTurn);
         setLocalPlayer(currentTurn);
         setGameBoard(board);
+        console.log(gameBoard.players);
+    }*/
+
+    const changeTurn:any = () => {
+        if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
+        let board = {...gameBoard};
+        lose(localPlayer);
+        const players = [...board.players];
+        const findCurrentTurn = (element:Player) => board.turn === element.name;
+        const currentTurn = players.findIndex(findCurrentTurn);
+        if(currentTurn + 1 > players.length - 1) {
+            board.turn = players[0].name;
+            players[0].dice1.hasRolled = false;
+            players[0].dice2.hasRolled = false;
+            setLocalPlayer(players[0]);
+        } else {
+            board.turn = players[currentTurn + 1].name;
+            players[currentTurn + 1].dice1.hasRolled = false;
+            players[currentTurn + 1].dice2.hasRolled = false;
+            setLocalPlayer(players[currentTurn + 1]);
+        }
+        board = removeLost(board);
+        setGameBoard(board);
+    }
+
+    const removeLost = (board: board) => {
+        const r:Player[] = [];
+        let i = 1;
+        board.players.forEach((player: Player) => {
+            if(!player.lost) { 
+                player.turnOrder = i;
+                i++;
+                r.push(player);
+            }
+        });
+        board.players = r;
+        return board;
+    }
+
+    const lose = (user: Player) => {
+        if(user.money <= 0 && !user.owned.length) user.lost = true;
     }
 
     const choosePlayer = () => {
@@ -370,7 +416,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 1);
+        const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -427,11 +473,9 @@ const Game = () => {
                 && player.name === square.ownedBy) {
                     player.money += square.rent[0] * 2;
                     paidAmount = square.rent[0] * 2;
-                    console.log(paidAmount);
                 } else if(player.name === square.ownedBy) {
                     player.money += square.rent[square.properties];
                     paidAmount = square.rent[square.properties];
-                    console.log(paidAmount);
                 }
             });
             user.money -= paidAmount;
@@ -524,7 +568,6 @@ const Game = () => {
         for(let i = 0; i < board.jail.length; i++) {
             if(user.name === board.jail[i].name) board.jail.splice(i, 1);
         }
-        console.log(board.jail);
         setGameBoard(board);
     }
 
@@ -552,19 +595,19 @@ const Game = () => {
         const here = user.location;
         switch(luckCards.number) {
             case 0:
-                user = moveSpaces(41 - here, user);
+                user = moveSpaces(user.location + 41 - here, user);
                 break;
             case 1: 
-                user = moveSpaces(40 - here, user);
+                user = moveSpaces(user.location + 40 - here, user);
                 break;
             case 2:
-                user = moveSpaces(15 - here, user);
+                user = moveSpaces(user.location + 15 - here, user);
                 break;
             case 3:
-                user = moveSpaces(36 - here, user);
+                user = moveSpaces(user.location + 36 - here, user);
                 break;
             case 4:
-                user = moveSpaces(29 - here, user);
+                user = moveSpaces(user.location + 29 - here, user);
                 break;
             case 5:
                 user = moveSpaces(3, user);
