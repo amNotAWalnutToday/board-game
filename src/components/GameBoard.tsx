@@ -186,9 +186,29 @@ const GameBoard = (
             }
             <div className="player-overlay">
                 <ul>
-                    <li>{localPlayer.name}</li>
-                    <li className='text-green' >£{localPlayer.money}</li>
-                    <li><strong>{cursorMode}</strong></li>
+                    <li>
+                        {cursorMode === 'inspect'
+                        && <div className='inspect-btn selected'></div>
+                        }
+                        {cursorMode === 'place'
+                        && <div className='place-mode-btn selected'>
+                            <span className="house-group">
+                                <span className='house' ></span>
+                                <span className='house' ></span>
+                                <span className='house' ></span>
+                            </span>
+                            <span className='break-line' ></span>
+                            <span className='hotel' ></span>
+                        </div>
+                        }
+                        {cursorMode === 'sell'
+                        && <div className='sell-property-btn selected money'>£</div>
+                        }
+                    </li>
+                    <div>
+                        <li>{localPlayer.name}</li>
+                        <li className='money' >£{localPlayer.money}</li>
+                    </div>
                 </ul>
             </div>
             <button 
@@ -198,10 +218,43 @@ const GameBoard = (
                 >
                     End Turn
             </button>
-            <button onClick={() => toggleMode('place')}  className="test" >place mode(temp)</button>
-            <button onClick={() => toggleMode('sell')} className='test3' >Sell mode(temp)</button>
-            <button onClick={() => toggleMode('inspect')} className='test4' >Inspect mode(temp)</button>
-            <button onClick={toggleStats} className="test2">show stats</button>
+            {cursorMode === 'place' 
+            ? undefined
+            :<button 
+                onClick={() => toggleMode('place')}  
+                className="top place-mode-btn" 
+                >
+                    <span className="house-group">
+                        <span className='house' ></span>
+                        <span className='house' ></span>
+                        <span className='house' ></span>
+                        <span className='house' ></span>
+                    </span>
+                    <span className='break-line' ></span>
+                    <span className='hotel' ></span>
+            </button>}
+            { cursorMode === 'sell'
+            ? undefined
+            :<button 
+                onClick={() => toggleMode('sell')} 
+                className='bottom sell-property-btn money' 
+                >
+                    £
+            </button>}
+            {cursorMode === 'inspect' 
+            ? undefined 
+            :<button 
+                onClick={() => toggleMode('inspect')} 
+                className={cursorMode === 'sell' 
+                    ? 'inspect-btn bottom' 
+                    : 'inspect-btn top'
+                } 
+            />}
+            <button 
+                onClick={toggleStats} 
+                className="test2">
+                    stats
+            </button>
         </div>
     )
 }
