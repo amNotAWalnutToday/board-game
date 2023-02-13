@@ -27,7 +27,7 @@ const Stats = ({players}: Props) => {
 
 
     return (
-        <div className="stats" >
+        <div className={players.length > 1 ? 'stats' : 'winner'} >
             {mapPlayerStats()}
         </div>
     )

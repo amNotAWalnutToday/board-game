@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GameBoard from './components/GameBoard';
+import Gameover from './components/Gameover';
 import ChancePrompt from './components/ChancePrompt';
 import BuyPrompt from './components/BuyPrompt';
 
@@ -47,7 +48,9 @@ const Game = () => {
     const toggleLuckCards = () => setLuckCards({show: false, type: '', number: 0});
 
     const [canBuy, setCanBuy] = useState(false);
-    const [buyableSquare, setBuyableSquare] = useState<Square>()
+    const [buyableSquare, setBuyableSquare] = useState<Square>();
+
+    const [gameover, setGameover] = useState<boolean>(false);
 
     const createSquare = (
         name:string, 
@@ -270,11 +273,11 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                0,
+                35,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
-                2 - i, 
+                1200 - i * 600, 
                 [], 
                 [],
                 false
@@ -355,6 +358,7 @@ const Game = () => {
             }
         });
         board.players = r;
+        if(r.length <= 1) setGameover(true);
         return board;
     }
 
@@ -416,7 +420,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 6);
+        const ran = Math.ceil(Math.random() * 1);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -593,21 +597,22 @@ const Game = () => {
     const useChance = () => {
         let user = {...localPlayer};
         const here = user.location;
+        let move;
         switch(luckCards.number) {
             case 0:
-                user = moveSpaces(user.location + 41 - here, user);
+                user = moveSpaces(41 - here, user);
                 break;
             case 1: 
-                user = moveSpaces(user.location + 40 - here, user);
+                user = moveSpaces(40 - here, user);
                 break;
             case 2:
-                user = moveSpaces(user.location + 15 - here, user);
+                user = moveSpaces(40 + 15 - here, user);
                 break;
             case 3:
-                user = moveSpaces(user.location + 36 - here, user);
+                user = moveSpaces(40 + 36 - here, user);
                 break;
             case 4:
-                user = moveSpaces(user.location + 29 - here, user);
+                user = moveSpaces(40 + 29 - here, user);
                 break;
             case 5:
                 user = moveSpaces(3, user);
@@ -748,6 +753,8 @@ const Game = () => {
                     useChest={useChest}
                 />
             }
+            {gameover
+            && <Gameover localPlayer={localPlayer} />}
         </div>
     )
 }
@@ -775,9 +782,11 @@ export default Game;
 //              improve buy prompt <= started(onhold)
 //
 // next step => add chance/chest cards <= complete
+//              add function to get out of jail free card
 //              add correct text to cards 
 //
 // next step => add icons to board spots and update user icons
+//              stagger moving
 //
 // next step => add player interface 
 //              statistic screen <= complete?(can improve by adding props to list)
@@ -785,4 +794,5 @@ export default Game;
 //              change dice
 // next step => add sorting function for player owned properties <= complete
 //
-// next step => add win/lose conditions
+// next step => add win/lose conditions <= current
+//              add win screen

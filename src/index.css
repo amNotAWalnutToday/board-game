@@ -111,6 +111,7 @@
   height: 45%;
 }
 
+.winner .player-stats,
 .prompt .chance-card,
 .buy-popup .company-card,
 .buy-popup .station-card,
@@ -179,6 +180,13 @@
   grid-template-rows: 1fr 1fr;
   justify-items: center;
   background: rgba(52, 64, 58, 0.4);
+  color: white;
+}
+
+.winner {
+  display: flex;
+  justify-content: center;
+  width: 90%;
   color: white;
 }
 
@@ -275,10 +283,16 @@
   border: 2px solid black;
 }
 
+a:hover,
 button:hover,
 .dice:hover {
   filter: brightness(80%);
   cursor: pointer;
+}
+
+a,
+button {
+  transition: filter 0.2s ease-out;
 }
 
 .square {
@@ -422,6 +436,13 @@ a {
   border: none;
   box-shadow: 0px 1px 5px 1px black;
   border-radius: 5px;
+}
+
+a.buy-btn {
+  text-decoration: none;
+  color: black;
+  width: 100%;
+  text-align: center;
 }
 
 .buy-btn {

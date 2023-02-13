@@ -42,9 +42,11 @@ const SellPrompt = (
                             className="dont-buy-btn" 
                             onClick={() => buyProperty(inspectionTarget)} 
                         >
-                            { buyType === 'sell' 
+                            { (buyType === 'sell' 
                             && inspectionTarget
-                            && inspectionTarget?.properties < 1
+                            && inspectionTarget?.properties < 1)
+                            || checkIfStation(inspectionTarget?.number)
+                            || checkIfUtility(inspectionTarget?.number)
                                 ? `Sell Property £${inspectionTarget?.cost.deed 
                                     ? inspectionTarget?.cost.deed / 2
                                     : undefined}`
