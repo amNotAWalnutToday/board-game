@@ -15,7 +15,10 @@ const Gameover = ( {localPlayer}: Props ) => {
                 <div className="prompt" >
                     <div className="buy-menu">
                         <h1 className='money' >1st Place!</h1>
-                        <Stats players={[localPlayer]} />
+                        <Stats 
+                            players={[localPlayer]}
+                            shouldClose={undefined}
+                        />
                         <div className='btn-group' >
                             <Link to="/" className='buy-btn'>Return To Main Menu</Link>
                         </div>

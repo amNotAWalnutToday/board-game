@@ -218,6 +218,10 @@
   border-radius: 5px;
 }
 
+.stats:not(.close) {
+  animation: pullout 0.4s 1 linear;
+}
+
 .winner {
   display: flex;
   justify-content: center;
@@ -577,6 +581,28 @@ a.buy-btn {
   
   to {
     transform: scale(1) rotateX(0deg);
+  }
+}
+
+.stats.close {
+  animation: pushin 0.5s 1 linear;
+}
+
+@keyframes pullout {
+  from {
+    transform: translateY(-50%) scaleY(0);
+  }
+  to {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes pushin {
+  from {
+    transform: translateY(0) scaleY(1);
+  }
+  to {
+    transform: translateY(-50%) scaleY(0);
   }
 }
 

@@ -33,15 +33,26 @@ const GameBoard = (
         checkIfUtility,
         checkForSet,
     }: Props ) => {
-    const [loading, setLoading] = useState(true);
-    const [showStats, setShowStats] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
+    
+    const [showStats, setShowStats] = useState<boolean>(true);
+    const [shouldClose, setShouldClose] = useState<boolean>(false);
+
     const [cursorMode, setCursorMode] = useState<Mode>('inspect');
     const [showInspect, setShowInspect] = useState<Boolean>(false);
     const [showBuyHouse, setShowBuyHouse] = useState<Boolean>(false);
     const [showSellHouse, setShowSellHouse] = useState<Boolean>(false);
+
     const [inspectionTarget, setInspectionTarget] = useState<SquareType>()
 
-    const toggleStats = () => setShowStats(!showStats);
+    const toggleStats = () => { 
+        setShowStats(!showStats);
+        setShouldClose(false);
+    }
+    const toggleShouldClose = () => {
+        setShouldClose(true);
+        setTimeout(() => toggleStats(), 400);
+    }
     const toggleInspect = () => setShowInspect(!showInspect);
     const toggleBuyHouse = () => setShowBuyHouse(!showBuyHouse);
     const toggleSellHouse = () => setShowSellHouse(!showSellHouse);
@@ -160,6 +171,7 @@ const GameBoard = (
             {showStats 
             && <Stats 
                     players={gameBoard.players} 
+                    shouldClose={shouldClose}
                 />
             }
             {showBuyHouse
@@ -251,7 +263,7 @@ const GameBoard = (
                 } 
             />}
             <button 
-                onClick={toggleStats} 
+                onClick={!showStats ? toggleStats : toggleShouldClose} 
                 className="test2">
                     stats
             </button>

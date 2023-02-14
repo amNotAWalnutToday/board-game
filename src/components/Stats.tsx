@@ -2,9 +2,10 @@ import { Player } from '../Game';
 
 type Props = {
     players: Player[];
+    shouldClose: boolean | undefined;
 }
 
-const Stats = ({players}: Props) => {
+const Stats = ({players, shouldClose}: Props) => {
     const mapPlayerStats = () => {
         return players.map((item, i) => {
             return (
@@ -25,9 +26,16 @@ const Stats = ({players}: Props) => {
         })
     }
 
-
     return (
-        <div className={players.length > 1 ? 'stats' : 'winner'} >
+        <div 
+            className={
+                players.length < 2 && !shouldClose
+                    ? 'winner' 
+                    : shouldClose 
+                        ? 'stats close'
+                        : 'stats'
+            } 
+        >
             {mapPlayerStats()}
         </div>
     )
