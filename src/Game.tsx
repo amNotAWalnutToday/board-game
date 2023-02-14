@@ -24,6 +24,7 @@ export type Player = {
     cards: string[],
     owned: Square[],
     lost: boolean,
+    logo: string,
 }
 
 export type Square = {
@@ -254,6 +255,7 @@ const Game = () => {
         cards: [], 
         owned: [],
         lost: false,
+        logo: string,
     ) => {
         return { 
             name,
@@ -265,6 +267,7 @@ const Game = () => {
             cards,
             owned,
             lost,
+            logo,
         }
     }
 
@@ -273,14 +276,15 @@ const Game = () => {
         for(let i = 1; i <= 4; i++) {
             const newPlayer = createPlayer(
                 `player ${i}`,
-                35,
+                1,
                 i, 
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
-                1200 - i * 600, 
+                1000, 
                 [], 
                 [],
-                false
+                false,
+                'dendro'
             );
             players.push(newPlayer);
         } 
@@ -334,6 +338,7 @@ const Game = () => {
         const currentTurn = players.findIndex(findCurrentTurn);
         if(currentTurn + 1 > players.length - 1) {
             board.turn = players[0].name;
+            board.round++;
             players[0].dice1.hasRolled = false;
             players[0].dice2.hasRolled = false;
             setLocalPlayer(players[0]);
@@ -420,7 +425,7 @@ const Game = () => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
-        const ran = Math.ceil(Math.random() * 1);
+        const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
         if(user.dice2.hasRolled && diceNum === 2) return; 
@@ -578,7 +583,8 @@ const Game = () => {
     const locationEventJailRollCheck = (user: Player) => {      
         setLocalPlayer(user);
         if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
-        if(user.dice1.number === user.dice2.number) locationEventLeaveJail(user);
+        if(user.dice1.number === user.dice2.number
+        || user.dice1.number + user.dice2.number > 7) locationEventLeaveJail(user);
     }
 
     const locationEventGoToJail = (user: Player) => {
@@ -597,7 +603,6 @@ const Game = () => {
     const useChance = () => {
         let user = {...localPlayer};
         const here = user.location;
-        let move;
         switch(luckCards.number) {
             case 0:
                 user = moveSpaces(41 - here, user);
@@ -776,9 +781,9 @@ export default Game;
 //              properties <= complete
 //              stations <= complete
 //              utility <= complete
-//              special
-//              chance 
-//              tax
+//              special <= complete
+//              chance  
+//              tax <= complete
 //              improve buy prompt <= started(onhold)
 //
 // next step => add chance/chest cards <= complete
@@ -789,10 +794,10 @@ export default Game;
 //              stagger moving
 //
 // next step => add player interface 
-//              statistic screen <= complete?(can improve by adding props to list)
+//              statistic screen <= complete
 //              improve end turn button
 //              change dice
 // next step => add sorting function for player owned properties <= complete
 //
-// next step => add win/lose conditions <= current
-//              add win screen
+// next step => add win/lose conditions <= complete
+//              add win screen <= complete

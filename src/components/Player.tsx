@@ -10,11 +10,9 @@ type Props = {
 
 const Player = ({localPlayer, index, player, changeTurn}: Props) => {
     return (
-        <>
-            <div className={`player player-${player.turnOrder}`}>
-                {index}
-            </div>
-        </>
+        <div 
+            className={`player player-${player.turnOrder} logo-${player.logo}`}
+        />
     )
 }
 
