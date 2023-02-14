@@ -14,6 +14,8 @@ type Props = {
     rollDice: any;/*not in use atm*/
     changeTurn: () => void,
     jailedPlayers: Player[];
+    locationEventLeaveJail: (user: Player) => void;
+    checkJail: (user: Player) => boolean | undefined;
     checkIfStation: (num: number | undefined) => boolean;
     checkIfUtility: (num: number | undefined) => boolean;
     checkForSet: (user: Player, group: string) => boolean;
@@ -29,12 +31,14 @@ const GameBoard = (
         rollDice,
         changeTurn, 
         jailedPlayers,
+        locationEventLeaveJail,
+        checkJail,
         checkIfStation,
         checkIfUtility,
         checkForSet,
     }: Props ) => {
     const [loading, setLoading] = useState<boolean>(true);
-    
+
     const [showStats, setShowStats] = useState<boolean>(true);
     const [shouldClose, setShouldClose] = useState<boolean>(false);
 
@@ -267,6 +271,19 @@ const GameBoard = (
                 className="test2">
                     stats
             </button>
+            {checkJail(localPlayer) && localPlayer.cards.length 
+                ? <button 
+                    className='use-card-btn'
+                    onClick={() => {
+                            locationEventLeaveJail(localPlayer);
+                            localPlayer.cards.pop();
+                        }
+                    }
+                >
+                    Get Out Of Jail
+                </button>
+                : undefined
+            }
         </div>
     )
 }

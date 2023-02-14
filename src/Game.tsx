@@ -252,7 +252,7 @@ const Game = () => {
         dice1: {number: number, hasRolled: boolean}, 
         dice2: {number: number, hasRolled: boolean}, 
         money: number, 
-        cards: [], 
+        cards: string[], 
         owned: [],
         lost: false,
         logo: string,
@@ -281,7 +281,7 @@ const Game = () => {
                 {number: 1, hasRolled: false}, 
                 {number: 1, hasRolled: false}, 
                 1000, 
-                [], 
+                ['get out of jail'], /*remove card*/
                 [],
                 false,
                 'dendro'
@@ -477,6 +477,7 @@ const Game = () => {
         } else {
             let paidAmount = 0;
             players.forEach((player: Player) => {
+                if(checkJail(player)) return;
                 if(checkForSet(player, square.group) 
                 && square.properties === 0
                 && player.name === square.ownedBy) {
@@ -734,6 +735,8 @@ const Game = () => {
                     rollDice={rollDice} 
                     changeTurn={changeTurn}
                     jailedPlayers={gameBoard.jail}
+                    locationEventLeaveJail={locationEventLeaveJail}
+                    checkJail={checkJail}
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}
                     checkForSet={checkForSet}

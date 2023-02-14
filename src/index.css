@@ -470,6 +470,12 @@ li .house-group {
   grid-column: 10 / 11;
 }
 
+.use-card-btn {
+  grid-row: 9 / 11;
+  grid-column: 2 / 3;
+}
+
+.use-card-btn,
 .logo-carousel button,
 .title-menu .btn-group button,
 .test2,
