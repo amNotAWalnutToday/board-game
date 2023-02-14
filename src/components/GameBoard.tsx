@@ -222,7 +222,7 @@ const GameBoard = (
                         }
                     </li>
                     <div>
-                        <li>{localPlayer.name}</li>
+                        <li>{localPlayer.name} <span className={`logo logo-${localPlayer.logo}`}></span></li>
                         <li className='money' >£{localPlayer.money}</li>
                     </div>
                 </ul>

@@ -100,6 +100,7 @@ const RouteSwitch = () => {
             ? playerSettings.player3.disable = !playerSettings.player3.disable
             : playerSettings.player4.disable = !playerSettings.player4.disable;
         setSettings(playerSettings);
+        console.log(settings.player3);
     }
 
     return(
@@ -117,7 +118,7 @@ const RouteSwitch = () => {
                 />
                 <Route 
                     path='/game' 
-                    element={<Game />} 
+                    element={<Game settings={settings} />} 
                 />
             </Routes>
         </Router>

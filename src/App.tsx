@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -13,6 +13,21 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
   const [currentPlayer, setCurrentPlayer] = useState<number>(1);
   const toggleShowSettings = () => setShowSettings(!showSettings);
 
+  const validateIcons = () => {
+    const icons:string[] = [];
+    for(const player in settings) {
+      if(!settings[player].disable) icons.push(settings[player].icon);
+    }
+
+    const validate = new Set(icons).size;
+    if(settings.player3.disable && settings.player4.disable) {
+      return validate === 2 ? true : false;
+    } else if(settings.player3.disable || settings.player4.disable) {
+      return validate === 3 ? true : false;
+    } 
+    else return validate === 4 ? true : false;
+  }
+
   return (
     <div className="title-menu" >
       {!showSettings 
@@ -24,6 +39,7 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
           <div className='card-name plain' >
             <input 
               type="text"
+              maxLength={10}
               onChange={(e) => inputHandler(e, currentPlayer)}
               value={
                 currentPlayer === 1 
@@ -60,14 +76,22 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
             </button>
           </div>
           <button 
-            className="disable-btn"
+            className={(currentPlayer === 3 && !settings.player3.disable)
+              || (currentPlayer === 4 && !settings.player4.disable)
+              ? 'disable-btn'
+              :  'disable-btn disable-on'
+            }
             onClick={() => disablePlayer(currentPlayer)} 
             disabled={currentPlayer === 3 || currentPlayer === 4 
               ? false 
               : true
             }
           >
-            Disable
+            {(currentPlayer === 3 && settings.player3.disable)
+            || (currentPlayer === 4 && settings.player4.disable)
+              ? 'Enable' 
+              : 'Disable' 
+            }
           </button>
           <div className='btn-group' >
             <button 
@@ -112,7 +136,13 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
             </button>
           </div>
         </div>
-        <Link to="/game" className='buy-btn' >Go</Link>
+        <Link 
+          to="/game" 
+          className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
+          onClick={validateIcons() ? undefined : (e) => e.preventDefault()}
+        >
+          {validateIcons() ? 'Go' : 'No Duplicate Icons'}
+        </Link>
       </div>}
     </div>
   );

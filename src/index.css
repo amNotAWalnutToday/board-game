@@ -53,7 +53,6 @@
 }
 
 .title-menu a {
-  font-size: 40px;
   padding: 1rem;
   border-radius: 5px;
   box-shadow: var(--light-shadow);
@@ -546,6 +545,7 @@ li .house-group {
   align-self: center;
 }
 
+a.dont-buy-btn,
 a.buy-btn {
   text-decoration: none;
   color: black;
@@ -553,6 +553,15 @@ a.buy-btn {
   text-align: center;
 }
 
+a.buy-btn {
+  font-size: 40px;
+}
+
+a.dont-buy-btn {
+  padding: 1.9rem 0;
+}
+
+.disable-btn.disable-on,
 .buy-btn {
   background: var(--positive-btn);
 }
@@ -658,8 +667,19 @@ button:disabled {
   background: var(--negative-btn) !important;
 }
 
+.player-stats p:first-child {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+} 
+
+.player-overlay span.logo {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+}
+
 .logo {
-  filter: brightness(75%);
   width: 25px;
   height: 25px;
   transition: all 0.4s ease;

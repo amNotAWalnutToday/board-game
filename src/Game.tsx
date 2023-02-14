@@ -37,7 +37,11 @@ export type Square = {
     group: 'brown'|'cyan'|'pink'|'orange'|'red'|'yellow'|'green'|'navy'|null,
 }
 
-const Game = () => {
+type Props = {
+    settings: any;
+}
+
+const Game = ( {settings}: Props ) => {
     const [loading, setLoading] = useState(true);
     const [luckCards, setLuckCards] = useState(
         {
@@ -202,7 +206,7 @@ const Game = () => {
     const checkForSet = (user:Player, group: string | null):boolean => {
         let deeds = 0;
         user.owned.forEach((square) => {
-                if(square.group === group) deeds += 1; 
+            if(square.group === group) deeds += 1; 
         });
         if(group === 'navy' || group === 'brown') {
             return deeds === 2 ? true : false;
@@ -247,47 +251,66 @@ const Game = () => {
 
     const createPlayer = (
         name: string,
-        location: number,
-        turnOrder: number,
-        dice1: {number: number, hasRolled: boolean}, 
-        dice2: {number: number, hasRolled: boolean}, 
-        money: number, 
-        cards: string[], 
-        owned: [],
-        lost: false,
         logo: string,
+        turnOrder: number,
+        location: number = 1,
+        dice1: {
+            number: number, 
+            hasRolled: boolean 
+        } = { number: 1, hasRolled: false}, 
+        dice2: {
+            number: number, 
+            hasRolled: boolean 
+        } = { number: 1, hasRolled: false}, 
+        money: number = 1000, 
+        cards: string[] = [], 
+        owned: [] = [],
+        lost: boolean = false,
     ) => {
         return { 
             name,
-            location,
+            logo,
             turnOrder, 
+            location,
             dice1, 
             dice2, 
             money,
             cards,
             owned,
             lost,
-            logo,
         }
     }
 
     const populatePlayers = () => {
         const players = []
-        for(let i = 1; i <= 4; i++) {
-            const newPlayer = createPlayer(
-                `player ${i}`,
-                1,
-                i, 
-                {number: 1, hasRolled: false}, 
-                {number: 1, hasRolled: false}, 
-                1000, 
-                ['get out of jail'], /*remove card*/
-                [],
-                false,
-                'dendro'
+        const newPlayer1 = createPlayer(
+            settings.player1.name,
+            settings.player1.icon,
+            1,
+        );
+        const newPlayer2 = createPlayer(
+            settings.player2.name,
+            settings.player2.icon,
+            2,
+        );
+        players.push(newPlayer1, newPlayer2);
+
+        if(!settings.player3.disable) {
+            const newPlayer3 = createPlayer(
+                settings.player3.name,
+                settings.player3.icon,
+                3,
             );
-            players.push(newPlayer);
-        } 
+            players.push(newPlayer3);
+        }
+        if(!settings.player4.disable) {
+            const newPlayer4 = createPlayer(
+                settings.player4.name,
+                settings.player4.icon,
+                4,
+            );
+            players.push(newPlayer4);
+        }
         return players;
     }
 
@@ -295,7 +318,7 @@ const Game = () => {
         {
             players: populatePlayers(),
             round: 1,
-            turn: 'player 1',
+            turn: settings.player1.name,
             squares: populateSquares(),
             chance: [],
             prize: [],
@@ -379,8 +402,8 @@ const Game = () => {
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
-        if(gameBoard.squares.length < 40) populateSquares();
-    }, [loading]);
+        
+    }, []);
 
     const syncPlayer = (user: Player) => {
         const board = {...gameBoard};
@@ -559,7 +582,8 @@ const Game = () => {
         if(square.ownedBy !== 'market'
         && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
-        else if(square.ownedBy !== user.name && square.cost.deed) {
+        else if(square.ownedBy !== user.name && square.cost.deed
+        && square.cost.deed < user.money) {
             setCanBuy(true);
             setBuyableSquare(square);
         }
