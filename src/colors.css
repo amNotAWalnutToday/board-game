@@ -18,6 +18,7 @@
     color: var(--cyan);
   }
   
+  .card-cryo,
   .cyan {
     background: linear-gradient(var(--cyan), darkcyan) ;
   }
@@ -42,6 +43,7 @@
     color: var(--red);
   }
   
+  .card-pyro,
   .red {
     background: linear-gradient(var(--red), darkred);
   }
@@ -50,6 +52,7 @@
     color: var(--yellow);
   }
   
+  .card-geo,
   .yellow {
     background: linear-gradient(var(--yellow), gold);
     color: rgb(70, 70, 70);
@@ -59,6 +62,7 @@
     color: var(--green);
   }
   
+  .card-dendro,
   .green {
     background: linear-gradient(var(--green), darkgreen) ;
   }
@@ -67,6 +71,7 @@
     color: var(--light-navy);
   }
   
+  .card-hydro,
   .navy {
     background: linear-gradient(var(--light-navy), var(--navy));
 
@@ -75,8 +80,15 @@
   .money {
     color: var(--money);
   }
+
+  .card-anemo {
+    background: linear-gradient(var(--turquoise), var(--inner-board));
+  }
   
   .tax {
     color: var(--tax);
   }
   
+  .card-electro {
+    background: linear-gradient(violet, purple)
+  }

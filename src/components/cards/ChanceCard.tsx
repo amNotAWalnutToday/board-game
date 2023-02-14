@@ -57,9 +57,11 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
             }
             
         >
-            {flipped !== 'flipped' && flipped !== 'flipped flipping-part-2' ? '' 
-            :<div>
+            {flipped !== 'flipped' && flipped !== 'flipped flipping-part-2' 
+            ? <div className='card-back'><div className='chance-icon card-back' ></div></div> 
+            :<div className='card-front' >
                 <li className="card-name plain">{luckCards.type}</li>
+                <li className='chance-icon card-back' ></li>
                 <li className='card-name' >{currentCard}</li>
             </div>}
         </ul>

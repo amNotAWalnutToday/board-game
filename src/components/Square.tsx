@@ -95,13 +95,19 @@ const Square = (
             {/*specific exceptions*/}
             {square.number === 21
                 ? <p className='money'>£{square.cost.deed}</p>
-                : undefined}
+                : undefined
+            }
             {square.number === 5 || square.number === 39
                 ? <p className='tax'>£{square.cost.deed}</p>
-                : undefined}
-            <div className={`square-name ${square.group}`} >
-
-            </div>
+                : undefined
+            }
+            {square.number === 3 || square.number === 8
+            || square.number === 18 || square.number === 23
+            || square.number === 34 || square.number === 37
+                ? <div className='chance-icon'></div>
+                : undefined  
+            }
+            <div className={`square-name ${square.group}`} />
         </div>
     )
 }

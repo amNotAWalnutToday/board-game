@@ -7,7 +7,8 @@ type Props = {
 
 const ChestCard = ( {inspectionTarget, toggleInspect}: Props ) => {
     return (
-       <ul className="chance-card" onClick={toggleInspect} >
+       <ul className="chance-card card-back" onClick={toggleInspect} >
+        <li className='chance-icon'></li>
        </ul> 
     )
 }

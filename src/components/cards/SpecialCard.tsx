@@ -84,7 +84,7 @@ const SpecialCard = (
             : ''}
             {inspectionTarget?.name === 'jail' 
             ? <li className="jail-description" >
-                To leave jail you must roll a double, or stay another turn!
+                To leave jail you must roll a double, or higher total than 8!
             </li>
             : ''}
             
