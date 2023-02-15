@@ -92,6 +92,18 @@
   box-shadow: var(--heavy-shadow);
 }
 
+.game-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background-color: #88888888;
+  padding: 0.5rem 2rem;
+  width: 840px;
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+}
+
 .underlay {
   position: absolute;
   top: 0;
@@ -264,6 +276,7 @@
   max-height: 160px;
 }
 
+.game-log::-webkit-scrollbar,
 .player-owned::-webkit-scrollbar {
   width: 1em;
   background: black;
@@ -271,6 +284,7 @@
   border-radius: 5px;
 }
 
+.game-log::-webkit-scrollbar-thumb,
 .player-owned::-webkit-scrollbar-thumb {
   background: var(--light-background);
   border-radius: 5px;

@@ -88,6 +88,12 @@
   .tax {
     color: var(--tax);
   }
+
+  .game-log .tax {
+    font-weight: bold;
+    font-size: 24px;
+    -webkit-text-stroke: 1px black;
+  }
   
   .card-electro {
     background: linear-gradient(violet, purple)

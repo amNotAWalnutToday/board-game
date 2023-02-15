@@ -3,6 +3,7 @@ import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
 import ChancePrompt from './components/ChancePrompt';
 import BuyPrompt from './components/BuyPrompt';
+import Log from './components/Log';
 
 interface board {
     players: any,
@@ -12,6 +13,14 @@ interface board {
     chance: [],
     prize: [],
     jail: Player[],
+}
+
+export type LogMessage = {
+    player: string,
+    action: string | undefined,
+    output: string | undefined,
+    player2: string | undefined,
+    money: string | undefined,
 }
 
 export type Player = {
@@ -54,6 +63,8 @@ const Game = ( {settings}: Props ) => {
 
     const [canBuy, setCanBuy] = useState(false);
     const [buyableSquare, setBuyableSquare] = useState<Square>();
+
+    const [gameLog, setGameLog] = useState<LogMessage[]>([]);
 
     const [gameover, setGameover] = useState<boolean>(false);
 
@@ -126,7 +137,7 @@ const Game = ( {settings}: Props ) => {
             createSquare('Mondstadt', 2, 'market', 0, {deed: 60, house: 50, hotel: 50}, [2,10,30,90,160,250], 'brown'),
             createSquare('Common Chest', 3),
             createSquare('Stormterrors lair', 4, 'market', 0, {deed: 60, house: 50, hotel: 50}, [4,20,60,180,320,450], 'brown'),
-            createSquare('Retake Gliding Exam', 5, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
+            createSquare('Gliding Exam', 5, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
             createSquare('Dornman Port', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
             createSquare('Dadaupa Gorge', 7, 'market', 0, {deed: 100, house: 50, hotel: 50}, [6,30,90,270,400,550], 'cyan'),
             createSquare('Wish', 8),
@@ -372,7 +383,7 @@ const Game = ( {settings}: Props ) => {
             setLocalPlayer(players[currentTurn + 1]);
         }
         board = removeLost(board);
-        setGameBoard(board);
+        setGameBoard(board);      
     }
 
     const removeLost = (board: board) => {
@@ -404,6 +415,24 @@ const Game = ( {settings}: Props ) => {
         setTimeout(() => setLoading(false), 1000);
         
     }, []);
+
+    const pushToLog = (
+        user: any, 
+        action: string, 
+        output: string | undefined,
+        receiver: any,
+        money: string | undefined,
+        ) => {
+        const message = {
+            player: `${user.name}`,
+            action: action,
+            player2: receiver,
+            output: output,
+            money: money,
+        };
+        gameLog.push(message);
+        if(gameLog.length > 50) gameLog.shift();
+    }
 
     const syncPlayer = (user: Player) => {
         const board = {...gameBoard};
@@ -468,6 +497,10 @@ const Game = ( {settings}: Props ) => {
         } else {
             user.location += rolledNum;
         }
+        const currentSquare = getSquare(user);
+        if(user.dice1.hasRolled && user.dice2.hasRolled) {
+            pushToLog(user, 'arrives at', currentSquare?.name, '', '');
+        }
         return user;
     }
 
@@ -498,9 +531,11 @@ const Game = ( {settings}: Props ) => {
             if(square.number === 21 && user.location === 39) {
                 square.cost.deed += 100;
                 user.money -= 100;
+                pushToLog(user, `pays`, `to`, 'Commisions', `100`);
             } else if(square.number === 21 && user.location === 5) {
                 square.cost.deed += 200;
                 user.money -= 200;
+                pushToLog(user, `pays`, `to`, 'Commisions', `200`);
             }
         });
         setLocalPlayer(user);
@@ -531,9 +566,11 @@ const Game = ( {settings}: Props ) => {
                 && player.name === square.ownedBy) {
                     player.money += square.rent[0] * 2;
                     paidAmount = square.rent[0] * 2;
+                    pushToLog(user, `pays`, `to`, player.name, `${paidAmount}`);
                 } else if(player.name === square.ownedBy) {
                     player.money += square.rent[square.properties];
                     paidAmount = square.rent[square.properties];
+                    pushToLog(user, `pays`, `to`, player.name, `${paidAmount}`);
                 }
             });
             user.money -= paidAmount;
@@ -591,6 +628,7 @@ const Game = ( {settings}: Props ) => {
             if(checkIfStation(square.number)) setStationRent();
             if(checkIfUtility(square.number)) setUtilityRent();
         }
+        pushToLog(user, 'bought', buyableSquare?.name, '', '');
         setLocalPlayer(user);
         syncPlayer(user);
         closeBuyPrompt();
@@ -632,22 +670,44 @@ const Game = ( {settings}: Props ) => {
 
     const locationEventJailRollCheck = (user: Player) => {      
         setLocalPlayer(user);
+        const totalRoll = user.dice1.number + user.dice2.number;
         if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
         if(user.dice1.number === user.dice2.number
-        || user.dice1.number + user.dice2.number > 7) locationEventLeaveJail(user);
+        || user.dice1.number + user.dice2.number > 7) {
+            locationEventLeaveJail(user);
+            pushToLog(
+                user, 
+                `rolls a ${totalRoll} and`, 
+                'is released from solitary confinement', ``, '' 
+            );
+        } else {
+            pushToLog(
+                user, 
+                `rolls a ${totalRoll} and`, 
+                'remains in solitary confinement another turn', ``, `` 
+            );
+        }
     }
 
-    const locationEventGoToJail = (user: Player) => {
+    const locationEventGoToJail = (user: Player, type: string) => {
         const board = {...gameBoard};
         gameBoard.jail.push(user);
         user.location = 11;
         setLocalPlayer(user);
         setGameBoard(board);
+        console.log(user.name);
+        type === 'single' 
+            ? pushToLog(user, 'gets sent to', 'Solitary Confinement', '', '')
+            : pushToLog(
+                {name: `Everybody except ${user.name}`}, 
+                `gets arrested to`, 
+                'Solitary Confinement', '', ''
+            )
     }
 
     const locationEventSpecial = (user: Player) => {
         if(user.location === 21) return locationEventFreeParking(user);
-        if(user.location === 31) return locationEventGoToJail(user);
+        if(user.location === 31) return locationEventGoToJail(user, 'single');
     }
 
     const useChance = () => {
@@ -720,11 +780,13 @@ const Game = ( {settings}: Props ) => {
                 break;
             case 5:
                 board.players.forEach((player: Player) => {
-                    if(user.name !== player.name) locationEventGoToJail(player);
+                    if(user.name !== player.name) {
+                        locationEventGoToJail(player, 'all');
+                    }
                 });
                 break;
             case 6:
-                locationEventGoToJail(user);
+                locationEventGoToJail(user, 'single');
                 break;
             case 7:
                 user.cards.push('get out of jail');
@@ -812,6 +874,7 @@ const Game = ( {settings}: Props ) => {
             }
             {gameover
             && <Gameover localPlayer={localPlayer} />}
+            <Log gameLog={gameLog} />
         </div>
     )
 }
