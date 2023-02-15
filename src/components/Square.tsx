@@ -101,12 +101,21 @@ const Square = (
                 ? <p className='tax'>£{square.cost.deed}</p>
                 : undefined
             }
-            {square.number === 3 || square.number === 8
-            || square.number === 18 || square.number === 23
-            || square.number === 34 || square.number === 37
-                ? <div className='chance-icon'></div>
+            {square.number === 8
+            || square.number === 23
+            || square.number === 37
+                ? <div className='wish-icon'></div>
                 : undefined  
             }
+            {square.number === 3 
+                ? <div className='common-chest' ></div>
+                : undefined}
+            {square.number === 18 
+                ? <div className='exquisite-chest' ></div>
+                : undefined}
+            {square.number === 34
+                ? <div className='luxurious-chest' />
+                : undefined}
             <div className={`square-name ${square.group}`} />
         </div>
     )

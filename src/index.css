@@ -88,10 +88,7 @@
   padding: 0.1rem;
   margin-top: 1rem;
   /*background-color: var(--inner-board);*/
-  background: url('./imgs/test.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 75%;
+  transition: all 0.4s ease-out;
   box-shadow: var(--heavy-shadow);
 }
 
@@ -203,6 +200,11 @@
 .free-parking-prize {
   justify-content: space-between !important;
   font-size: 30px;
+}
+
+.chance-card-description {
+  padding: 1rem 0;
+  margin: 0 2rem;
 }
 
 .stats {
@@ -380,6 +382,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  font-size: 13px;
   padding: 0.2rem 0 0 0; 
   background: var(--dark-background);
   color: white;
@@ -766,4 +769,67 @@ button:disabled {
   width: 40%;
   height: 40%;
   align-self: center;
+}
+
+.wish-icon {
+  background: url('./imgs/wish.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40%;
+  height: 40%;
+  align-self: center;
+}
+
+.common-chest {
+  background: url('./imgs/common-chest.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40%;
+  height: 40%;
+}
+
+.exquisite-chest {
+  background: url('./imgs/exquisite-chest.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40%;
+  height: 40%;
+}
+
+.luxurious-chest {
+  background: url('./imgs/luxurious-chest.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40%;
+  height: 40%;
+}
+
+.mondo {
+  background: url('./imgs/mondo.png');
+  background-repeat: no-repeat;
+  background-size: 125%;
+  background-position-y: 50%;
+  background-position-x: 130%;
+}
+
+.liyu {
+  background: url('./imgs/li.png');
+  background-repeat: no-repeat;
+  background-size: 125%;
+  background-position-y: 50%;
+  background-position-x: 130%;
+}
+
+.sume {
+  background: url('./imgs/sume.png');
+  background-repeat: no-repeat;
+  background-size: 125%;
+  background-position-y: 60%;
+  background-position-x: 30%;
+}
+
+.ina { 
+  background: url('./imgs/ina.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }

@@ -62,7 +62,7 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
             :<div className='card-front' >
                 <li className="card-name plain">{luckCards.type}</li>
                 <li className='chance-icon card-back' ></li>
-                <li className='card-name' >{currentCard}</li>
+                <li className='chance-card-description' >{currentCard}</li>
             </div>}
         </ul>
     )

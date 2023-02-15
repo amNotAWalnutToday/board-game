@@ -122,46 +122,46 @@ const Game = ( {settings}: Props ) => {
 
     const populateExceptionSquares = (num: number) => {
         const squares = [
-            createSquare('go', 1),
-            createSquare('kent road', 2, 'market', 0, {deed: 60, house: 50, hotel: 50}, [2,10,30,90,160,250], 'brown'),
-            createSquare('chest', 3),
-            createSquare('white road', 4, 'market', 0, {deed: 60, house: 50, hotel: 50}, [4,20,60,180,320,450], 'brown'),
-            createSquare('income tax', 5, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
-            createSquare('king cross station', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
-            createSquare('angel islington', 7, 'market', 0, {deed: 100, house: 50, hotel: 50}, [6,30,90,270,400,550], 'cyan'),
-            createSquare('chance', 8),
-            createSquare('euston road', 9, 'market', 0, {deed: 100, house: 50, hotel: 50}, [6,30,90,270,400,550], 'cyan'),
-            createSquare('penton ville road', 10, 'market', 0, {deed: 120, house: 50, hotel: 50}, [8,40,100,300,450,600], 'cyan'),
-            createSquare('jail', 11),
-            createSquare('pall mall', 12, 'market', 0, {deed: 140, house: 100, hotel: 100}, [10,50,150,450,625,750], 'pink'),
-            createSquare('electric company', 13, 'market', 0, {deed: 150, house: 100, hotel: 100}, [1,2,3,4,5,5]),
-            createSquare('whitehall', 14, 'market', 0, {deed: 140, house: 100, hotel: 100}, [10,50,150,450,625,750], 'pink'),
-            createSquare('umberland avenue', 15, 'market', 0, {deed: 160, house: 100, hotel: 100}, [12,60,180,500,700,900], 'pink'),
-            createSquare('marylbone station', 16, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
-            createSquare('bow street', 17, 'market', 0, {deed: 180, house: 100, hotel: 100}, [14,70,200,550,750,950], 'orange'),
-            createSquare('chest', 18),
-            createSquare('borough street', 19, 'market', 0, {deed: 180, house: 100, hotel: 100}, [14,70,200,550,750,950], 'orange'),
-            createSquare('vine street', 20, 'market', 0, {deed: 200, house: 100, hotel: 100}, [16,80,220,600,800,1000], 'orange'),
-            createSquare('free parking', 21),
-            createSquare('strand', 22, 'market', 0, {deed: 220, house: 150, hotel: 150}, [18,90,250,700,875,1050], 'red'),
-            createSquare('chance', 23),
-            createSquare('fleet street', 24, 'market', 0, {deed: 220, house: 150, hotel: 150}, [18,90,250,700,875,1050], 'red'),
-            createSquare('trafalgar square', 25, 'market', 0, {deed: 240, house: 150, hotel: 150}, [20,100,300,750,925,1100], 'red'),
-            createSquare('fenchurch station', 26, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
-            createSquare('leicester square', 27, 'market', 0, {deed: 260, house: 150, hotel: 150}, [22,110,330,800,975,1150], 'yellow'),
-            createSquare('coventry street', 28, 'market', 0, {deed: 260, house: 150, hotel: 150}, [22,110,330,800,975,1150], 'yellow'),
-            createSquare('water works', 29, 'market', 0, {deed: 150, house: 100, hotel: 100}, [1,2,3,4,5,5]),
-            createSquare('piccadilly', 30, 'market', 0, {deed: 260, house: 150, hotel: 150}, [24,120,360,850,1025,1200], 'yellow'),
+            createSquare('New Samsara', 1),
+            createSquare('Mondstadt', 2, 'market', 0, {deed: 60, house: 50, hotel: 50}, [2,10,30,90,160,250], 'brown'),
+            createSquare('Common Chest', 3),
+            createSquare('Stormterrors lair', 4, 'market', 0, {deed: 60, house: 50, hotel: 50}, [4,20,60,180,320,450], 'brown'),
+            createSquare('Retake Gliding Exam', 5, 'free parking', 0, {deed: 200, house: 0, hotel: 0}),
+            createSquare('Dornman Port', 6, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
+            createSquare('Dadaupa Gorge', 7, 'market', 0, {deed: 100, house: 50, hotel: 50}, [6,30,90,270,400,550], 'cyan'),
+            createSquare('Wish', 8),
+            createSquare('Springvale', 9, 'market', 0, {deed: 100, house: 50, hotel: 50}, [6,30,90,270,400,550], 'cyan'),
+            createSquare('Dawn Winery', 10, 'market', 0, {deed: 120, house: 50, hotel: 50}, [8,40,100,300,450,600], 'cyan'),
+            createSquare('Solitary Confinement', 11),
+            createSquare('Mt. Hula', 12, 'market', 0, {deed: 140, house: 100, hotel: 100}, [10,50,150,450,625,750], 'pink'),
+            createSquare('Yun-Han Opera', 13, 'market', 0, {deed: 150, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('Qingyun Peak', 14, 'market', 0, {deed: 140, house: 100, hotel: 100}, [10,50,150,450,625,750], 'pink'),
+            createSquare('Mt. Aocang', 15, 'market', 0, {deed: 160, house: 100, hotel: 100}, [12,60,180,500,700,900], 'pink'),
+            createSquare('Liyue Harbor', 16, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
+            createSquare('Mingyun Village', 17, 'market', 0, {deed: 180, house: 100, hotel: 100}, [14,70,200,550,750,950], 'orange'),
+            createSquare('Exquisite Chest', 18),
+            createSquare('Qingce Village', 19, 'market', 0, {deed: 180, house: 100, hotel: 100}, [14,70,200,550,750,950], 'orange'),
+            createSquare('Qiaoying Village', 20, 'market', 0, {deed: 200, house: 100, hotel: 100}, [16,80,220,600,800,1000], 'orange'),
+            createSquare('Commisions', 21),
+            createSquare('Chirai Shrine', 22, 'market', 0, {deed: 220, house: 150, hotel: 150}, [18,90,250,700,875,1050], 'red'),
+            createSquare('Wish', 23),
+            createSquare('Asase Shrine', 24, 'market', 0, {deed: 220, house: 150, hotel: 150}, [18,90,250,700,875,1050], 'red'),
+            createSquare('Mouun Shrine', 25, 'market', 0, {deed: 240, house: 150, hotel: 150}, [20,100,300,750,925,1100], 'red'),
+            createSquare('Ritou Port', 26, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
+            createSquare('Sangonomiya Shrine', 27, 'market', 0, {deed: 260, house: 150, hotel: 150}, [22,110,330,800,975,1150], 'yellow'),
+            createSquare('Grand Narukami Shrine', 28, 'market', 0, {deed: 260, house: 150, hotel: 150}, [22,110,330,800,975,1150], 'yellow'),
+            createSquare('Yae Publishing House', 29, 'market', 0, {deed: 150, house: 100, hotel: 100}, [1,2,3,4,5,5]),
+            createSquare('Inazuma City', 30, 'market', 0, {deed: 260, house: 150, hotel: 150}, [24,120,360,850,1025,1200], 'yellow'),
             createSquare('go to jail', 31),
-            createSquare('regent street', 32, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
-            createSquare('oxford street', 33, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
-            createSquare('chest', 34),
-            createSquare('bond street', 35, 'market', 0, {deed: 320, house: 200, hotel: 200}, [28,150,450,1000,1200,1400], 'green'),
-            createSquare('liverpool station', 36, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
-            createSquare('chance', 37),
-            createSquare('park lane', 38, 'market', 0, {deed: 350, house: 200, hotel: 200}, [35,175,550,1100,1300,1500], 'navy'),
-            createSquare('window tax', 39, 'free parking', 0, {deed: 100, house: 0, hotel: 0}),
-            createSquare('mayfair', 40, 'market', 0, {deed: 400, house: 200, hotel: 200}, [50,200,669,1400,1700,2000], 'navy'),
+            createSquare('Tanit Camps', 32, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
+            createSquare('Aaru Village', 33, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
+            createSquare('Luxurious Chest', 34),
+            createSquare('Caravan Ribat', 35, 'market', 0, {deed: 320, house: 200, hotel: 200}, [28,150,450,1000,1200,1400], 'green'),
+            createSquare('Port Ormos', 36, 'market', 0, {deed: 200, house: 100, hotel: 100}, [0,25,50,100,200]),
+            createSquare('Wish', 37),
+            createSquare('Pardis Dhyai', 38, 'market', 0, {deed: 350, house: 200, hotel: 200}, [35,175,550,1100,1300,1500], 'navy'),
+            createSquare('Knowledge Capsule Scam', 39, 'free parking', 0, {deed: 100, house: 0, hotel: 0}),
+            createSquare('Sumeru City', 40, 'market', 0, {deed: 400, house: 200, hotel: 200}, [50,200,669,1400,1700,2000], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
             if(squares[i].number === num) return squares[i];
@@ -434,6 +434,31 @@ const Game = ( {settings}: Props ) => {
         });
         return inJail;
     }
+    
+    /////////////////////////
+    // Work .In .Progress //
+    /*const moveStagger = (user: Player, rolledNum: number) => {
+        if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
+        let times = rolledNum 
+            ? rolledNum 
+            : user.dice1.number + user.dice2.number;
+        const timer = () => setTimeout(() => {
+            if(user.location + 1 > 40){
+                user.location = 1;
+                user.money += 200;
+            } else {
+                user.location += 1;
+            }
+            times -= 1;
+            setLocalPlayer(user);
+            syncPlayer(user);
+            console.log('also happen')
+            if(times === 0) locationEventController(user);
+            if(times > 0) timer();
+        }, 50);
+        setTimeout(timer);
+        console.log('happen');
+    }*/
 
     const moveSpaces = (rolledNum: number, user: Player) => {
         if(user.location + rolledNum > 40) {

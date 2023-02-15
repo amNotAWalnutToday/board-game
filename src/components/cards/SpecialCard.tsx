@@ -51,14 +51,14 @@ const SpecialCard = (
                 <li>
                     {inspectionTarget?.name === 'go'
                     ? goText : '' }
-                    {inspectionTarget?.name === 'jail'
+                    {inspectionTarget?.number === 11
                     ? "Visiting" : ''}
-                    {inspectionTarget?.name === 'free parking'
+                    {inspectionTarget?.number === 21
                     ? freeParkingText : ''}
                     {inspectionTarget?.name === 'go to jail'
                     ? goToJailText : ''}
                 </li>
-                {inspectionTarget?.name === 'jail'
+                {inspectionTarget?.number === 11
                 ? getVisitersNames() 
                     ? <li>{getVisitersNames()}</li> 
                     : <div>
@@ -70,7 +70,7 @@ const SpecialCard = (
             </div>
 
            {/*jail extras*/}
-            {inspectionTarget?.name === 'jail' && jailedPlayers
+            {inspectionTarget?.number === 11 && jailedPlayers
             ? <div className="jailed-players">
                 <li>Jail</li>
                 <hr />
@@ -82,14 +82,14 @@ const SpecialCard = (
                 </li>
             </div> 
             : ''}
-            {inspectionTarget?.name === 'jail' 
+            {inspectionTarget?.number === 11 
             ? <li className="jail-description" >
-                To leave jail you must roll a double, or higher total than 8!
+                To leave, you must roll a double, or higher total than 7!
             </li>
             : ''}
             
             {/*free parking extras*/}
-            {inspectionTarget?.name === 'free parking'
+            {inspectionTarget?.number === 21
             ?  <li className="free-parking-prize">
                     Current
                     <span className="money">

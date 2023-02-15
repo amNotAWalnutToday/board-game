@@ -146,7 +146,14 @@ const GameBoard = (
     }, [loading]);
 
     return(
-        <div id="game-board" >
+        <div id="game-board" 
+            className={localPlayer.location < 12 && localPlayer.location > 1 
+                ? 'mondo'
+                : localPlayer.location > 11 && localPlayer.location < 22
+                    ? 'liyu'
+                    : localPlayer.location > 21 && localPlayer.location < 32
+                        ? 'ina'
+                        : 'sume'} >
             {mapSquares()}
             <div className="dice-holder">
                 {!loading 

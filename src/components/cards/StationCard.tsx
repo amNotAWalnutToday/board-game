@@ -16,15 +16,15 @@ const StationCard = ({inspectionTarget, toggleInspect}: Props) => {
                 <span>£{inspectionTarget?.rent[1]}</span>
             </li>
             <li>
-                With 2 Stations
+                With 2 Ports
                 <span>£{inspectionTarget?.rent[2]}</span>
             </li>
             <li>
-                With 3 Stations
+                With 3 Ports
                 <span>£{inspectionTarget?.rent[3]}</span>
             </li>
             <li>
-                With 4 Stations
+                With 4 Ports
                 <span>£{inspectionTarget?.rent[4]}</span>
             </li>
             <li className="card-owner" >
