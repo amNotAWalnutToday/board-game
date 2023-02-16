@@ -153,7 +153,8 @@ const GameBoard = (
             return <React.Fragment key={i}>
                 <Square 
                     localPlayer={localPlayer} 
-                    players={gameBoard.players} 
+                    players={gameBoard.players}
+                    checkJail={checkJail}
                     changeTurn={changeTurn}
                     cursorMode={cursorMode}
                     inspectSquare={inspectSquare}

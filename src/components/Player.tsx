@@ -5,13 +5,19 @@ type Props = {
     localPlayer: PlayerTemplate;
     index: number;
     player: PlayerTemplate;
+    checkJail: (user: PlayerTemplate) => boolean | undefined;
     changeTurn: () => void;
 }
 
-const Player = ({localPlayer, index, player, changeTurn}: Props) => {
+const Player = ({localPlayer, index, player, checkJail, changeTurn}: Props) => {
     return (
         <div 
-            className={`player player-${player.turnOrder} logo-${player.logo}`}
+            className={`player player-${player.turnOrder} logo-${player.logo}
+            ${checkJail(player) ? 'logo-jail' : '' }
+            ${player.turnOrder === localPlayer.turnOrder 
+                ? 'logo-current-turn'
+                : ''}
+            `}
         />
     )
 }

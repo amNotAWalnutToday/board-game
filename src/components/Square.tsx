@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Square as SquareType } from '../Game';
+import { Square as SquareType, Player as PlayerTemplate } from '../Game';
 import Player from './Player';
 
 type Props = {
     localPlayer: any,
     players: any,
+    checkJail: (user: PlayerTemplate) => boolean | undefined,
     changeTurn: () => void,
     cursorMode: string,
     inspectSquare: (e:any, square: SquareType) => void,
@@ -18,6 +19,7 @@ const Square = (
     {
         localPlayer, 
         players, 
+        checkJail,
         changeTurn,
         cursorMode, 
         inspectSquare, 
@@ -46,6 +48,7 @@ const Square = (
                     <Player 
                         localPlayer={localPlayer} 
                         player={item} 
+                        checkJail={checkJail}
                         changeTurn={changeTurn} 
                         index={currentPlayers[i].turnOrder} 
                     />

@@ -459,8 +459,9 @@ li .house-group {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  /*box-shadow: 1px -1px 5px 1px white;*/
+  /*box-shadow: 1px -1px 25px 1px white;*/
   box-shadow: var(--light-shadow);
+  z-index: 1;
 }
 
 .player-1 { 
@@ -721,6 +722,18 @@ button:disabled {
   width: 25px;
   height: 25px;
   transition: all 0.4s ease;
+}
+
+.logo-jail.logo-current-turn {
+  box-shadow: 0px 0px 25px 1px var(--red) !important; 
+}
+
+.logo-current-turn {
+  box-shadow: 0px 0px 25px 1px white;
+}
+
+.logo-jail {
+  box-shadow: 0px 0px 5px 1px var(--red);
 }
 
 .logo-dendro {
