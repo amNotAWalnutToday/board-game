@@ -404,6 +404,10 @@ button {
   box-shadow: 0px 0px 1px 2px black;
 }
 
+.square p {
+  pointer-events: none;
+}
+
 .house-group {
   display: flex;
   gap: 0.2rem;
@@ -846,4 +850,14 @@ button:disabled {
   background: url('./imgs/ina.png');
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.m-symbol {
+  display: inline-block;
+  background: url('./imgs/money.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 15px;
+  height: 15px;
+  margin-right: 0.1rem;
 }

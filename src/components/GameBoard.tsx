@@ -11,7 +11,7 @@ type Props = {
     gameBoard: any,
     /*buyProperty: (square: SquareType | undefined) => void | undefined;*/
     localPlayer: Player,
-    rollDice: any;/*not in use atm*/
+    rollDice: any;
     changeTurn: () => void,
     jailedPlayers: Player[];
     locationEventLeaveJail: (user: Player) => void;
@@ -19,6 +19,7 @@ type Props = {
     checkIfStation: (num: number | undefined) => boolean;
     checkIfUtility: (num: number | undefined) => boolean;
     checkForSet: (user: Player, group: string) => boolean;
+    pushToLog: (user: Player, action: string, output:string, receiver: string, money: string) => void;
 }
 
 type Mode = 'inspect' | 'place' | 'sell';
@@ -36,6 +37,7 @@ const GameBoard = (
         checkIfStation,
         checkIfUtility,
         checkForSet,
+        pushToLog,
     }: Props ) => {
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -100,9 +102,25 @@ const GameBoard = (
                 }
             }
             localPlayer.money += square.cost.deed / 2;
+
+            pushToLog(
+                localPlayer, 
+                'for, ', 
+                square.name, 
+                'was sold', 
+                `${square.cost.deed / 2}`
+            );
         } else if (square.properties > 0) {
             square.properties -= 1;
             localPlayer.money += square.cost.house / 2;
+            
+            pushToLog(
+                localPlayer, 
+                'for, ', 
+                `at ${square.name}`, 
+                'some land was sold', 
+                `${square.cost.house / 2}`
+            );
         }
         toggleSellHouse();
     }
@@ -117,8 +135,15 @@ const GameBoard = (
             square.properties += 1 
             localPlayer.money -= square.cost.hotel;
         }
+
+        pushToLog(
+            localPlayer, 
+            'for, ', 
+            square.name, 
+            'was expanded', 
+            `${square.cost.house}`
+        );
         toggleBuyHouse();
-        console.log(gameBoard.squares);
     }
 
     const mapSquares:any = () => {
@@ -284,6 +309,11 @@ const GameBoard = (
                     onClick={() => {
                             locationEventLeaveJail(localPlayer);
                             localPlayer.cards.pop();
+                            pushToLog(
+                                localPlayer, 
+                                'used card to leave', 
+                                'Solitary Confinement','',''
+                            );
                         }
                     }
                 >

@@ -11,7 +11,7 @@ const Log = ( {gameLog}: Props ) => {
     useEffect(() => {
         container.current.scrollTo(
             0,
-            container.current.offsetHeight + (gameLog.length * 20)
+            container.current.offsetHeight + (gameLog.length * 21)
         );
     });
 
@@ -28,7 +28,7 @@ const Log = ( {gameLog}: Props ) => {
                             : 'money'}`
                             }
                         > 
-                            {' '}£{item.money}
+                            {' '}<span className="m-symbol"/>{item.money}
                         </span>}
                     <span 
                         className={`${item.action === 'gets sent to' 
