@@ -1,4 +1,4 @@
-import { Square as SquareTemplate } from '../../Game';
+import { Square as SquareTemplate, currency } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareTemplate | undefined;
@@ -15,7 +15,7 @@ const TaxCard = ( {inspectionTarget, toggleInspect}: Props ) => {
             </li>
             <li className='free-parking-prize'>
                 Tax 
-                <span className="tax">£{inspectionTarget?.cost.deed}</span>
+                <span className="tax">{currency}{inspectionTarget?.cost.deed}</span>
             </li>
        </ul> 
     )

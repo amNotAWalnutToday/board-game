@@ -1,4 +1,4 @@
-import { Square as SquareTemplate } from '../../Game';
+import { Square as SquareTemplate, currency } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareTemplate | undefined;
@@ -13,26 +13,29 @@ const StationCard = ({inspectionTarget, toggleInspect}: Props) => {
             </li>
             <li>
                 Rent
-                <span>£{inspectionTarget?.rent[1]}</span>
+                <span>{currency}{inspectionTarget?.rent[1]}</span>
             </li>
             <li>
                 With 2 Ports
-                <span>£{inspectionTarget?.rent[2]}</span>
+                <span>{currency}{inspectionTarget?.rent[2]}</span>
             </li>
             <li>
                 With 3 Ports
-                <span>£{inspectionTarget?.rent[3]}</span>
+                <span>{currency}{inspectionTarget?.rent[3]}</span>
             </li>
             <li>
                 With 4 Ports
-                <span>£{inspectionTarget?.rent[4]}</span>
+                <span>{currency}{inspectionTarget?.rent[4]}</span>
             </li>
             <li className="card-owner" >
-                <span>
-                    {inspectionTarget?.ownedBy === 'market'
-                    ? `Available To Purchase £${inspectionTarget?.cost.deed}`
+                {inspectionTarget?.ownedBy === 'market'
+                    ? <span>
+                        Available To Purchase 
+                        {' '}
+                        {currency}
+                        {inspectionTarget?.cost.deed}
+                    </span>
                     : inspectionTarget?.ownedBy}
-                </span>
             </li>
         </ul>
     )

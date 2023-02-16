@@ -102,6 +102,8 @@
   height: 100px;
   overflow-y: auto;
   margin-bottom: 0.5rem;
+  border-radius: 5px;
+  box-shadow: var(--light-shadow);
 }
 
 .underlay {
@@ -174,6 +176,11 @@
 
 .company-card li:not(.card-name):not(.card-owner) {
   margin: 0 1rem;
+}
+
+.special-card .m-symbol {
+  width: 25px;
+  height: 25px;
 }
 
 .special-card li:not(.card-name) {
@@ -314,8 +321,13 @@
   z-index: 2;
   width: 50px;
   height: 50px;
-  font-size: 40px !important;
   text-align: center;
+}
+
+.bottom .m-symbol,
+.selected .m-symbol {
+  width: 75%  ;
+  height: 75%;
 }
 
 .selected .house-group {
@@ -345,6 +357,9 @@
 }
 
 .sell-property-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 60px;
   background: var(--light-background);
   border: none;
@@ -859,5 +874,6 @@ button:disabled {
   background-size: contain;
   width: 15px;
   height: 15px;
-  margin-right: 0.1rem;
+  margin: 0 0.1rem;
+  transform: translateY(1px);
 }

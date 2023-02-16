@@ -10,8 +10,13 @@ const Stats = ({players, shouldClose}: Props) => {
         return players.map((item, i) => {
             return (
                 <div key={i} className="player-stats" >
-                    <p className={`card-name plain card-${item.logo}`} >{item.name}<span className={`logo logo-${item.logo}`} ></span></p>
-                    <p className='money' >£{item.money}</p>
+                    <p className={`card-name plain card-${item.logo}`} >
+                        {item.name}
+                        <span className={`logo logo-${item.logo}`} />
+                    </p>
+                    <p className='money'>
+                        <span className="m-symbol"/>{item.money}
+                    </p>
                     <hr />
                     <p className="player-owned">
                         {item.owned.map((item, i) => {

@@ -28,11 +28,13 @@ const CompanyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                 the payer rolled this turn.
             </li>
             <li className="card-owner" >
-                <span>
-                    {inspectionTarget?.ownedBy === 'market'
-                    ? `Available To Purchase £${inspectionTarget?.cost.deed}`
-                    : inspectionTarget?.ownedBy}
-                </span>
+                {inspectionTarget?.ownedBy === 'market'
+                    ? <span>Available To Purchase 
+                        <span className="m-symbol"/>
+                        {inspectionTarget?.cost.deed}
+                    </span>
+                    : <span>{inspectionTarget?.ownedBy}</span>
+                }
             </li>
         </ul>
     )

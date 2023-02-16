@@ -1,4 +1,4 @@
-import { Square as SquareTemplate, Player} from '../../Game';
+import { Square as SquareTemplate, Player, currency} from '../../Game';
 
 type Props = {
     inspectionTarget: SquareTemplate | undefined;
@@ -16,7 +16,7 @@ const SpecialCard = (
     }: Props ) => {
     const goText = "On passing go receive £200";
     const freeParkingText = "On landing here receive money that has collected from taxes";
-    const goToJailText = "Go directly to jail, do not pass go, do not receive £200!";
+    const goToJailText = "Go directly to jail, do not pass go, do not receive 200!";
 
     const getVisitersNames = () => {
         const names:string[] = [];
@@ -93,7 +93,7 @@ const SpecialCard = (
             ?  <li className="free-parking-prize">
                     Current
                     <span className="money">
-                        £{inspectionTarget.cost.deed}
+                        {currency}{inspectionTarget.cost.deed}
                     </span>
                 </li> 
                 : ''}

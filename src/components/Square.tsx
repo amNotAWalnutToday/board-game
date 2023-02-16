@@ -24,7 +24,7 @@ const Square = (
         placeOnSquare,
         sellFromSquare,
         square,
-        index
+        index,
     }: Props) => {
     const [currentPlayers, setCurrentPlayers] = useState<any>([]);
 
@@ -86,19 +86,19 @@ const Square = (
                 {mapPlayers()}
             </div>
             {square.ownedBy === "market" || !square.ownedBy
-            ?<p>
-                {square.cost.deed > 0 && square.ownedBy === 'market'
-                    ? `£${square.cost.deed} ` 
-                    : ''}
-            </p>
-            : <div className="house-group" >{mapProperties()}</div>}
+                ? square.cost.deed > 0 && square.ownedBy === 'market'
+                    ? <p><span className="m-symbol"/>{square.cost.deed}</p>
+                    : ''
+                : <div className="house-group" >{mapProperties()}</div>}
             {/*specific exceptions*/}
             {square.number === 21
-                ? <p className='money'>£{square.cost.deed}</p>
+                ? <p className='money'>
+                    <span className="m-symbol"/>{square.cost.deed}
+                </p>
                 : undefined
             }
             {square.number === 5 || square.number === 39
-                ? <p className='tax'>£{square.cost.deed}</p>
+                ? <p className='tax'><span className="m-symbol"/>{square.cost.deed}</p>
                 : undefined
             }
             {square.number === 8

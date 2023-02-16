@@ -1,4 +1,5 @@
 import { Square as SquareType } from '../../Game';
+import { currency } from '../../Game';
 
 type Props = {
     inspectionTarget: SquareType | undefined;
@@ -13,13 +14,14 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
             </li>
             <li>
                 Rent
-                <span>£{inspectionTarget?.rent[0]}</span>
+                <span>{currency}{inspectionTarget?.rent[0]}</span>
             </li>
             <li>
                 Rent with Color Set
-                <span>£{inspectionTarget 
-                    ? inspectionTarget?.rent[0] * 2
-                    : undefined}
+                <span>{currency}
+                    {inspectionTarget 
+                        ? inspectionTarget?.rent[0] * 2
+                        : undefined}
                 </span>
             </li>
             <li>
@@ -29,7 +31,7 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                         <span className="house" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[1]}</span>
+                <span>{currency}{inspectionTarget?.rent[1]}</span>
             </li>
             <li>
                 <span>
@@ -39,7 +41,7 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                         <span className="house" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[2]}</span>
+                <span>{currency}{inspectionTarget?.rent[2]}</span>
             </li>
             <li>
                 <span>
@@ -50,7 +52,7 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                         <span className="house" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[3]}</span>
+                <span>{currency}{inspectionTarget?.rent[3]}</span>
             </li>
             <li>
                 <span>
@@ -62,7 +64,7 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                         <span className="house" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[4]}</span>
+                <span>{currency}{inspectionTarget?.rent[4]}</span>
             </li>
             <li>
                 <span>
@@ -71,26 +73,33 @@ const PropertyCard = ( {inspectionTarget, toggleInspect}: Props ) => {
                         <span className="hotel" ></span>
                     </span>
                 </span>
-                <span>£{inspectionTarget?.rent[5]}</span>
+                <span>{currency}{inspectionTarget?.rent[5]}</span>
             </li>
             <hr />
             <li>
                 House Cost 
-                <span>£{inspectionTarget?.cost.house} each</span>
+                <span>{currency}{inspectionTarget?.cost.house} each</span>
             </li>
             <li>
                 Hotel Cost 
-                <span>£{inspectionTarget 
-                    ? inspectionTarget?.cost.hotel * 4
-                    : undefined
-                } total</span>
+                <span>
+                    {currency}
+                    {inspectionTarget 
+                        ? inspectionTarget?.cost.hotel * 4
+                        : undefined
+                    } 
+                    {' '}total
+                </span>
             </li>
             <li className="card-owner" >
-                <span>
-                    {inspectionTarget?.ownedBy === 'market'
-                    ? `Available To Purchase £${inspectionTarget?.cost.deed}`
-                    : inspectionTarget?.ownedBy}
+                {inspectionTarget?.ownedBy === 'market'
+                ? <span>
+                    Available To Purchase 
+                    {' '}
+                    {currency}
+                    {inspectionTarget?.cost.deed}
                 </span>
+                : <span>{inspectionTarget?.ownedBy}</span>}
             </li>
         </ul>
     )

@@ -250,12 +250,14 @@ const GameBoard = (
                         </div>
                         }
                         {cursorMode === 'sell'
-                        && <div className='sell-property-btn selected money'>£</div>
+                        && <div className='sell-property-btn selected money'>
+                            <span className="m-symbol"/>
+                        </div>
                         }
                     </li>
                     <div>
                         <li>{localPlayer.name} <span className={`logo logo-${localPlayer.logo}`}></span></li>
-                        <li className='money' >£{localPlayer.money}</li>
+                        <li className='money' ><span className="m-symbol"/>{localPlayer.money}</li>
                     </div>
                 </ul>
             </div>
@@ -287,7 +289,7 @@ const GameBoard = (
                 onClick={() => toggleMode('sell')} 
                 className='bottom sell-property-btn money' 
                 >
-                    £
+                    <span className="m-symbol"/>
             </button>}
             {cursorMode === 'inspect' 
             ? undefined 

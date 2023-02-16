@@ -46,6 +46,8 @@ export type Square = {
     group: 'brown'|'cyan'|'pink'|'orange'|'red'|'yellow'|'green'|'navy'|null,
 }
 
+export const currency = <span className="m-symbol"/>;
+
 type Props = {
     settings: any;
 }
@@ -514,9 +516,12 @@ const Game = ( {settings}: Props ) => {
             const difference = 40 - (user.location + rolledNum);
             user.location = 0 - difference;
             user.money += 200;
+            
+            pushToLog(user, 'receives', 'A New Samsara' , 'has began', '200, ');
         } else {
             user.location += rolledNum;
         }
+
         const currentSquare = getSquare(user);
         if(user.dice1.hasRolled && user.dice2.hasRolled) {
             pushToLog(user, 'arrives at', currentSquare?.name, '', '');
@@ -921,26 +926,28 @@ export default Game;
 //              stations <= complete
 //              utility <= complete
 //              special <= complete
-//              chance  
+//              chance  <= complete
 //              tax <= complete
 //              improve buy prompt <= started(onhold)
 //
-// next step => add chance/chest cards <= complete
-//              add function to get out of jail free card
+// next step => add chance/chest cards <= complete(could add more)
+//              add function to get out of jail free card <= complete
 //              add correct text to cards 
 //
-// next step => add icons to board spots and update user icons
+// next step => add icons to board spots and update user icons <= complete
 //              stagger moving
 //
-// next step => add player interface 
+// next step => add player interface <= complete
 //              statistic screen <= complete
-//              improve end turn button
-//              change dice
+//              improve end turn button <= complete
+//              change dice <= dunno
 // next step => add sorting function for player owned properties <= complete
 //
 // next step => add win/lose conditions <= complete
 //              add win screen <= complete
-
+//
 // things to add to log =>  { use get out of jail card } <= complete
 //                          { selling properties/houses} <= complete
 //                          { placing properties } <= complete
+//
+// next step => replace currency symbols !important

@@ -45,7 +45,9 @@ const SellPrompt = (
                     }
                     <p className='text-plain' >
                         Your Money: 
-                        <span className='money'> £{localPlayer.money}</span>
+                        <span className='money'> 
+                            <span className="m-symbol"/> {localPlayer.money}
+                        </span>
                     </p>
                     <div className="btn-group">
                         <button 
@@ -57,18 +59,31 @@ const SellPrompt = (
                             && inspectionTarget?.properties < 1)
                             || checkIfStation(inspectionTarget?.number)
                             || checkIfUtility(inspectionTarget?.number)
-                                ? `Sell Property £${inspectionTarget?.cost.deed 
-                                    ? inspectionTarget?.cost.deed / 2
-                                    : undefined}`
+                                ? <span>Sell Property 
+                                    <span className="m-symbol"/>
+                                        {inspectionTarget?.cost.deed 
+                                            ? inspectionTarget?.cost.deed / 2
+                                            : undefined
+                                        }
+                                </span>
                                 : inspectionTarget
                                 && inspectionTarget?.properties < 5
-                                    ? `Sell House 
-                                        £${inspectionTarget?.cost.house 
-                                            ? inspectionTarget?.cost.house / 2
-                                            : undefined}`
-                                    : `Sell Hotel £${inspectionTarget?.cost.hotel 
-                                        ? inspectionTarget?.cost.hotel / 2
-                                        : undefined}`
+                                    ? <span>
+                                        Sell House
+                                        <span className="m-symbol"/>
+                                            {inspectionTarget?.cost.house
+                                                ? inspectionTarget?.cost.house / 2
+                                                : undefined
+                                            }
+                                    </span>
+                                    : <span>
+                                        Sell Hotel 
+                                        <span className="m-symbol"/>
+                                            {inspectionTarget?.cost.hotel
+                                                ? inspectionTarget?.cost.hotel / 2
+                                                : undefined
+                                            }
+                                    </span>
                             }
                         </button>
                         <button 

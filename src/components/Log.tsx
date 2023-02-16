@@ -31,7 +31,7 @@ const Log = ( {gameLog}: Props ) => {
                             {' '}<span className="m-symbol"/>{item.money}
                         </span>}
                     <span 
-                        className={`${item.action === 'gets sent to' 
+                        className={`${item.action === 'gets arrested to' 
                             ? 'tax' 
                             : 'text-yellow'
                             }`

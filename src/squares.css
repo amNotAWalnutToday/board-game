@@ -103,6 +103,10 @@
   grid-row: 1 / 2;
 }
   
+.square-20 .money {
+  font-size: 18px;
+}
+
 .square-21 {
   grid-column: 0 / 1;
   grid-row: 0 / 1;

@@ -45,7 +45,9 @@ const BuyPrompt = (
                     }
                     <p className='text-plain' >
                         Your Money: 
-                        <span className='money'> £{localPlayer.money}</span>
+                        <span className='money'> <span className="m-symbol"/>
+                            {localPlayer.money}
+                        </span>
                     </p>
                     <div className="btn-group">
                         <button 
@@ -53,11 +55,23 @@ const BuyPrompt = (
                             onClick={() => buyProperty(inspectionTarget)} 
                         >
                             { buyType === 'property'
-                                ? `Buy Property £${inspectionTarget?.cost.deed}`
+                                ? <span>
+                                    Buy Property 
+                                    <span className="m-symbol"/>
+                                    {inspectionTarget?.cost.deed}
+                                </span>
                                 : inspectionTarget 
                                 && inspectionTarget?.properties < 4 
-                                    ? `Place House £${inspectionTarget?.cost.house}`
-                                    : `Place Hotel £${inspectionTarget?.cost.hotel}`
+                                    ? <span>
+                                        Place House 
+                                        <span className="m-symbol"/>
+                                        {inspectionTarget?.cost.house}
+                                    </span>
+                                    : <span>
+                                        Place Hotel 
+                                        <span className="m-symbol"/>
+                                        {inspectionTarget?.cost.hotel}
+                                    </span>
                             }
                         </button>
                         <button 
