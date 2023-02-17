@@ -94,6 +94,7 @@ const Square = (
                     : ''
                 : <div className="house-group" >{mapProperties()}</div>}
             {/*specific exceptions*/}
+            {square.number === 1 && <span className='samsara' />}
             {square.number === 21
                 ? <p className='money'>
                     <span className="m-symbol"/>{square.cost.deed}

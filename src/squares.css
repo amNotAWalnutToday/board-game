@@ -1,6 +1,7 @@
 .square-0 {
   grid-column: 11 / 12;
   grid-row: 11 / 12;
+  justify-content: center !important;
 }
   
 .square-1 {

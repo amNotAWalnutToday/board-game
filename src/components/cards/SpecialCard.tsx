@@ -14,7 +14,6 @@ const SpecialCard = (
         jailedPlayers,
         toggleInspect,
     }: Props ) => {
-    const goText = "On passing go receive £200";
     const freeParkingText = "On landing here receive money that has collected from taxes";
     const goToJailText = "Go directly to jail, do not pass go, do not receive 200!";
 
@@ -49,8 +48,13 @@ const SpecialCard = (
             <li className="card-name plain" >{inspectionTarget?.name}</li>
             <div>
                 <li>
-                    {inspectionTarget?.name === 'go'
-                    ? goText : '' }
+                    {inspectionTarget?.number === 1
+                    ? <span>
+                        On starting a new samsara receive {currency}
+                        <span className="free-parking-prize money">
+                            200
+                        </span>
+                    </span> : '' }
                     {inspectionTarget?.number === 11
                     ? "Visiting" : ''}
                     {inspectionTarget?.number === 21
@@ -68,6 +72,8 @@ const SpecialCard = (
                     </div> 
                 : ''}
             </div>
+            {inspectionTarget?.number === 1 
+                && <div className='samsara' />}
 
            {/*jail extras*/}
             {inspectionTarget?.number === 11 && jailedPlayers

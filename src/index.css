@@ -808,6 +808,24 @@ button:disabled {
   height: 100px;
 }
 
+.special-card .samsara {
+  width: 40%;
+  height: 40%;
+  align-self: center;
+}
+
+.square .samsara {
+  width: 30px;
+  height: 30px;
+}
+
+.samsara {
+  background: url('./imgs/samsara.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: invert();
+}
+
 .chance-icon {
   background: url('./imgs/chance-icon.png');
   background-size: contain;
