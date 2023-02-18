@@ -40,6 +40,7 @@
   width: 100vw;
   height: 100vh;
   background: var(--dark-background);
+  color: white;
 }
 
 .settings {
@@ -51,6 +52,8 @@
   background: var(--light-background);
   box-shadow: var(--heavy-shadow);
   border-radius: 5px;
+  min-width: 350px;
+  max-width: 350px;
 }
 
 .title-menu a {
@@ -70,6 +73,19 @@
   text-align: center;
 }
 
+.title-menu .btn-group:not(.settings *:not(:first-child)) {
+  flex-direction: column;
+}
+
+.title-menu .settings:first-child button {
+  width: 100%;
+}
+
+.title-menu .play-btn {
+  padding: 1rem;
+  font-weight: bold;
+}
+
 .game-screen {
   display: flex;
   flex-direction: column;
@@ -78,6 +94,41 @@
   width: 100vw;
   height: 100vh;
   background: var(--dark-background);
+  overflow: auto;
+}
+
+@media (max-width: 500px) and (orientation: portrait) {
+  .game-screen {
+    width: 250vw;
+    height: 250vh;
+    justify-content: center;
+    gap: 5rem;
+  }
+
+  .underlay {
+    width: 250vw !important;
+    height: 250vh !important;
+  }
+
+  .buy-popup,
+  .prompt {
+    width: 250vw !important;
+    height: 250vh !important;
+  }
+}
+
+@media (max-height: 800px) and (orientation: landscape) {
+  .game-screen {
+    width: 100vw;
+    height: 150vh;
+    justify-content: center;
+    gap: 5rem;
+  }
+
+  .underlay {
+    width: 100vw !important;
+    height: 150vh !important;
+  }
 }
 
 #game-board {
@@ -513,6 +564,7 @@ li .house-group {
   grid-column: 2 / 3;
 }
 
+.play-btn,
 .use-card-btn,
 .logo-carousel button,
 .title-menu .btn-group button,

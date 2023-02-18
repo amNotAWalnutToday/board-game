@@ -37,7 +37,11 @@ const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
             }
             onDragLeave={(e) => {
                 if(diceNum === 1 && !localPlayer.dice1.hasRolled)setIsRolling(true);
-                if(diceNum === 2 && !localPlayer.dice2.hasRolled)setIsRolling(true)
+                if(diceNum === 2 && !localPlayer.dice2.hasRolled)setIsRolling(true);
+            }}
+            onTouchMove={(e) => {
+                if(diceNum === 1 && !localPlayer.dice1.hasRolled)setIsRolling(true);
+                if(diceNum === 2 && !localPlayer.dice2.hasRolled)setIsRolling(true);
             }}
             onAnimationStart={(() => {
                     const interval = setInterval(() => {

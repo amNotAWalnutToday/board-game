@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { set, ref, remove, onValue, update, push, child, get } from 'firebase/database';
+import { set, ref, remove, onValue, child, get } from 'firebase/database';
 import { db } from './RouteSwitch';
 
 type Props = {
@@ -111,7 +111,14 @@ const App = (
   const mapSessions = () => {
     console.log(allSessions);
     return allSessions?.map((item:any, i:any) => {
-      return <button key={i} onClick={() => joinSession(item)} >{item}</button>
+      return (
+        <button 
+          key={i}
+          onClick={() => joinSession(item)} 
+        >
+          {item}
+        </button>
+      );
     });
   }
 
@@ -120,30 +127,30 @@ const App = (
     remove(sessionName);
   }
 
-  const testlog = () => {
-    console.log(playerNumber, sessionName);
-    console.log('settings', settings);
-  }
-
   return (
     <div className="title-menu" >
       {!showSettings && !showJoinMenu 
-      && <div>
-        <button onClick={toggleShowSettings} >
+      && <div className='btn-group' >
+        <button className='play-btn' onClick={toggleShowSettings} >
           Play Game
         </button>
-        <button onClick={toggleJoinMenu}>Join</button>
+        <button className='play-btn' onClick={toggleJoinMenu}>Join</button>
       </div>}
       {showJoinMenu 
       &&
       <div className='settings'>
-        <div>{mapSessions()}</div>
-        <button onClick={getSessions} >use</button>
-        <button onClick={testlog} >test</button>
+        <div className='btn-group' >
+          <h1>Sessions</h1>
+          {mapSessions()}
+          <p style={{wordWrap: 'break-word'}} >current session: {sessionName}</p>
+        </div>
         <Link 
           to="/online-game" 
           className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
-        >Go</Link>
+          onClick={!sessionName ? (e) => e.preventDefault() : undefined}
+        >
+          Go
+        </Link>
       </div> 
       }
       {showSettings 
@@ -196,9 +203,10 @@ const App = (
               :  'disable-btn disable-on'
             }
             onClick={() => disablePlayer(currentPlayer)} 
-            disabled={currentPlayer === 3 || currentPlayer === 4 
-              ? false 
-              : true
+            disabled={(currentPlayer === 3 && settings.player4.disable) 
+              || (currentPlayer === 4 && !settings.player3.disable)
+                ? false 
+                : true
             }
           >
             {(currentPlayer === 3 && settings.player3.disable)
@@ -257,7 +265,7 @@ const App = (
         >
           {validateIcons() ? 'Go' : 'No Duplicate Icons'}
         </Link>
-        <button onClick={!isHosting ? createSession : cancelSession}>
+        <button className='play-btn' onClick={!isHosting ? createSession : cancelSession}>
           {!isHosting ? 'Host' : "Stop Hosting"}
         </button>
       </div>}
