@@ -1,58 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { db } from './RouteSwitch';
+import { get, set, ref, onValue, child } from 'firebase/database';
+import { LogMessage, Player, Square } from './Game';
 import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
 import ChancePrompt from './components/ChancePrompt';
 import BuyPrompt from './components/BuyPrompt';
 import Log from './components/Log';
 
-export interface board {
+interface board {
     players: any,
     round: number,
     turn: string,
     squares: any,
-    chance: [],
-    prize: [],
     jail: Player[],
 }
 
-export type LogMessage = {
-    player: string,
-    action: string | undefined,
-    output: string | undefined,
-    player2: string | undefined,
-    money: string | undefined,
-}
-
-export type Player = {
-    name: string,
-    location: number,
-    turnOrder: number,
-    dice1: {number: number, hasRolled: boolean},
-    dice2: {number: number, hasRolled: boolean},
-    money: number,
-    cards: string[],
-    owned: Square[],
-    lost: boolean,
-    logo: string,
-}
-
-export type Square = {
-    name:string, 
-    number:number,
-    ownedBy:string | null, 
-    properties: 0|1|2|3|4|5,
-    cost: {deed: number, house: number, hotel: number},
-    rent: number[],
-    group: 'brown'|'cyan'|'pink'|'orange'|'red'|'yellow'|'green'|'navy'|null,
-}
-
-export const currency = <span className="m-symbol"/>;
-
 type Props = {
     settings: any;
+    sessionName: any;
+    playerNumber: number;
 }
 
-const Game = ( {settings}: Props ) => {
+const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     const [loading, setLoading] = useState(true);
     const [luckCards, setLuckCards] = useState(
         {
@@ -69,6 +39,22 @@ const Game = ( {settings}: Props ) => {
     const [gameLog, setGameLog] = useState<LogMessage[]>([]);
 
     const [gameover, setGameover] = useState<boolean>(false);
+
+    const giveName = () => {
+        switch(playerNumber) {
+            case 1:
+                return settings.player1.name;
+            case 2:
+                return settings.player2.name;
+            case 3:
+                return settings.player3.name;
+            case 4:
+                return settings.player4.name;
+        }
+        return;
+    }
+
+    const [yourName, setYourName] = useState<string>(giveName);
 
     const createSquare = (
         name:string, 
@@ -204,6 +190,15 @@ const Game = ( {settings}: Props ) => {
         return result;
     }
 
+    const getPlayer = (user: string, board: board):Player | undefined => {
+        const players = [...board.players];
+        let result;
+        players.forEach((player: Player) => {
+            if(user === player.name) result = player;
+        });
+        return result;
+    }
+
     const checkIfStation = (num: number | undefined) => {
         return num === 6 || num === 16 || num === 26 || num === 36
             ? true
@@ -277,7 +272,7 @@ const Game = ( {settings}: Props ) => {
         } = { number: 1, hasRolled: false}, 
         money: number = 1000, 
         cards: string[] = [], 
-        owned: [] = [],
+        owned: Square[] = [],
         lost: boolean = false,
     ) => {
         return { 
@@ -333,37 +328,121 @@ const Game = ( {settings}: Props ) => {
             round: 1,
             turn: settings.player1.name,
             squares: populateSquares(),
-            chance: [],
-            prize: [],
             jail: [],
         }
     );
 
-    /*const changeTurn:any = () => {
-        const board = {...gameBoard}
-        const players = [...board.players]
-        let currentTurn:any;
-        players.forEach((player:Player) => {
-            if(player.name === board.turn) currentTurn = player;
+    const connectBoard = async () => {
+        const reference = ref(db, `${settings.player1.name}/gameBoard`)
+        onValue(reference, async (snapshot) => {
+            const data = await snapshot.val();
+            
+            convertBoard(data.players, data.round, data.turn, data.squares, data.jail)
         });
-        if(currentTurn.turnOrder < 4) {
-            const nextTurn = currentTurn.turnOrder + 1;
-            players.forEach((player: Player) => {
-                if(player.turnOrder === nextTurn) currentTurn = player;
-            });
-        } else {
-            players.forEach((player: Player) => {
-                if(player.turnOrder === 1) currentTurn = player;
-            })
+    }
+
+    const convertBoard = (players: Player[], round: number, turn: string, squares: Square[], jail: Player[] = []) => {
+        const board = {...gameBoard};
+        const p1owned = players[0].owned ? players[0].owned : [];
+        const p2owned = players[1].owned ? players[1].owned : [];
+        board.players = [createPlayer(
+                players[0].name, 
+                players[0].logo, 
+                players[0].turnOrder,
+                players[0].location,
+                {number: 1, hasRolled: false},
+                {number: 1, hasRolled: false},
+                players[0].money,
+                players[0].cards,
+                p1owned,
+                players[0].lost,
+            ),
+            createPlayer(
+                players[1].name, 
+                players[1].logo, 
+                players[1].turnOrder,
+                players[1].location, 
+                {number: 1, hasRolled: false},
+                {number: 1, hasRolled: false},
+                players[1].money,
+                players[1].cards,
+                p2owned,
+                players[1].lost,
+            ),
+        ];
+        if(!settings.player3.disable) {
+            const p3owned = players[2].owned ? players[2].owned : [];
+            const p3 = createPlayer(
+                players[2].name,
+                players[2].logo,
+                players[2].turnOrder,
+                players[2].location,
+                {number: 1, hasRolled: false},
+                {number: 1, hasRolled: false},
+                players[2].money,
+                players[2].cards,
+                p3owned,
+                players[2].lost,
+            );
+            board.players.push(p3);
         }
-        currentTurn.dice1.hasRolled = false;
-        currentTurn.dice2.hasRolled = false;
-        board.turn = currentTurn.name;
-        lose(currentTurn);
-        setLocalPlayer(currentTurn);
+        if(!settings.player4.disable) {
+            const p4owned = players[3].owned ? players[3].owned : [];
+            const p4 = createPlayer(
+                players[3].name,
+                players[3].logo,
+                players[3].turnOrder,
+                players[3].location,
+                {number: 1, hasRolled: false},
+                {number: 1, hasRolled: false},
+                players[3].money,
+                players[3].cards,
+                p4owned,
+                players[3].lost,
+            );
+            board.players.push(p4);
+        }
+        
+        board.squares = squares;
+        board.round = round;
+        board.turn = turn;
+        board.jail = jail;
+        console.log(board);
+        const currentPlayer = getPlayer(turn, board);
+        if(!currentPlayer) return;
+        setLocalPlayer(currentPlayer); 
         setGameBoard(board);
-        console.log(gameBoard.players);
-    }*/
+    }
+
+    const getBoard = async () => {
+        await get(child(ref(db), `${settings.player1.name}/gameBoard`))
+            .then(async (snapshot) => {
+                const data = await snapshot.val();
+                const currentPlayer = getPlayer(data.turn, gameBoard);
+                if(!currentPlayer) return;
+                setLocalPlayer(currentPlayer); 
+            });
+    }
+
+    const resetDice = () => {
+        const players = [...gameBoard.players];
+        players.forEach((player: Player) => {
+            player.dice1.hasRolled = false;
+            player.dice2.hasRolled = false;
+        });
+    }
+
+    const uploadBoard = async (board: board = gameBoard) => {
+        resetDice();
+        const reference = ref(db, `${settings.player1.name}/gameBoard`);
+        set(reference, board);
+    }
+
+    useEffect(() => {
+        if(playerNumber === 1) uploadBoard();
+        setTimeout(() =>  connectBoard(), 250);
+    }, []);
+          
 
     const changeTurn:any = () => {
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
@@ -385,7 +464,8 @@ const Game = ( {settings}: Props ) => {
             setLocalPlayer(players[currentTurn + 1]);
         }
         board = removeLost(board);
-        setGameBoard(board);      
+        setGameBoard(board);
+        uploadBoard(board);  
     }
 
     const removeLost = (board: board) => {
@@ -485,31 +565,6 @@ const Game = ( {settings}: Props ) => {
         });
         return inJail;
     }
-    
-    /////////////////////////
-    // Work .In .Progress //
-    /*const moveStagger = (user: Player, rolledNum: number) => {
-        if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
-        let times = rolledNum 
-            ? rolledNum 
-            : user.dice1.number + user.dice2.number;
-        const timer = () => setTimeout(() => {
-            if(user.location + 1 > 40){
-                user.location = 1;
-                user.money += 200;
-            } else {
-                user.location += 1;
-            }
-            times -= 1;
-            setLocalPlayer(user);
-            syncPlayer(user);
-            console.log('also happen')
-            if(times === 0) locationEventController(user);
-            if(times > 0) timer();
-        }, 50);
-        setTimeout(timer);
-        console.log('happen');
-    }*/
 
     const moveSpaces = (rolledNum: number, user: Player) => {
         if(user.location + rolledNum > 40) {
@@ -531,6 +586,7 @@ const Game = ( {settings}: Props ) => {
 
     const rollDice = (diceNum: number) => {
         if(gameBoard.turn !== localPlayer.name) return;
+        if(yourName !== localPlayer.name) return;
         const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
@@ -864,90 +920,47 @@ const Game = ( {settings}: Props ) => {
         else locationEventMerch(user);
     }
 
-    return(
+    return (
         <div className="game-screen" >
-            {
-                <GameBoard 
-                    gameBoard={gameBoard}
-                    /*buyProperty={placeHouse}*/
-                    localPlayer={localPlayer}
-                    rollDice={rollDice} 
-                    changeTurn={changeTurn}
-                    jailedPlayers={gameBoard.jail}
-                    locationEventLeaveJail={locationEventLeaveJail}
-                    checkJail={checkJail}
-                    checkIfStation={checkIfStation}
-                    checkIfUtility={checkIfUtility}
-                    checkForSet={checkForSet}
-                    pushToLog={forceLog}
-                />
-            }
-            {canBuy 
-            && <BuyPrompt 
-                    buyProperty={locationEventBuy} 
-                    dontBuy={closeBuyPrompt}
-                    localPlayer={localPlayer}
-                    inspectionTarget={buyableSquare}
-                    checkIfStation={checkIfStation} 
-                    checkIfUtility={checkIfUtility}
-                    buyType="property"
-                />
-            }
-            {luckCards.show
-            && <ChancePrompt
-                    localPlayer={localPlayer}
-                    luckCards={luckCards}
-                    useChance={useChance}
-                    useChest={useChest}
-                />
-            }
-            {gameover
-            && <Gameover localPlayer={localPlayer} />}
-            <Log gameLog={gameLog} />
-        </div>
-    )
+        {
+            <GameBoard 
+                gameBoard={gameBoard}
+                localPlayer={localPlayer}
+                rollDice={rollDice} 
+                changeTurn={changeTurn}
+                jailedPlayers={gameBoard.jail}
+                locationEventLeaveJail={locationEventLeaveJail}
+                checkJail={checkJail}
+                checkIfStation={checkIfStation}
+                checkIfUtility={checkIfUtility}
+                checkForSet={checkForSet}
+                pushToLog={forceLog}
+            />
+        }
+        {canBuy 
+        && <BuyPrompt 
+                buyProperty={locationEventBuy} 
+                dontBuy={closeBuyPrompt}
+                localPlayer={localPlayer}
+                inspectionTarget={buyableSquare}
+                checkIfStation={checkIfStation} 
+                checkIfUtility={checkIfUtility}
+                buyType="property"
+            />
+        }
+        {luckCards.show
+        && <ChancePrompt
+                localPlayer={localPlayer}
+                luckCards={luckCards}
+                useChance={useChance}
+                useChest={useChest}
+            />
+        }
+        {gameover
+        && <Gameover localPlayer={localPlayer} />}
+        <Log gameLog={gameLog} />
+    </div>
+    );
 }
 
-export default Game;
-
-// next step => specify squares
-// square types => irregular { go, jail, free, go to jail } <= complete
-//                 card spots { community, chance }
-//                 normal { properties } add full set bonus with 0 props <= complete
-//                 normal { stations } <= complete
-//                 normal {  utility}  <= complete
-// next step => normal { properties } place house/hotels only when full set <= complete
-// next step => fill in square information <= complete
-//
-// next step => allow selling deeds/props <= complete
-//
-// next step => add overlay when hovering squares for extra info
-//              properties <= complete
-//              stations <= complete
-//              utility <= complete
-//              special <= complete
-//              chance  <= complete
-//              tax <= complete
-//              improve buy prompt <= started(onhold)
-//
-// next step => add chance/chest cards <= complete(could add more)
-//              add function to get out of jail free card <= complete
-//              add correct text to cards 
-//
-// next step => add icons to board spots and update user icons <= complete
-//              stagger moving
-//
-// next step => add player interface <= complete
-//              statistic screen <= complete
-//              improve end turn button <= complete
-//              change dice <= dunno
-// next step => add sorting function for player owned properties <= complete
-//
-// next step => add win/lose conditions <= complete
-//              add win screen <= complete
-//
-// things to add to log =>  { use get out of jail card } <= complete
-//                          { selling properties/houses} <= complete
-//                          { placing properties } <= complete
-//
-// next step => replace currency symbols !important
+export default OnlineGame;

@@ -6,21 +6,34 @@ import { db } from './RouteSwitch';
 type Props = {
   settings: any;
   setSettings: any;
+  playerNumber: number | undefined;
+  setPlayerNumber: any;
+  sessionName: any;
+  setSessionName: any;
   inputHandler: (e:any, player: number) => void;
   changeIcon: (e:any, player: number) => void;
   disablePlayer: (player: number) => void;
 }
 
-const App = ( {settings, setSettings, inputHandler, changeIcon, disablePlayer}: Props ) => {
+const App = ( 
+  {
+    settings, 
+    setSettings, 
+    playerNumber,
+    setPlayerNumber,
+    sessionName,
+    setSessionName,
+    inputHandler, 
+    changeIcon, 
+    disablePlayer
+  }: Props ) => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<number>(1);
 
   const [showJoinMenu, setShowJoinMenu] = useState<boolean>(false);
   const [allSessions, setAllSessions] = useState<object[]>();
 
-  const [sessionName, setSessionName] = useState<any>();
   const [isHosting, setIsHosting] = useState<boolean>(false);
-  const [playerNumber, setPlayerNumber] = useState<number>(0);
 
   const toggleShowSettings = () => setShowSettings(!showSettings);
   const toggleJoinMenu = () => setShowJoinMenu(!showJoinMenu);
@@ -51,7 +64,8 @@ const App = ( {settings, setSettings, inputHandler, changeIcon, disablePlayer}: 
     set(reference, {
       sessionId: settings.player1.name,
       settings: settings,
-      joinedPlayers: 1,    
+      joinedPlayers: 1,
+      gameBoard: false,
     });
     setPlayerNumber(1);
     setSessionName(reference);
@@ -126,7 +140,7 @@ const App = ( {settings, setSettings, inputHandler, changeIcon, disablePlayer}: 
         <button onClick={getSessions} >use</button>
         <button onClick={testlog} >test</button>
         <Link 
-          to="/game" 
+          to="/online-game" 
           className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
         >Go</Link>
       </div> 
@@ -236,7 +250,7 @@ const App = ( {settings, setSettings, inputHandler, changeIcon, disablePlayer}: 
           </div>
         </div>
         <Link 
-          to="/game" 
+          to={isHosting ? '/online-game' : '/game'}
           className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
           onClick={validateIcons() ? undefined : (e) => e.preventDefault()}
         >

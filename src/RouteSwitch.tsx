@@ -5,9 +5,9 @@ import getFirebaseConfig from './firebase.config';
 import { getDatabase, ref, set } from "firebase/database";
 import App from './App';
 import Game from './Game';
+import OnlineGame from './OnlineGame';
 
 const app = initializeApp(getFirebaseConfig());
-export const db = getDatabase();
 
 const RouteSwitch = () => {
 
@@ -33,6 +33,9 @@ const RouteSwitch = () => {
             }
         }
     );
+
+    const [sessionName, setSessionName] = useState<any>();
+    const [playerNumber, setPlayerNumber] = useState<number>(0);
 
     /*useEffect(() => {
         const reference = ref(db, 'players/');
@@ -129,6 +132,10 @@ const RouteSwitch = () => {
                     element={<App 
                             settings={settings} 
                             setSettings={setSettings}
+                            playerNumber={playerNumber}
+                            setPlayerNumber={setPlayerNumber}
+                            sessionName={sessionName}
+                            setSessionName={setSessionName}
                             inputHandler={inputHandler}
                             changeIcon={changeIcon}
                             disablePlayer={disablePlayer}
@@ -139,9 +146,19 @@ const RouteSwitch = () => {
                     path='/game' 
                     element={<Game settings={settings} />} 
                 />
+                <Route 
+                    path='/online-game'
+                    element={<OnlineGame 
+                            settings={settings}
+                            playerNumber={playerNumber}
+                            sessionName={sessionName}    
+                        />
+                    }
+                />
             </Routes>
         </Router>
     )
 }
 
+export const db = getDatabase();
 export default RouteSwitch;
