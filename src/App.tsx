@@ -66,6 +66,7 @@ const App = (
       settings: settings,
       joinedPlayers: 1,
       gameBoard: false,
+      log: false,
     });
     setPlayerNumber(1);
     setSessionName(reference);

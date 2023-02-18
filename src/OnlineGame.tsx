@@ -438,14 +438,32 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         set(reference, board);
     }
 
+    const connectLog = () => {
+        const reference = ref(db, `${settings.player1.name}/log`);
+        onValue(reference, async (snapshot) => {
+            const data = await snapshot.val();
+            setGameLog([...data]);
+        });
+    }
+
+    const uploadLog = () => {
+        const data = gameLog.length ? gameLog : [{player: '', action: 'the game has begun', output: ''}];
+        const reference = ref(db, `${settings.player1.name}/log`);
+        set(reference, data);
+    }
+
     useEffect(() => {
         if(playerNumber === 1) uploadBoard();
+        if(playerNumber === 1) setTimeout(() => uploadLog(), 100);
         setTimeout(() =>  connectBoard(), 250);
+        setTimeout(() => connectLog(), 500);
     }, []);
           
 
     const changeTurn:any = () => {
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
+        if(yourName !== localPlayer.name) return;
+        if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
         let board = {...gameBoard};
         lose(localPlayer);
         const players = [...board.players];
@@ -466,6 +484,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         board = removeLost(board);
         setGameBoard(board);
         uploadBoard(board);  
+        uploadLog();
     }
 
     const removeLost = (board: board) => {

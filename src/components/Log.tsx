@@ -16,6 +16,7 @@ const Log = ( {gameLog}: Props ) => {
     });
 
     const mapLog = () => {
+        if(!gameLog.length) return <div />;
         return gameLog.map((item, i) => {
             return (
                 <p key={i} >
