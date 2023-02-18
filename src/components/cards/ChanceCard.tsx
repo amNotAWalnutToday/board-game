@@ -21,7 +21,7 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
             'Advance to last utility',
             'Go forward 3 spaces',
             'Go backwards 3 spaces',
-            'Random location pass go',
+            'Random location',
         ]
     );
     const [chestCards, setChestCards] = useState<string[]>(

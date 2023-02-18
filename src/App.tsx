@@ -109,7 +109,7 @@ const App = (
   }
 
   const mapSessions = () => {
-    console.log(allSessions);
+    if(!allSessions || !allSessions.length) return <p>There are no sessions currently</p>
     return allSessions?.map((item:any, i:any) => {
       return (
         <button 
@@ -139,7 +139,7 @@ const App = (
       {showJoinMenu 
       &&
       <div className='settings'>
-        <div className='btn-group' >
+        <div className='sessions btn-group' >
           <h1>Sessions</h1>
           {mapSessions()}
           <p style={{wordWrap: 'break-word'}} >current session: {sessionName}</p>
@@ -265,7 +265,7 @@ const App = (
         >
           {validateIcons() ? 'Go' : 'No Duplicate Icons'}
         </Link>
-        <button className='play-btn' onClick={!isHosting ? createSession : cancelSession}>
+        <button className='play-btn host-btn' onClick={!isHosting ? createSession : cancelSession}>
           {!isHosting ? 'Host' : "Stop Hosting"}
         </button>
       </div>}

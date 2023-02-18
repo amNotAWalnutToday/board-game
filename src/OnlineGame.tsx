@@ -407,7 +407,6 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         board.round = round;
         board.turn = turn;
         board.jail = jail;
-        console.log(board);
         const currentPlayer = getPlayer(turn, board);
         if(!currentPlayer) return;
         setLocalPlayer(currentPlayer); 
