@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { initializeApp } from 'firebase/app';
+import getFirebaseConfig from './firebase.config';
+import { getDatabase, ref, set } from "firebase/database";
 import App from './App';
 import Game from './Game';
 
+const app = initializeApp(getFirebaseConfig());
+export const db = getDatabase();
+
 const RouteSwitch = () => {
+
     const [settings, setSettings] = useState(
         {
             player1: {
@@ -26,6 +33,17 @@ const RouteSwitch = () => {
             }
         }
     );
+
+    /*useEffect(() => {
+        const reference = ref(db, 'players/');
+        set(reference, {
+            player1: 'a player',
+            player2: settings.player2,
+            player3: settings.player3,
+            player4: settings.player4,
+        });
+        console.log(db);
+    }, []);*/
 
     const inputHandler = (e: any, player: number) => {
         const playerSettings = {...settings}
@@ -110,6 +128,7 @@ const RouteSwitch = () => {
                     path='/' 
                     element={<App 
                             settings={settings} 
+                            setSettings={setSettings}
                             inputHandler={inputHandler}
                             changeIcon={changeIcon}
                             disablePlayer={disablePlayer}

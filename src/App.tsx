@@ -1,17 +1,29 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { set, ref, remove, onValue, update, push, child, get } from 'firebase/database';
+import { db } from './RouteSwitch';
 
 type Props = {
   settings: any;
+  setSettings: any;
   inputHandler: (e:any, player: number) => void;
   changeIcon: (e:any, player: number) => void;
   disablePlayer: (player: number) => void;
 }
 
-const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
+const App = ( {settings, setSettings, inputHandler, changeIcon, disablePlayer}: Props ) => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<number>(1);
+
+  const [showJoinMenu, setShowJoinMenu] = useState<boolean>(false);
+  const [allSessions, setAllSessions] = useState<object[]>();
+
+  const [sessionName, setSessionName] = useState<any>();
+  const [isHosting, setIsHosting] = useState<boolean>(false);
+  const [playerNumber, setPlayerNumber] = useState<number>(0);
+
   const toggleShowSettings = () => setShowSettings(!showSettings);
+  const toggleJoinMenu = () => setShowJoinMenu(!showJoinMenu);
 
   const validateIcons = () => {
     const icons:string[] = [];
@@ -28,10 +40,97 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
     else return validate === 4 ? true : false;
   }
 
+  const createSession = () => {
+    setIsHosting(true);
+    const reference = ref(db, settings.player1.name);
+    let data;
+    onValue(reference, (snapshot) => {
+      data = snapshot.val();
+    });
+    if(data) return;
+    set(reference, {
+      sessionId: settings.player1.name,
+      settings: settings,
+      joinedPlayers: 1,    
+    });
+    setPlayerNumber(1);
+    setSessionName(reference);
+  }
+
+  useEffect(() => {
+    getSessions()
+  }, []);
+
+  const getSessions = async () => {
+    const reference = ref(db);
+    const sessions:any[] = [];
+    get(child(reference, '/')).then(async (snapshot) => {
+      const data = await snapshot.val();
+      for(const session in data) {
+        sessions.push(data[session].sessionId);
+      }
+      setAllSessions(sessions);
+    });
+  }
+
+  const getSessionSettings = async (sessionId: string) => {
+    const reference = ref(db, `${sessionId}/`);
+    return get(child(reference, 'settings')).then((snapshot) => {
+      return snapshot.val();
+    })
+  }
+
+  const joinSession = async (sessionId: string) => {
+    const reference = ref(db, `${sessionId}/`);
+    await get(child(reference, 'joinedPlayers')).then(async (snapshot) => {
+      let data = await snapshot.val();
+      if(data >= 4 || playerNumber) return;
+      set(child(reference, 'joinedPlayers'), data + 1);
+      const sessionSettings = await getSessionSettings(sessionId);
+      setPlayerNumber(data + 1);
+      setSessionName(sessionId);
+      setSettings(sessionSettings);
+    })
+  }
+
+  const mapSessions = () => {
+    console.log(allSessions);
+    return allSessions?.map((item:any, i:any) => {
+      return <button key={i} onClick={() => joinSession(item)} >{item}</button>
+    });
+  }
+
+  const cancelSession = () => {
+    setIsHosting(false);
+    remove(sessionName);
+  }
+
+  const testlog = () => {
+    console.log(playerNumber, sessionName);
+    console.log('settings', settings);
+  }
+
   return (
     <div className="title-menu" >
-      {!showSettings 
-      && <button onClick={toggleShowSettings} >Play Game</button>}
+      {!showSettings && !showJoinMenu 
+      && <div>
+        <button onClick={toggleShowSettings} >
+          Play Game
+        </button>
+        <button onClick={toggleJoinMenu}>Join</button>
+      </div>}
+      {showJoinMenu 
+      &&
+      <div className='settings'>
+        <div>{mapSessions()}</div>
+        <button onClick={getSessions} >use</button>
+        <button onClick={testlog} >test</button>
+        <Link 
+          to="/game" 
+          className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
+        >Go</Link>
+      </div> 
+      }
       {showSettings 
       && 
       <div className='settings' >
@@ -143,6 +242,9 @@ const App = ( {settings, inputHandler, changeIcon, disablePlayer}: Props ) => {
         >
           {validateIcons() ? 'Go' : 'No Duplicate Icons'}
         </Link>
+        <button onClick={!isHosting ? createSession : cancelSession}>
+          {!isHosting ? 'Host' : "Stop Hosting"}
+        </button>
       </div>}
     </div>
   );
