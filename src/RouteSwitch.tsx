@@ -125,7 +125,7 @@ const RouteSwitch = () => {
     }
 
     return(
-        <Router>
+        <Router basename='/board-game' >
             <Routes>
                 <Route 
                     path='/' 
