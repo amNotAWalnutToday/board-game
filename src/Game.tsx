@@ -367,6 +367,7 @@ const Game = ( {settings}: Props ) => {
 
     const changeTurn:any = () => {
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
+        if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
         let board = {...gameBoard};
         lose(localPlayer);
         const players = [...board.players];
