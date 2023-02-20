@@ -960,6 +960,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 buyProperty={locationEventBuy} 
                 dontBuy={closeBuyPrompt}
                 localPlayer={localPlayer}
+                players={gameBoard.players}
                 inspectionTarget={buyableSquare}
                 checkIfStation={checkIfStation} 
                 checkIfUtility={checkIfUtility}

@@ -335,6 +335,8 @@
   max-height: 160px;
 }
 
+.prompt-menu::-webkit-scrollbar,
+.buy-menu::-webkit-scrollbar,
 .game-log::-webkit-scrollbar,
 .player-owned::-webkit-scrollbar {
   width: 1em;
@@ -343,6 +345,8 @@
   border-radius: 5px;
 }
 
+.buy-menu::-webkit-scrollbar,
+.prompt-menu::-webkit-scrollbar,
 .game-log::-webkit-scrollbar-thumb,
 .player-owned::-webkit-scrollbar-thumb {
   background: var(--light-background);
@@ -604,6 +608,8 @@ li .house-group {
   background: linear-gradient(#333333, #555555);
   box-shadow: 0px 0px 5px 5px black;
   border-radius: 5px;
+  resize: vertical;
+  overflow-y: scroll;
 }
 
 .title-menu .btn-group button {

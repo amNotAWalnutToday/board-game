@@ -7,6 +7,7 @@ type Props = {
     buyProperty: (square: Square | undefined) => Square | void | undefined;
     dontBuy: () => void
     localPlayer: Player;
+    players: Player[];
     inspectionTarget: Square | undefined;
     checkIfStation: (num: number | undefined) => Boolean;
     checkIfUtility: (num: number | undefined) => Boolean;
@@ -18,11 +19,36 @@ const BuyPrompt = (
         buyProperty, 
         dontBuy, 
         localPlayer,
+        players,
         inspectionTarget, 
         checkIfStation,
         checkIfUtility,
         buyType,
     }: Props) => {
+
+    const checkForGroup = (user: Player, group: string | null) => {
+        let hasGroup;
+        user.owned.forEach((square: Square) => {
+            if(square.group === group) return hasGroup = true;
+        });
+        return hasGroup;
+    }
+
+    const checkEachPlayerForGroup = (group: string | null) => {
+        const hasGroup:any = [];
+        players.forEach((player: Player) => {
+            if(checkForGroup(player, group)) hasGroup.push(player); 
+        });
+        return hasGroup;
+    }
+
+    const mapGroups = (group: string | null) => {
+        const hasGroup = checkEachPlayerForGroup(group);
+        if(hasGroup.length) return hasGroup.map((item: Player, i: number) => {
+            return <div className={item.name === localPlayer.name ? 'money' : 'tax'} >{item.name}</div>
+        });
+    }
+
     return (
         <>
             <div className="underlay" onClick={dontBuy} />
@@ -49,6 +75,17 @@ const BuyPrompt = (
                             {localPlayer.money}
                         </span>
                     </p>
+                    {!checkIfStation(inspectionTarget?.number) 
+                    && !checkIfUtility(inspectionTarget?.number) 
+                    ? <p className='text-plain' >
+                        Same Set Owners: 
+                        {inspectionTarget 
+                        && checkEachPlayerForGroup(inspectionTarget?.group) 
+                        ? mapGroups(inspectionTarget?.group)
+                        : 'No Players'}
+                    </p>
+                    : undefined
+                    }
                     <div className="btn-group">
                         <button 
                             className="buy-btn" 

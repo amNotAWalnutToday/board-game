@@ -216,6 +216,7 @@ const GameBoard = (
                     buyProperty={placeHouse}
                     dontBuy={toggleBuyHouse}
                     localPlayer={localPlayer}
+                    players={gameBoard.players}
                     inspectionTarget={inspectionTarget}
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}
