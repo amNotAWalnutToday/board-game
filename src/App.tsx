@@ -158,6 +158,8 @@ const App = (
       <div className='settings' >
         <div className='special-card'>
           <div className='card-name plain' >
+            {!isHosting 
+            ? 
             <input 
               type="text"
               maxLength={10}
@@ -172,11 +174,25 @@ const App = (
                     : settings.player4.name
               }
             />
+            : 
+            <p>
+              {                
+              currentPlayer === 1 
+                ? settings.player1.name
+                : currentPlayer === 2
+                  ? settings.player2.name
+                  : currentPlayer === 3
+                    ? settings.player3.name
+                    : settings.player4.name
+              }
+            </p> 
+            }
           </div>
           <div className='logo-carousel' >
             <button 
               onClick={(e) => changeIcon(e, currentPlayer)} 
               value="backward" 
+              disabled={isHosting ? true : false}
             > 
               {'<'} 
             </button>
@@ -192,6 +208,7 @@ const App = (
             <button 
               onClick={(e) => changeIcon(e, currentPlayer)} 
               value="forward" 
+              disabled={isHosting ? true : false}
             >  
               {'>'} 
             </button>
@@ -203,8 +220,9 @@ const App = (
               :  'disable-btn disable-on'
             }
             onClick={() => disablePlayer(currentPlayer)} 
-            disabled={(currentPlayer === 3 && settings.player4.disable) 
-              || (currentPlayer === 4 && !settings.player3.disable)
+            disabled={ !isHosting
+              && ((currentPlayer === 3 && settings.player4.disable) 
+              || (currentPlayer === 4 && !settings.player3.disable))
                 ? false 
                 : true
             }
