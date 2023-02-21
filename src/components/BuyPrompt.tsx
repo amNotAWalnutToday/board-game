@@ -45,7 +45,16 @@ const BuyPrompt = (
     const mapGroups = (group: string | null) => {
         const hasGroup = checkEachPlayerForGroup(group);
         if(hasGroup.length) return hasGroup.map((item: Player, i: number) => {
-            return <div className={item.name === localPlayer.name ? 'money' : 'tax'} >{item.name}</div>
+            return <span 
+                key={i}
+                className={
+                    item.name === localPlayer.name 
+                        ? 'money' 
+                        : 'tax'
+                } 
+            >
+                {item.name}{hasGroup.length - 1 === i ? '' : ', '} 
+            </span>
         });
     }
 
@@ -78,7 +87,7 @@ const BuyPrompt = (
                     {!checkIfStation(inspectionTarget?.number) 
                     && !checkIfUtility(inspectionTarget?.number) 
                     ? <p className='text-plain' >
-                        Same Set Owners: 
+                        Same Set Owners: {' '}
                         {inspectionTarget 
                         && checkEachPlayerForGroup(inspectionTarget?.group) 
                         ? mapGroups(inspectionTarget?.group)
