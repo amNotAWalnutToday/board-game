@@ -314,7 +314,6 @@
 }
 
 .player-stats p:not(:first-child) {
-  margin-left: 1rem;
   margin-bottom: 0.2rem;
   text-align: center;
 }
@@ -331,8 +330,8 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 160px;
-  max-height: 160px;
+  height: 120px;
+  max-height: 120px;
 }
 
 .prompt-menu::-webkit-scrollbar,
@@ -511,8 +510,6 @@
   display: inline-flex;
   width: 5px;
   height: 5px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   border: 4.5px solid black;
   box-sizing: content-box;
@@ -713,6 +710,17 @@ li .house-group {
   align-self: center;
 }
 
+.trade-btn {
+  margin: 0.25rem 25%;
+  width: 50%;
+  padding: 0.5rem 0;
+  background: var(--light-background);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  box-shadow: var(--light-shadow);
+}
+
 a.dont-buy-btn,
 a.buy-btn {
   text-decoration: none;
@@ -822,11 +830,13 @@ a.dont-buy-btn {
   }
 }
 
+button:disabled,
 .disable-btn:disabled {
   color: grey;
   filter: brightness(60%);
 }
 
+button:disabled,
 .disable-btn:disabled:hover {
   cursor: default;
 }

@@ -16,6 +16,7 @@ const Gameover = ( {localPlayer}: Props ) => {
                     <div className="buy-menu">
                         <h1 className='money' >1st Place!</h1>
                         <Stats 
+                            gameBoard={undefined}
                             players={[localPlayer]}
                             shouldClose={undefined}
                         />

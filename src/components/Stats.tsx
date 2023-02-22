@@ -1,11 +1,12 @@
-import { Player } from '../Game';
+import { Player, board } from '../Game';
 
 type Props = {
+    gameBoard: board | undefined;
     players: Player[];
     shouldClose: boolean | undefined;
 }
 
-const Stats = ({players, shouldClose}: Props) => {
+const Stats = ( {gameBoard, players, shouldClose}: Props ) => {
     const mapPlayerStats = () => {
         return players.map((item, i) => {
             return (
@@ -26,6 +27,17 @@ const Stats = ({players, shouldClose}: Props) => {
                             </span>)
                         })}
                     </p>
+                    {gameBoard 
+                    && 
+                    <button 
+                        className='trade-btn' 
+                        disabled={gameBoard.turn === item.name
+                            ? true
+                            : false
+                        }    
+                    >
+                        Trade
+                    </button>}
                 </div>
             )
         })

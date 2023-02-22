@@ -207,6 +207,7 @@ const GameBoard = (
             }
             {showStats 
             && <Stats 
+                    gameBoard={gameBoard}
                     players={gameBoard.players} 
                     shouldClose={shouldClose}
                 />
