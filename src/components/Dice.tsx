@@ -20,6 +20,16 @@ const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
     const [pseudoNum, setPseudoNum] = useState<number>(2);
     const [timer, setTimer] = useState<any>();
 
+    const mapNumber = (num: number) => {
+        const amount = [];
+        for(let i = 0; i < num; i++) amount.push(i);
+        return amount.map((item, i) => {
+            return (
+                <span className="dice-circle" ></span>
+            )
+        });
+    }
+
     return(
         <div 
             className={`dice 
@@ -61,12 +71,18 @@ const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
             {!isRolling 
             ? <p>
                 {diceNum === 1 
-                    ? localPlayer.dice1.number 
-                    : localPlayer.dice2.number
+                    ? <span className={`dice-${localPlayer.dice1.number}`}>
+                        {mapNumber(localPlayer.dice1.number)}
+                    </span>
+                    : <span className={`dice-${localPlayer.dice2.number}`}>
+                        {mapNumber(localPlayer.dice2.number)}
+                    </span>
                 }
             </p>
             : <p>
-                {pseudoNum}
+                <span className={`dice-${pseudoNum}`}>
+                    {mapNumber(pseudoNum)}
+                </span>
             </p> }
         </div>
     )
