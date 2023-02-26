@@ -935,18 +935,18 @@ const Game = ( {settings}: Props ) => {
         let user = {...localPlayer};
         switch(luckCards.number) {
             case 0:
-                user.money -= 100
+                user.money -= 100;
                 pushToLog(user, 'pays', '', '', `100`);
                 break;
             case 1:
-                user.money += 100
+                user.money += 100;
                 pushToLog(user, 'receives', '', '', `100`);
                 break;
             case 2:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money -= 10
-                        user.money += 10
+                        player.money -= 50;
+                        user.money += 50;
                         pushToLog(user, 'pays', 'to', player.name, `10`);
                     }
                 });
@@ -954,8 +954,8 @@ const Game = ( {settings}: Props ) => {
             case 3:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money += 10
-                        user.money -= 10
+                        player.money += 50;
+                        user.money -= 50;
                         pushToLog(user, 'receives', 'from', player.name, `10`);
                     }
                 });

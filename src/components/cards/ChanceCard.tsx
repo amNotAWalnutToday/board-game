@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { currency } from '../../Game';
 
 type Props = {
     luckCards: {
@@ -14,26 +15,26 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
     const [currentCard, setCurrentCard] = useState<string>();
     const [chanceCards, setChanceCards] = useState<string[]>(
         [
-            'Advance to go',
-            'Advance to last navy square',
-            'Advance to last pink square',
-            'Advance to last Station',
-            'Advance to last utility',
-            'Go forward 3 spaces',
-            'Go backwards 3 spaces',
-            'Random location',
+            'Restart the Samsara with an extra 200 mora.',
+            'It\'s time for the Sabzeruz festival, visit Sumeru City.',
+            'Pay tribute to Cloud Retainer at Mt. Aocang.',
+            'Take part in the Nilotpala cup in Port Osmos.',
+            'Submit a light novel manuscript for a contest at the Yae Publishing House.',
+            'Go rolling with Sayu and advance 3 Spaces.',
+            'Adventure with Bennet in a dungeon and get lost, go backwards 3 spaces.',
+            'Fall into a wormhole, teleport somewhere random.',
         ]
     );
     const [chestCards, setChestCards] = useState<string[]>(
         [
-            'pay 100',
-            'receive 100',
-            'collect 10 from each player',
-            'give 10 to each player',
-            'every other player randomize locations but dont buy or pay tax',
-            'every other player goes to jail',
-            'go to jail',
-            'get outta jail free card',
+            'Paimon robs Mora for food, lose 100 Mora',
+            'Participate in the Weinlesefest festival and run a stall, receive 100 Mora in profits.',
+            'Collect 50 Mora from each player as they take your specialities.',
+            'Give 50 Mora to each player to take their specialities.',
+            'Trick every other player into a wormhole. Everyone else forced to a random location.',
+            'Catch Klee fish blasting with every other player, send them to solitary confinement!',
+            'Get caught fish blasting with Klee, take a trip to Solitary Confinement!',
+            'Get out of Solitary Confinement early for good behaviour.(get out of jail free card.)',
         ]
     )
 
