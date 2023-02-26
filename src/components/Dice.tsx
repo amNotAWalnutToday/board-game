@@ -25,7 +25,7 @@ const Dice = ({localPlayer, diceNum, rollDice}: Props) => {
         for(let i = 0; i < num; i++) amount.push(i);
         return amount.map((item, i) => {
             return (
-                <span className="dice-circle" ></span>
+                <span key={i} className="dice-circle" />
             )
         });
     }
