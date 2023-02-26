@@ -41,7 +41,8 @@ export type Trader = {
     player: Player,
     offer: {
         properties: Square[],
-    }
+    },
+    accepted: boolean,
 }
 
 export type Trade = {
@@ -444,13 +445,15 @@ const Game = ( {settings}: Props ) => {
                 player: localPlayer,
                 offer: {
                     properties: []
-                }
+                },
+                accepted: false /*not in use in local*/,
             },
             receiver: {
                 player: gameBoard.players[1],
                 offer: {
                     properties: []
-                }
+                },
+                accepted: false /*not in use in local*/,
             },
         }
     );
@@ -1021,7 +1024,6 @@ const Game = ( {settings}: Props ) => {
             {
                 <GameBoard 
                     gameBoard={gameBoard}
-                    /*buyProperty={placeHouse}*/
                     localPlayer={localPlayer}
                     rollDice={rollDice} 
                     changeTurn={changeTurn}
@@ -1033,6 +1035,8 @@ const Game = ( {settings}: Props ) => {
                     checkForSet={checkForSet}
                     sendTrade={sendTrade}
                     pushToLog={forceLog}
+                    
+                    yourName={undefined}
                 />
             }
             {canBuy 

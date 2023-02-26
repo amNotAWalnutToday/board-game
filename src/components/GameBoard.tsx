@@ -20,6 +20,8 @@ type Props = {
     checkIfUtility: (num: number | undefined) => boolean;
     checkForSet: (user: Player, group: string) => boolean;
     pushToLog: (user: Player, action: string, output:string, receiver: string, money: string) => void;
+
+    yourName: string | undefined;
 }
 
 type Mode = 'inspect' | 'place' | 'sell';
@@ -38,6 +40,7 @@ const GameBoard = (
         checkIfUtility,
         checkForSet,
         pushToLog,
+        yourName,
     }: Props ) => {
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -211,6 +214,8 @@ const GameBoard = (
                     players={gameBoard.players} 
                     sendTrade={sendTrade}
                     shouldClose={shouldClose}
+                    
+                    yourName={yourName}
                 />
             }
             {showBuyHouse

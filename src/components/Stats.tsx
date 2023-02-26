@@ -6,9 +6,10 @@ type Props = {
     players: Player[];
     sendTrade: undefined | ((receiver: Player | undefined) => void);
     shouldClose: boolean | undefined;
+    yourName: string | undefined
 }
 
-const Stats = ( {gameBoard, players, sendTrade, shouldClose}: Props ) => {
+const Stats = ( {gameBoard, players, sendTrade, shouldClose, yourName}: Props ) => {
     const mapPlayerStats = () => {
         return players.map((item, i) => {
             return (
@@ -24,9 +25,11 @@ const Stats = ( {gameBoard, players, sendTrade, shouldClose}: Props ) => {
                     <button 
                         className='trade-btn' 
                         onClick={sendTrade ? () => sendTrade(item) : undefined}
-                        disabled={gameBoard.turn === item.name
-                            ? true
-                            : false
+                        disabled={
+                            (gameBoard.turn === item.name)
+                            || (yourName && yourName !== gameBoard.turn)
+                                ? true
+                                : false
                         }    
                     >
                         Trade

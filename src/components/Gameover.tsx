@@ -20,6 +20,7 @@ const Gameover = ( {localPlayer}: Props ) => {
                             players={[localPlayer]}
                             sendTrade={undefined}
                             shouldClose={undefined}
+                            yourName={undefined}
                         />
                         <div className='btn-group' >
                             <Link to="/" className='buy-btn'>Return To Main Menu</Link>

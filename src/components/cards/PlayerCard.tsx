@@ -25,7 +25,7 @@ const PlayerCard = (
             </p>
             <hr />
             <p className="player-owned">
-                {player.owned.map((item, i) => {
+                {player.owned && player.owned.map((item, i) => {
                     return (
                         <span 
                             key={i} 

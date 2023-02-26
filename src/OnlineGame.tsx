@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './RouteSwitch';
 import { get, set, ref, onValue, child } from 'firebase/database';
-import { LogMessage, Player, Square } from './Game';
+import { Trade, Trader, LogMessage, Player, Square } from './Game';
 import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
-import ChancePrompt from './components/ChancePrompt';
-import BuyPrompt from './components/BuyPrompt';
+import ChancePrompt from './components/prompts/ChancePrompt';
+import BuyPrompt from './components/prompts/BuyPrompt';
+import TradePrompt from './components/prompts/TradePrompt';
 import Log from './components/Log';
 
 interface board {
@@ -350,8 +351,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 players[0].logo, 
                 players[0].turnOrder,
                 players[0].location,
-                {number: 1, hasRolled: false},
-                {number: 1, hasRolled: false},
+                players[0].dice1,
+                players[0].dice2,
                 players[0].money,
                 players[0].cards,
                 p1owned,
@@ -362,8 +363,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 players[1].logo, 
                 players[1].turnOrder,
                 players[1].location, 
-                {number: 1, hasRolled: false},
-                {number: 1, hasRolled: false},
+                players[1].dice1,
+                players[1].dice2,
                 players[1].money,
                 players[1].cards,
                 p2owned,
@@ -377,8 +378,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 players[2].logo,
                 players[2].turnOrder,
                 players[2].location,
-                {number: 1, hasRolled: false},
-                {number: 1, hasRolled: false},
+                players[2].dice1,
+                players[2].dice2,
                 players[2].money,
                 players[2].cards,
                 p3owned,
@@ -393,8 +394,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 players[3].logo,
                 players[3].turnOrder,
                 players[3].location,
-                {number: 1, hasRolled: false},
-                {number: 1, hasRolled: false},
+                players[3].dice1,
+                players[3].dice2,
                 players[3].money,
                 players[3].cards,
                 p4owned,
@@ -432,7 +433,6 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const uploadBoard = async (board: board = gameBoard) => {
-        resetDice();
         const reference = ref(db, `${settings.player1.name}/gameBoard`);
         set(reference, board);
     }
@@ -451,11 +451,51 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         set(reference, data);
     }
 
+    const connectTrade = () => {
+        const reference = ref(db, `${settings.player1.name}/trade`);
+        onValue(reference, async (snapshot) => {
+            const data = await snapshot.val();
+            convertTrade(data);
+        });
+    }
+
+    const convertTrade = (data: any) => {
+        const senderProps: Square[] = [];
+        const receiverProps: Square[] = [];
+        if(data.sender.offer.properties !== false){
+            data.sender.offer.properties.forEach((property: Square) => {
+                senderProps.push(property);
+            });
+        }
+        if(data.receiver.offer.properties !== false) {
+            data.receiver.offer.properties.forEach((property: Square) => {
+                receiverProps.push(property);
+            });
+        }
+
+        data.sender.offer.properties = senderProps; 
+        data.receiver.offer.properties = receiverProps; 
+        
+        setTrading(data);
+    }
+
+    const uploadTrade = (show: boolean) => {
+        const data: any = {...trading};
+        data.show = show;
+        if(!data.sender.offer.properties.length) data.sender.offer.properties = false; 
+        if(!data.receiver.offer.properties.length) data.receiver.offer.properties = false; 
+        
+        const reference = ref(db, `${settings.player1.name}/trade`);
+        set(reference, data);
+    }
+
     useEffect(() => {
         if(playerNumber === 1) uploadBoard();
         if(playerNumber === 1) setTimeout(() => uploadLog(), 100);
+        if(playerNumber === 1) setTimeout(() => uploadTrade(false), 175);
         setTimeout(() =>  connectBoard(), 250);
         setTimeout(() => connectLog(), 500);
+        setTimeout(() => connectTrade(), 750);
     }, []);
           
 
@@ -482,6 +522,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         }
         board = removeLost(board);
         setGameBoard(board);
+        resetDice();
         uploadBoard(board);  
         uploadLog();
     }
@@ -509,7 +550,173 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         return gameBoard.players[0];
     }
 
-    const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer())
+    const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer());
+
+    const [trading, setTrading] = useState<Trade>(
+        {
+            show: false,
+            sender: {
+                player: localPlayer,
+                offer: {
+                    properties: []
+                },
+                accepted: false,
+            },
+            receiver: {
+                player: gameBoard.players[1],
+                offer: {
+                    properties: []
+                },
+                accepted: false,
+            },
+        }
+    );
+
+    const checkTradeForItem = (user: Player, item: Square): boolean => {
+        const isSender = user.name === trading.sender.player.name;
+        const properties = 
+            isSender 
+                ? trading.sender.offer.properties
+                : trading.receiver.offer.properties;
+
+        for(let i = 0; i < properties.length; i++) {
+            if(properties[i].name === item.name) return true;
+        }
+        return false;
+    }
+
+    const toggleTrade = () => {
+        let trade = {...trading};
+        trade = resetTrade(trade);
+        trade.show = false;
+        setTrading(trade);
+
+        uploadTrade(false);
+    }
+
+    const resetTrade = (trade: Trade) => {
+        trade.sender.offer.properties = [];
+        trade.receiver.offer.properties = [];
+        trade.sender.accepted = false;
+        trade.receiver.accepted = false;
+        return trade;
+    }
+
+    const sendTrade = (receiver: Player | undefined) => {
+        if(!receiver) return;
+        const trade = {...trading};
+        trade.show = true;
+        trade.sender.player = localPlayer;
+        trade.receiver.player = receiver;
+        setTrading(trade);
+        
+        uploadBoard();
+        uploadTrade(true)
+    }
+
+    const selectItemForTrade = (user: Player, item: Square) => {
+        if(yourName !== user.name) return;
+        if(trading.receiver.accepted || trading.sender.accepted) return;
+
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        if(checkTradeForItem(user, item)) return;
+        if(isSender) trade.sender.offer.properties.push(item);
+        else trade.receiver.offer.properties.push(item);
+        setTrading(trade);
+
+        uploadTrade(true);
+    }
+
+    const removeItemFromTrade = (user: Player, item: Square) => {
+        if(yourName !== user.name) return;
+        if(trading.receiver.accepted || trading.sender.accepted) return;
+
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        const newTradeOffer: Square[] = [];
+        if(isSender) {
+            trade.sender.offer.properties.forEach((square: Square) => {
+                if(square.name !== item.name) newTradeOffer.push(square);
+            });
+            trade.sender.offer.properties = newTradeOffer;
+        } else {
+            trade.receiver.offer.properties.forEach((square: Square) => {
+                if(square.name !== item.name) newTradeOffer.push(square);
+            });
+            trade.receiver.offer.properties = newTradeOffer;
+        }
+        setTrading(trade);
+
+        uploadTrade(true);
+    }
+
+    const removePropertyFromPlayer = (user: Player | undefined, item: Square) => {
+        if(!user) return user;
+        const properties: Square[] = [];
+        user.owned.forEach((property: Square) => {
+            if(property.name !== item.name) properties.push(property);
+        });
+        user.owned = properties;
+        return user;
+    }
+
+    const getRealSquare = (fakeSquare: Square, board: board) => {
+        board.squares.forEach((square: Square) => {
+            if(square.name === fakeSquare.name) fakeSquare = square;
+        });
+        return fakeSquare;
+    }
+
+    const validateTrade = (isSender: boolean) => {
+        const trade = {...trading};
+        isSender 
+            ? trade.sender.accepted = true
+            : trade.receiver.accepted = true;
+         
+        setTrading(trade);
+
+        uploadTrade(true);
+    }
+
+    const acceptTrade = () => {
+        if(!trading.sender.accepted && yourName === trading.sender.player.name) {
+            return validateTrade(true);
+        }
+        if(!trading.receiver.accepted && yourName === trading.receiver.player.name) {
+            return validateTrade(false);
+        }
+        if(!trading.receiver.accepted || !trading.sender.accepted) return;
+
+        const board = {...gameBoard};
+        const trade = {...trading};
+        let sender = getPlayer(`${trading.sender.player.name}`, board);
+        let receiver = getPlayer(`${trading.receiver.player.name}`, board);
+        if(!sender || !receiver) return;
+
+        trade.sender.offer.properties.forEach((property: Square) => {
+            sender = removePropertyFromPlayer(sender, property);
+            const square = getRealSquare(property, board);
+            square.ownedBy = receiver?.name;
+            receiver?.owned.push(square);
+        });
+        trade.receiver.offer.properties.forEach((property: Square) => {
+            receiver = removePropertyFromPlayer(receiver, property);
+            const square = getRealSquare(property, board);
+            square.ownedBy = sender?.name;
+            sender?.owned.push(property);      
+        });
+
+        setStationRent(sender);
+        setStationRent(receiver);
+        setUtilityRent(sender);
+        setUtilityRent(receiver);
+
+        setGameBoard(board);
+        toggleTrade();
+
+        uploadBoard();
+    }
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
@@ -679,36 +886,36 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         setGameBoard(board);
     }
 
-    const setStationRent = () => {
+    const setStationRent = (user: Player = localPlayer) => {
         const board = {...gameBoard}
         let stations:0|1|2|3|4 = 0;
         board.squares.forEach((square: Square) => {
             if(checkIfStation(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 stations += 1;
             } 
         });
         board.squares.forEach((square: Square) => {
             if(checkIfStation(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 square.properties = stations;
             } 
         });
         setGameBoard(board);
     }
 
-    const setUtilityRent = () => {
+    const setUtilityRent = (user: Player = localPlayer) => {
         const board = {...gameBoard}
         let utilities:0|1|2|3|4 = 0;
         board.squares.forEach((square: Square) => {
             if(checkIfUtility(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 utilities += 1;
             } 
         });
         board.squares.forEach((square: Square) => {
             if(checkIfUtility(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 square.properties = utilities;
             } 
         });
@@ -943,6 +1150,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         {
             <GameBoard 
                 gameBoard={gameBoard}
+                sendTrade={sendTrade}
                 localPlayer={localPlayer}
                 rollDice={rollDice} 
                 changeTurn={changeTurn}
@@ -953,6 +1161,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 checkIfUtility={checkIfUtility}
                 checkForSet={checkForSet}
                 pushToLog={forceLog}
+
+                yourName={yourName}
             />
         }
         {canBuy 
@@ -975,8 +1185,18 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 useChest={useChest}
             />
         }
-        {gameover
-        && <Gameover localPlayer={localPlayer} />}
+        {trading.show
+        && <TradePrompt 
+                sender={trading.sender} 
+                receiver={trading.receiver} 
+                toggleTrade={toggleTrade}
+                acceptTrade={acceptTrade}
+                selectItemForTrade={selectItemForTrade}
+                removeItemFromTrade={removeItemFromTrade}
+                checkTradeForItem={checkTradeForItem}
+            />
+        }
+        {gameover && <Gameover localPlayer={localPlayer} />}
         <Log gameLog={gameLog} />
     </div>
     );
