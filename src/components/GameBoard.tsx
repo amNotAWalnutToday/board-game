@@ -9,12 +9,12 @@ import SellPrompt from './SellPrompt';
 
 type Props = {
     gameBoard: any,
-    /*buyProperty: (square: SquareType | undefined) => void | undefined;*/
     localPlayer: Player,
     rollDice: any;
     changeTurn: () => void,
     jailedPlayers: Player[];
     locationEventLeaveJail: (user: Player) => void;
+    sendTrade: undefined | ((receiver: Player | undefined) => void);
     checkJail: (user: Player) => boolean | undefined;
     checkIfStation: (num: number | undefined) => boolean;
     checkIfUtility: (num: number | undefined) => boolean;
@@ -27,12 +27,12 @@ type Mode = 'inspect' | 'place' | 'sell';
 const GameBoard = ( 
     {
         gameBoard, 
-        /*buyProperty,*/ 
         localPlayer, 
         rollDice,
         changeTurn, 
         jailedPlayers,
         locationEventLeaveJail,
+        sendTrade,
         checkJail,
         checkIfStation,
         checkIfUtility,
@@ -209,6 +209,7 @@ const GameBoard = (
             && <Stats 
                     gameBoard={gameBoard}
                     players={gameBoard.players} 
+                    sendTrade={sendTrade}
                     shouldClose={shouldClose}
                 />
             }

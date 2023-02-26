@@ -1,36 +1,29 @@
 import { Player, board } from '../Game';
+import PlayerCard from './cards/PlayerCard';
 
 type Props = {
     gameBoard: board | undefined;
     players: Player[];
+    sendTrade: undefined | ((receiver: Player | undefined) => void);
     shouldClose: boolean | undefined;
 }
 
-const Stats = ( {gameBoard, players, shouldClose}: Props ) => {
+const Stats = ( {gameBoard, players, sendTrade, shouldClose}: Props ) => {
     const mapPlayerStats = () => {
         return players.map((item, i) => {
             return (
                 <div key={i} className="player-stats" >
-                    <p className={`card-name plain card-${item.logo}`} >
-                        {item.name}
-                        <span className={`logo logo-${item.logo}`} />
-                    </p>
-                    <p className='money'>
-                        <span className="m-symbol"/>{item.money}
-                    </p>
-                    <hr />
-                    <p className="player-owned">
-                        {item.owned.map((item, i) => {
-                            return (
-                            <span key={i} className={`text-${item.group}`} >
-                                {item.name}
-                            </span>)
-                        })}
-                    </p>
+                    <PlayerCard 
+                        player={item} 
+                        selectItemForTrade={undefined}
+                        removeItemFromTrade={undefined}
+                        checkTradeForItem={undefined}
+                    />
                     {gameBoard 
                     && 
                     <button 
                         className='trade-btn' 
+                        onClick={sendTrade ? () => sendTrade(item) : undefined}
                         disabled={gameBoard.turn === item.name
                             ? true
                             : false

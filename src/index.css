@@ -292,6 +292,17 @@
   border-radius: 5px;
 }
 
+.prompt-menu .stats {
+  display: flex;
+  gap: 5rem;
+  padding: 2.5rem;
+}
+
+.prompt-menu h4 {
+  color: white;
+  font-size: 24px;
+}
+
 .stats:not(.close) {
   animation: pullout 0.4s 1 linear;
 }
@@ -516,6 +527,7 @@
   background-color: black;
 }
 
+.prompt-menu .player-owned span:hover,
 .pseudo-select,
 a:hover,
 button:hover,
@@ -685,12 +697,17 @@ li .house-group {
   margin: 0 0.5rem 1rem 0.5rem;
 }
 
+.trade-btn-group,
 .btn-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   gap: 1rem;
+}
+
+.trade-btn-group {
+  justify-content: space-evenly;
 }
 
 .disable-btn,

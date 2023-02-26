@@ -18,6 +18,7 @@ const Gameover = ( {localPlayer}: Props ) => {
                         <Stats 
                             gameBoard={undefined}
                             players={[localPlayer]}
+                            sendTrade={undefined}
                             shouldClose={undefined}
                         />
                         <div className='btn-group' >

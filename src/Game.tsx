@@ -3,6 +3,7 @@ import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
 import ChancePrompt from './components/ChancePrompt';
 import BuyPrompt from './components/BuyPrompt';
+import TradePrompt from './components/TradePrompt';
 import Log from './components/Log';
 
 export interface board {
@@ -36,10 +37,23 @@ export type Player = {
     logo: string,
 }
 
+export type Trader = {
+    player: Player,
+    offer: {
+        properties: Square[],
+    }
+}
+
+export type Trade = {
+    show: boolean,
+    sender: Trader,
+    receiver: Trader,
+}
+
 export type Square = {
     name:string, 
     number:number,
-    ownedBy:string | null, 
+    ownedBy:string | null | undefined, 
     properties: 0|1|2|3|4|5,
     cost: {deed: number, house: number, hotel: number},
     rent: number[],
@@ -201,6 +215,15 @@ const Game = ( {settings}: Props ) => {
         squares.forEach((square: any) => {
             if(square.number === user.location) result = square
         })
+        return result;
+    }
+
+    const getPlayer = (user: string, board: board):Player | undefined => {
+        const players = [...board.players];
+        let result;
+        players.forEach((player: Player) => {
+            if(user === player.name) result = player;
+        });
         return result;
     }
 
@@ -412,7 +435,130 @@ const Game = ( {settings}: Props ) => {
         return gameBoard.players[0];
     }
 
-    const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer())
+    const [localPlayer, setLocalPlayer] = useState<Player>(choosePlayer());
+
+    const [trading, setTrading] = useState<Trade>(
+        {
+            show: false,
+            sender: {
+                player: localPlayer,
+                offer: {
+                    properties: []
+                }
+            },
+            receiver: {
+                player: gameBoard.players[1],
+                offer: {
+                    properties: []
+                }
+            },
+        }
+    );
+
+    const checkTradeForItem = (user: Player, item: Square): boolean => {
+        const isSender = user.name === trading.sender.player.name;
+        const properties = 
+            isSender 
+                ? trading.sender.offer.properties
+                : trading.receiver.offer.properties;
+
+        for(let i = 0; i < properties.length; i++) {
+            if(properties[i].name === item.name) return true;
+        }
+        return false;
+    }
+
+    const toggleTrade = () => {
+        let trade = {...trading};
+        trade = resetTrade(trade);
+        trade.show = false;
+        setTrading(trade);
+    }
+
+    const resetTrade = (trade: Trade) => {
+        trade.sender.offer.properties = [];
+        trade.receiver.offer.properties = [];
+        return trade;
+    }
+
+    const sendTrade = (receiver: Player | undefined) => {
+        if(!receiver) return;
+        const trade = {...trading};
+        trade.show = true;
+        trade.sender.player = localPlayer;
+        trade.receiver.player = receiver;
+        setTrading(trade);
+    }
+
+    const selectItemForTrade = (user: Player, item: Square) => {
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        if(checkTradeForItem(user, item)) return;
+        if(isSender) trade.sender.offer.properties.push(item);
+        else trade.receiver.offer.properties.push(item);
+        setTrading(trade);
+        console.log(trading);
+    }
+
+    const removeItemFromTrade = (user: Player, item: Square) => {
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        const newTradeOffer: Square[] = [];
+        if(isSender) {
+            trade.sender.offer.properties.forEach((square: Square) => {
+                if(square.name !== item.name) newTradeOffer.push(square);
+            });
+            trade.sender.offer.properties = newTradeOffer;
+        } else {
+            trade.receiver.offer.properties.forEach((square: Square) => {
+                if(square.name !== item.name) newTradeOffer.push(square);
+            });
+            trade.receiver.offer.properties = newTradeOffer;
+        }
+        setTrading(trade);
+        console.log(trading);
+    }
+
+    const removePropertyFromPlayer = (user: Player | undefined, item: Square) => {
+        if(!user) return user;
+        const properties: Square[] = [];
+        user.owned.forEach((property: Square) => {
+            if(property.name !== item.name) properties.push(property);
+        });
+        user.owned = properties;
+        return user;
+    }
+
+    const getRealSquare = (fakeSquare: Square, board: board) => {
+        board.squares.forEach((square: Square) => {
+            if(square.name === fakeSquare.name) fakeSquare = square;
+        });
+        return fakeSquare;
+    }
+
+    const acceptTrade = () => {
+        const board = {...gameBoard};
+        const trade = {...trading};
+        let sender = getPlayer(`${trading.sender.player.name}`, board);
+        let receiver = getPlayer(`${trading.receiver.player.name}`, board);
+        if(!sender || !receiver) return;
+
+        trade.sender.offer.properties.forEach((property: Square) => {
+            sender = removePropertyFromPlayer(sender, property);
+            const square = getRealSquare(property, board);
+            square.ownedBy = receiver?.name;
+            receiver?.owned.push(square);
+        });
+        trade.receiver.offer.properties.forEach((property: Square) => {
+            receiver = removePropertyFromPlayer(receiver, property);
+            const square = getRealSquare(property, board);
+            square.ownedBy = sender?.name;
+            sender?.owned.push(property);
+        });
+
+        setGameBoard(board);
+        toggleTrade();
+    }
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
@@ -880,6 +1026,7 @@ const Game = ( {settings}: Props ) => {
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}
                     checkForSet={checkForSet}
+                    sendTrade={sendTrade}
                     pushToLog={forceLog}
                 />
             }
@@ -901,6 +1048,17 @@ const Game = ( {settings}: Props ) => {
                     luckCards={luckCards}
                     useChance={useChance}
                     useChest={useChest}
+                />
+            }
+            {trading.show
+            && <TradePrompt 
+                    sender={trading.sender} 
+                    receiver={trading.receiver} 
+                    toggleTrade={toggleTrade}
+                    acceptTrade={acceptTrade}
+                    selectItemForTrade={selectItemForTrade}
+                    removeItemFromTrade={removeItemFromTrade}
+                    checkTradeForItem={checkTradeForItem}
                 />
             }
             {gameover
