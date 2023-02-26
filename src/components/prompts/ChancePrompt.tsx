@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Player } from '../Game';
-import ChanceCard from './cards/ChanceCard';
+import { Player } from '../../Game';
+import ChanceCard from '../cards/ChanceCard';
 
 type Props = {
     localPlayer: Player;

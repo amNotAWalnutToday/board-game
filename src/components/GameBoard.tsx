@@ -4,8 +4,8 @@ import Square from './Square';
 import Dice from './Dice';
 import InspectSquare from './InspectSquare';
 import Stats from './Stats';
-import BuyPrompt from './BuyPrompt';
-import SellPrompt from './SellPrompt';
+import BuyPrompt from './prompts/BuyPrompt';
+import SellPrompt from './prompts/SellPrompt';
 
 type Props = {
     gameBoard: any,

@@ -1,7 +1,7 @@
-import { Square, Player } from '../Game';
-import CompanyCard from './cards/CompanyCard';
-import PropertyCard from './cards/PropertyCard';
-import StationCard from './cards/StationCard';
+import { Square, Player } from '../../Game';
+import CompanyCard from '../cards/CompanyCard';
+import PropertyCard from '../cards/PropertyCard';
+import StationCard from '../cards/StationCard';
 
 type Props = {
     buyProperty: (square: Square | undefined) => Square | void | undefined;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
-import ChancePrompt from './components/ChancePrompt';
-import BuyPrompt from './components/BuyPrompt';
-import TradePrompt from './components/TradePrompt';
+import ChancePrompt from './components/prompts/ChancePrompt';
+import BuyPrompt from './components/prompts/BuyPrompt';
+import TradePrompt from './components/prompts/TradePrompt';
 import Log from './components/Log';
 
 export interface board {
@@ -555,7 +555,7 @@ const Game = ( {settings}: Props ) => {
             square.ownedBy = sender?.name;
             sender?.owned.push(property);      
         });
-        
+
         setStationRent(sender);
         setStationRent(receiver);
         setUtilityRent(sender);

@@ -1,5 +1,5 @@
-import { Player, Square, Trader } from '../Game';
-import PlayerCard from './cards/PlayerCard';
+import { Player, Square, Trader } from '../../Game';
+import PlayerCard from '../cards/PlayerCard';
 
 type Props = {
     sender: Trader;
