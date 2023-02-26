@@ -553,8 +553,13 @@ const Game = ( {settings}: Props ) => {
             receiver = removePropertyFromPlayer(receiver, property);
             const square = getRealSquare(property, board);
             square.ownedBy = sender?.name;
-            sender?.owned.push(property);
+            sender?.owned.push(property);      
         });
+        
+        setStationRent(sender);
+        setStationRent(receiver);
+        setUtilityRent(sender);
+        setUtilityRent(receiver);
 
         setGameBoard(board);
         toggleTrade();
@@ -752,36 +757,36 @@ const Game = ( {settings}: Props ) => {
         setGameBoard(board);
     }
 
-    const setStationRent = () => {
+    const setStationRent = (user: Player = localPlayer) => {
         const board = {...gameBoard}
         let stations:0|1|2|3|4 = 0;
         board.squares.forEach((square: Square) => {
             if(checkIfStation(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 stations += 1;
             } 
         });
         board.squares.forEach((square: Square) => {
             if(checkIfStation(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 square.properties = stations;
             } 
         });
         setGameBoard(board);
     }
 
-    const setUtilityRent = () => {
+    const setUtilityRent = (user: Player = localPlayer) => {
         const board = {...gameBoard}
         let utilities:0|1|2|3|4 = 0;
         board.squares.forEach((square: Square) => {
             if(checkIfUtility(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 utilities += 1;
             } 
         });
         board.squares.forEach((square: Square) => {
             if(checkIfUtility(square.number) 
-            && square.ownedBy === localPlayer.name) {
+            && square.ownedBy === user.name) {
                 square.properties = utilities;
             } 
         });
