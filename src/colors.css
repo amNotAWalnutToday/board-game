@@ -43,6 +43,7 @@
     color: var(--red);
   }
   
+  .card-dehya,
   .card-pyro,
   .red {
     background: linear-gradient(var(--red), darkred);
@@ -62,6 +63,7 @@
     color: var(--green);
   }
   
+  .card-nahida,
   .card-dendro,
   .green {
     background: linear-gradient(var(--green), darkgreen) ;
@@ -71,6 +73,7 @@
     color: var(--light-navy);
   }
   
+  .card-nilou,
   .card-hydro,
   .navy {
     background: linear-gradient(var(--light-navy), var(--navy));
