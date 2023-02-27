@@ -92,6 +92,10 @@
     color: var(--tax);
   }
 
+  .player-stats .money:last-child,
+  .player-stats .tax:last-child,
+  .trade-btn-group .money,
+  .trade-btn-group .tax,
   .game-log .tax {
     font-weight: bold;
     font-size: 24px;

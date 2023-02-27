@@ -1070,6 +1070,7 @@ const Game = ( {settings}: Props ) => {
                     selectItemForTrade={selectItemForTrade}
                     removeItemFromTrade={removeItemFromTrade}
                     checkTradeForItem={checkTradeForItem}
+                    checkLocalIfSenderOrReceiver={undefined}
                 />
             }
             {gameover

@@ -294,8 +294,13 @@
 
 .prompt-menu .stats {
   display: flex;
-  gap: 5rem;
-  padding: 2.5rem;
+  gap: 2.5rem;
+  padding: 1rem;
+}
+
+.prompt-menu .player-stats {
+  min-width: 214px;
+  min-height: 274px;
 }
 
 .prompt-menu h4 {

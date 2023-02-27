@@ -580,6 +580,13 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         }
     );
 
+    const checkLocalIfSenderOrReceiver = () => {
+        const user = getPlayer(`${yourName}`, gameBoard);
+        if(!user) return;
+        if(user.name === trading.sender.player.name) return 'sender';
+        else if(user.name === trading.receiver.player.name) return 'receiver';
+    }
+
     const checkTradeForItem = (user: Player, item: Square): boolean => {
         const isSender = user.name === trading.sender.player.name;
         const properties = 
@@ -1206,6 +1213,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 selectItemForTrade={selectItemForTrade}
                 removeItemFromTrade={removeItemFromTrade}
                 checkTradeForItem={checkTradeForItem}
+                checkLocalIfSenderOrReceiver={checkLocalIfSenderOrReceiver}
             />
         }
         {gameover && <Gameover localPlayer={localPlayer} />}

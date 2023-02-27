@@ -9,6 +9,7 @@ type Props = {
     selectItemForTrade: (user: Player, item: Square) => void;
     removeItemFromTrade: (user: Player, item: Square) => void;
     checkTradeForItem: (user: Player, item: Square) => boolean;
+    checkLocalIfSenderOrReceiver: (() => string | undefined) | undefined;
 }
 
 const TradePrompt = ( 
@@ -19,7 +20,8 @@ const TradePrompt = (
         acceptTrade,
         selectItemForTrade,
         removeItemFromTrade,
-        checkTradeForItem
+        checkTradeForItem,
+        checkLocalIfSenderOrReceiver
     }: Props ) => {
     return (
         <>
@@ -35,6 +37,12 @@ const TradePrompt = (
                                 removeItemFromTrade={removeItemFromTrade}
                                 checkTradeForItem={checkTradeForItem}
                             />
+                            {checkLocalIfSenderOrReceiver
+                                ? !sender.accepted
+                                    ? <p className='tax money' >Not Accepted</p>
+                                    : <p className='money'>Accepted</p>
+                                : undefined
+                            }
                         </div>
                         <div className="player-stats">
                             <PlayerCard 
@@ -43,18 +51,47 @@ const TradePrompt = (
                                 removeItemFromTrade={removeItemFromTrade}
                                 checkTradeForItem={checkTradeForItem}
                             />
+                            {checkLocalIfSenderOrReceiver
+                                ? !receiver.accepted
+                                    ? <p className='tax money' >Not Accepted</p>
+                                    : <p className='money'>Accepted</p>
+                                : undefined
+                            }
                         </div>
                     </div>
                     <div className="trade-btn-group">
                         <button 
                             className='buy-btn'
-                            onClick={acceptTrade}    
+                            onClick={acceptTrade}   
+                            disabled={
+                                checkLocalIfSenderOrReceiver
+                                && !checkLocalIfSenderOrReceiver()
+                                    ? true
+                                    : false
+                            } 
                         >
                             Accept
                         </button>
+                        {checkLocalIfSenderOrReceiver
+                            ? (checkLocalIfSenderOrReceiver() === 'sender'
+                            && !sender.accepted)
+                            || (checkLocalIfSenderOrReceiver() === 'receiver'
+                            && !receiver.accepted)
+                                ? <p className='tax' >Not Accepted</p>
+                                : !checkLocalIfSenderOrReceiver()
+                                    ? <p className='tax' >Not Your Trade</p>
+                                    : <p className='money'>Accepted</p>
+                            : undefined
+                        }
                         <button 
                             className='dont-buy-btn' 
                             onClick={toggleTrade}
+                            disabled={
+                                checkLocalIfSenderOrReceiver
+                                && !checkLocalIfSenderOrReceiver()
+                                    ? true
+                                    : false
+                            } 
                         >
                             Decline
                         </button>
