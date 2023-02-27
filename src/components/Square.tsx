@@ -41,6 +41,15 @@ const Square = (
         setCurrentPlayers(playersHere);
     }, [players, square]);
 
+    const checkIfOwned = () => {
+        let isOwned = false;
+        localPlayer.owned.forEach((property: SquareType) => {
+            if(square.name === property.name) isOwned = true;
+        });
+        console.log(isOwned);
+        return isOwned;
+    }
+
     const mapPlayers = () => {
         return currentPlayers.map((item:any, i:number) => {
             return(
@@ -69,7 +78,7 @@ const Square = (
 
     return (
         <div 
-            className={`square square-${index}`} 
+            className={`square square-${index} ${checkIfOwned() ? 'highlight' : ''}`} 
             onClick={(e) => { 
                     switch(cursorMode) {
                         case 'inspect':

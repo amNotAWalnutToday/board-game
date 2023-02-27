@@ -998,6 +998,13 @@ button:disabled {
   height: 30px;
 }
 
+.square.highlight {
+  outline: 1px solid white;
+  outline-offset: 1px;
+  outline-style: outset;
+  z-index: 2;
+}
+
 .samsara {
   background: url('./imgs/samsara.png');
   background-size: contain;
