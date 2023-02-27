@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { set, ref, remove, onValue, child, get } from 'firebase/database';
 import { db } from './RouteSwitch';
+import { useBeforeUnload } from 'react-router-dom';
 
 type Props = {
   settings: any;
@@ -101,6 +102,7 @@ const App = (
   }
 
   const joinSession = async (sessionId: string) => {
+    if(sessionName) return;
     const reference = ref(db, `${sessionId}/`);
     await get(child(reference, 'joinedPlayers')).then(async (snapshot) => {
       let data = await snapshot.val();
@@ -108,7 +110,7 @@ const App = (
       set(child(reference, 'joinedPlayers'), data + 1);
       const sessionSettings = await getSessionSettings(sessionId);
       setPlayerNumber(data + 1);
-      setSessionName(sessionId);
+      setSessionName('a');
       setSettings(sessionSettings);
     })
   }
@@ -126,6 +128,11 @@ const App = (
       );
     });
   }
+
+  useBeforeUnload(() => {
+    if(!isHosting && !sessionName) return;
+    cancelSession();
+  });
 
   const cancelSession = () => {
     setIsHosting(false);

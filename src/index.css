@@ -86,7 +86,6 @@
   overflow-x: hidden;
   padding: 0.5rem 0;
   min-width: 300px;
-  min-height: 315px;
   max-height: 315px;
   display: flex;
   flex-direction: column;

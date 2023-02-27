@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useBeforeUnload } from 'react-router-dom';
 import { db } from './RouteSwitch';
-import { get, set, ref, onValue, child } from 'firebase/database';
+import { get, set, ref, onValue, child, remove } from 'firebase/database';
 import { Trade, Trader, LogMessage, Player, Square } from './Game';
 import GameBoard from './components/GameBoard';
 import Gameover from './components/Gameover';
@@ -495,6 +496,14 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         const reference = ref(db, `${settings.player1.name}/trade`);
         set(reference, data);
     }
+
+    useBeforeUnload(() => {
+        if(playerNumber !== 1) return; //remove later when done
+        const reference = ref(db, `${settings.player1.name}`);
+        typeof sessionName === 'string'
+            ? remove(reference)
+            : remove(sessionName);
+    })
 
     useEffect(() => {
         if(playerNumber === 1) uploadBoard();

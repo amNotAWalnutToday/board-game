@@ -46,7 +46,6 @@ const Square = (
         localPlayer.owned.forEach((property: SquareType) => {
             if(square.name === property.name) isOwned = true;
         });
-        console.log(isOwned);
         return isOwned;
     }
 
