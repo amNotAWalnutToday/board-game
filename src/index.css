@@ -48,7 +48,7 @@
   flex-direction: column;
   align-items: center;
   gap: 3rem;
-  padding: 5rem;
+  padding: 2.5rem 5rem 5rem 5rem;
   background: var(--light-background);
   box-shadow: var(--heavy-shadow);
   border-radius: 5px;
@@ -77,9 +77,23 @@
   flex-direction: column;
 }
 
-.host-btn,
-.title-menu .sessions:first-child button {
+.host-btn {
   width: 100%;
+}
+
+.sessions.btn-group {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+  min-width: 300px;
+  min-height: 315px;
+  max-height: 315px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-menu .sessions.btn-group button {
+  width: 80%;
 }
 
 .title-menu .play-btn {
@@ -350,6 +364,7 @@
   max-height: 120px;
 }
 
+.sessions.btn-group::-webkit-scrollbar,
 .prompt-menu::-webkit-scrollbar,
 .buy-menu::-webkit-scrollbar,
 .game-log::-webkit-scrollbar,
@@ -360,6 +375,7 @@
   border-radius: 5px;
 }
 
+.sessions.btn-group::-webkit-scrollbar-thumb,
 .buy-menu::-webkit-scrollbar,
 .prompt-menu::-webkit-scrollbar,
 .game-log::-webkit-scrollbar-thumb,
@@ -657,7 +673,7 @@ li .house-group {
 .play-btn,
 .use-card-btn,
 .logo-carousel button,
-.title-menu .btn-group button,
+.title-menu .btn-group button:not(.refresh-btn),
 .test2,
 .end-turn {
   background: var(--orange);
@@ -1094,4 +1110,57 @@ button:disabled {
   height: 15px;
   margin: 0 0.1rem;
   transform: translateY(1px);
+}
+
+.back-btn,
+.refresh-btn {
+  display: block;
+  width: 25px !important;
+  height: 25px;
+  background-color: var(--money);
+  border: none;
+  box-shadow: var(--light-shadow);
+  border-radius: 50%;
+  transform: translate(0, 5px);
+}
+
+.back-btn {
+  background: var(--tax);
+}
+
+@keyframes spin {
+  from {
+    transform: translate(0, 5px) rotateZ(0deg);
+  }
+  to {
+    transform: translate(0, 5px) rotateZ(360deg);
+  }
+}
+
+.refresh-btn:disabled {
+  animation: spin 1s infinite linear;
+}
+
+.refresh,
+.return {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.refresh {
+  background: url('./imgs/refresh.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.return {
+  background: url('./imgs/arrow_back.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.special-card .back-btn {
+  position: absolute;
+  transform: translate(-40px, -25px);
 }

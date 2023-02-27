@@ -34,6 +34,8 @@ const App = (
   const [allSessions, setAllSessions] = useState<object[]>();
 
   const [isHosting, setIsHosting] = useState<boolean>(false);
+  
+  const [canRefresh, setCanRefresh] = useState<boolean>(true);
 
   const toggleShowSettings = () => setShowSettings(!showSettings);
   const toggleJoinMenu = () => setShowJoinMenu(!showJoinMenu);
@@ -77,6 +79,7 @@ const App = (
   }, []);
 
   const getSessions = async () => {
+    if(!canRefresh) return;
     const reference = ref(db);
     const sessions:any[] = [];
     get(child(reference, '/')).then(async (snapshot) => {
@@ -86,6 +89,8 @@ const App = (
       }
       setAllSessions(sessions);
     });
+    setTimeout(() => setCanRefresh(true), 15000);
+    setCanRefresh(false);
   }
 
   const getSessionSettings = async (sessionId: string) => {
@@ -139,17 +144,35 @@ const App = (
       {showJoinMenu 
       &&
       <div className='settings'>
+          <div style={{display: 'flex', gap: '1rem'}} >
+            <button 
+              className='back-btn' 
+              onClick={toggleJoinMenu}
+              disabled={sessionName ? true : false}
+            >
+              <span className='return'/>
+            </button>
+            <h1>Sessions</h1>
+            <button 
+              className='refresh-btn' 
+              onClick={getSessions}
+              disabled={canRefresh && !sessionName ? false : true}
+            >
+              <span className='refresh'/>
+            </button>
+          </div>
         <div className='sessions btn-group' >
-          <h1>Sessions</h1>
           {mapSessions()}
-          <p style={{wordWrap: 'break-word'}} >current session: {sessionName}</p>
         </div>
+        <p className={!sessionName ? 'tax' : 'money'} style={{wordWrap: 'break-word'}} >
+            current session: {sessionName ? sessionName : 'N/A'}
+        </p>
         <Link 
           to="/online-game" 
-          className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
+          className={!sessionName ? 'dont-buy-btn' : 'buy-btn'} 
           onClick={!sessionName ? (e) => e.preventDefault() : undefined}
         >
-          Go
+          {!sessionName ? 'Join A Game From Above' : 'Go!'}
         </Link>
       </div> 
       }
@@ -157,6 +180,13 @@ const App = (
       && 
       <div className='settings' >
         <div className='special-card'>
+          <button 
+              className='back-btn' 
+              onClick={toggleShowSettings}
+              disabled={isHosting ? true : false}
+            >
+              <span className='return'/>
+            </button>
           <div className='card-name plain' >
             {!isHosting 
             ? 
@@ -283,7 +313,7 @@ const App = (
         >
           {validateIcons() ? 'Go' : 'No Duplicate Icons'}
         </Link>
-        <button className='play-btn host-btn' onClick={!isHosting ? createSession : cancelSession}>
+        <button className='play-btn host-btn' onClick={!isHosting && validateIcons() ? createSession : cancelSession}>
           {!isHosting ? 'Host' : "Stop Hosting"}
         </button>
       </div>}
