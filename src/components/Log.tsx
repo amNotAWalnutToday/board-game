@@ -11,7 +11,7 @@ const Log = ( {gameLog}: Props ) => {
     useEffect(() => {
         container.current.scrollTo(
             0,
-            container.current.offsetHeight + (gameLog.length * 21)
+            container.current.offsetHeight + (gameLog.length * 28)
         );
     });
 

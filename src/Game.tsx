@@ -563,6 +563,8 @@ const Game = ( {settings}: Props ) => {
         setStationRent(receiver);
         setUtilityRent(sender);
         setUtilityRent(receiver);
+        sender.owned = sortByGroup(sender);
+        receiver.owned = sortByGroup(receiver);
 
         setGameBoard(board);
         toggleTrade();
@@ -920,7 +922,7 @@ const Game = ( {settings}: Props ) => {
                 user = moveSpaces(-3, user);
                 break;
             case 7:
-                const ran = Math.ceil(Math.random() * 41);
+                const ran = Math.ceil(Math.random() * 40);
                 user = moveSpaces(ran, user);
                 break;
         }
@@ -947,7 +949,7 @@ const Game = ( {settings}: Props ) => {
                     if(user.name !== player.name) {
                         player.money -= 50;
                         user.money += 50;
-                        pushToLog(user, 'pays', 'to', player.name, `10`);
+                        pushToLog(user, 'receives', 'from', player.name, `50`);
                     }
                 });
                 break;
@@ -956,13 +958,13 @@ const Game = ( {settings}: Props ) => {
                     if(user.name !== player.name) {
                         player.money += 50;
                         user.money -= 50;
-                        pushToLog(user, 'receives', 'from', player.name, `10`);
+                        pushToLog(user, 'pays', 'to', player.name, `50`);
                     }
                 });
                 break;
             case 4:
                 board.players.forEach((player: Player) => {
-                    const ran = Math.ceil(Math.random() * 41);
+                    const ran = Math.ceil(Math.random() * 40);
                     if(!checkJail(player)) player.location = ran;
                     const square = getSquare(player);
                     pushToLog(player, 'is forced to', square?.name, '', '')
@@ -1120,3 +1122,6 @@ export default Game;
 //                          { placing properties } <= complete
 //
 // next step => replace currency symbols !important
+// 
+// fix winning in online
+// fix sort function after trade;

@@ -344,9 +344,10 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
 
     const convertBoard = (players: Player[], round: number, turn: string, squares: Square[], jail: Player[] = []) => {
         const board = {...gameBoard};
+
         const p1owned = players[0].owned ? players[0].owned : [];
-        const p2owned = players[1].owned ? players[1].owned : [];
-        board.players = [createPlayer(
+        board.players = [
+            createPlayer(
                 players[0].name, 
                 players[0].logo, 
                 players[0].turnOrder,
@@ -358,7 +359,11 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 p1owned,
                 players[0].lost,
             ),
-            createPlayer(
+        ];
+
+        if(players.length > 1) {
+            const p2owned = players[1].owned ? players[1].owned : [];
+            const p2 = createPlayer(
                 players[1].name, 
                 players[1].logo, 
                 players[1].turnOrder,
@@ -369,9 +374,11 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 players[1].cards,
                 p2owned,
                 players[1].lost,
-            ),
-        ];
-        if(!settings.player3.disable) {
+            );
+            board.players.push(p2);
+        }
+
+        if(!settings.player3.disable && players.length > 2) {
             const p3owned = players[2].owned ? players[2].owned : [];
             const p3 = createPlayer(
                 players[2].name,
@@ -387,7 +394,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             );
             board.players.push(p3);
         }
-        if(!settings.player4.disable) {
+        if(!settings.player4.disable && players.length > 3) {
             const p4owned = players[3].owned ? players[3].owned : [];
             const p4 = createPlayer(
                 players[3].name,
@@ -500,6 +507,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
           
 
     const changeTurn:any = () => {
+        if(yourName && yourName !== gameBoard.turn) uploadBoard(gameBoard);
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
         if(yourName !== localPlayer.name) return;
         if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
@@ -523,7 +531,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         board = removeLost(board);
         setGameBoard(board);
         resetDice();
-        uploadBoard(board);  
+        setTimeout(() => uploadBoard(board), 1000);  
         uploadLog();
     }
 
@@ -586,6 +594,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const toggleTrade = () => {
+        if(yourName !== trading.sender.player.name
+        && yourName !== trading.receiver.player.name) return;
         let trade = {...trading};
         trade = resetTrade(trade);
         trade.show = false;
@@ -711,6 +721,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         setStationRent(receiver);
         setUtilityRent(sender);
         setUtilityRent(receiver);
+        sender.owned = sortByGroup(sender);
+        receiver.owned = sortByGroup(receiver);
 
         setGameBoard(board);
         toggleTrade();
@@ -1046,7 +1058,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 user = moveSpaces(-3, user);
                 break;
             case 7:
-                const ran = Math.ceil(Math.random() * 41);
+                const ran = Math.ceil(Math.random() * 40);
                 user = moveSpaces(ran, user);
                 break;
         }
@@ -1071,24 +1083,24 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             case 2:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money -= 10
-                        user.money += 10
-                        pushToLog(user, 'pays', 'to', player.name, `10`);
+                        player.money -= 50
+                        user.money += 50
+                        pushToLog(user, 'receives', 'from', player.name, `50`);
                     }
                 });
                 break;
             case 3:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money += 10
-                        user.money -= 10
-                        pushToLog(user, 'receives', 'from', player.name, `10`);
+                        player.money += 50
+                        user.money -= 50
+                        pushToLog(user, 'pays', 'to', player.name, `50`);
                     }
                 });
                 break;
             case 4:
                 board.players.forEach((player: Player) => {
-                    const ran = Math.ceil(Math.random() * 41);
+                    const ran = Math.ceil(Math.random() * 40);
                     if(!checkJail(player)) player.location = ran;
                     const square = getSquare(player);
                     pushToLog(player, 'is forced to', square?.name, '', '')
