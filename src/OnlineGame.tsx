@@ -213,7 +213,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             : false
     }
 
-    const checkSetForProperties = (group: string | null):boolean => {
+    const checkSetForProperties = (group: string | null): boolean => {
+        if(!group) return false;
         let properties = 0;
         gameBoard.squares.forEach((square: Square) => {
             if(square.group === group && square.properties > 0) properties += 1; 
@@ -221,7 +222,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         return properties > 0;
     }
 
-    const checkForSet = (user:Player, group: string | null):boolean => {
+    const checkForSet = (user:Player, group: string | null): boolean => {
         let deeds = 0;
         user.owned.forEach((square) => {
             if(square.group === group) deeds += 1; 
@@ -524,7 +525,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
           
 
     const changeTurn:any = () => {
-        if(yourName && yourName !== gameBoard.turn) uploadBoard(gameBoard);
+        if(isMoving) return;
+        //if(yourName && yourName !== gameBoard.turn) uploadBoard(gameBoard);
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
         if(yourName !== localPlayer.name) return;
         if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
@@ -637,7 +639,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const sendTrade = (receiver: Player | undefined) => {
-        if(!receiver) return;
+        if(!receiver || isMoving) return;
         const trade = {...trading};
         trade.show = true;
         trade.sender.player = localPlayer;
@@ -828,6 +830,40 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         return inJail;
     }
 
+    const [isMoving, setIsMoving] = useState<boolean>(false);
+
+    const moveStagger = (user: Player, rolledNum: number, isReverse: boolean = false) => {
+        if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
+        setIsMoving(true);
+        let times = rolledNum 
+            ? rolledNum
+            : user.dice1.number + user.dice2.number;
+
+        const timer = () => setTimeout(() => {
+            if(!isReverse && user.location + 1 > 40){
+                user.location = 1;
+                user.money += 200;
+
+                pushToLog(user, 'receives', 'A New Samsara' , 'has began', '200, ');
+            } else if(isReverse && user.location - 1 < 1) {
+                user.location = 40;
+            } else {
+                !isReverse ? user.location += 1 : user.location -= 1;
+            }
+            times -= 1;
+            setLocalPlayer(user);
+            syncPlayer(user);
+            if(times === 0) { 
+                locationEventController(user)
+                const currentSquare = getSquare(user);
+                setIsMoving(false);
+                pushToLog(user, 'arrives at', currentSquare?.name, '', '');
+            }
+            if(times > 0) timer();
+        }, 100);
+        setTimeout(timer);
+    }
+
     const moveSpaces = (rolledNum: number, user: Player) => {
         if(user.location + rolledNum > 40) {
             const difference = 40 - (user.location + rolledNum);
@@ -847,6 +883,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const rollDice = (diceNum: number) => {
+        if(trading.show) return;
         if(gameBoard.turn !== localPlayer.name) return;
         if(yourName !== localPlayer.name) return;
         const ran = Math.ceil(Math.random() * 6);
@@ -861,10 +898,11 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             user.dice2.hasRolled = true;
         }
         if(checkJail(user)) return locationEventJailRollCheck(user);
-        user = moveSpaces(ran, user)
-        locationEventController(user);
-        setLocalPlayer(user);
-        syncPlayer(user);
+        moveStagger(user, user.dice1.number + user.dice2.number);
+        //user = moveSpaces(ran, user)
+        //locationEventController(user);
+        //setLocalPlayer(user);
+        //syncPlayer(user);
     }
 
     const closeBuyPrompt = () => setCanBuy(false);
@@ -918,9 +956,9 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             });
             user.money -= paidAmount;
         }
-        setLocalPlayer(user);
-        syncPlayer(user);
-        setGameBoard(board);
+        //setLocalPlayer(user);
+        //syncPlayer(user);
+        //setGameBoard(board);
     }
 
     const setStationRent = (user: Player = localPlayer) => {
@@ -1046,10 +1084,10 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     const locationEventGoToJail = (user: Player) => {
         if(checkJail(user)) return;
         const board = {...gameBoard};
-        gameBoard.jail.push(user);
+        board.jail.push(user);
         user.location = 11;
         setLocalPlayer(user);
-        setGameBoard(board);
+        //setGameBoard(board);
         pushToLog(user, 'gets arrested to', 'Solitary Confinement', '', '');
     }
 
@@ -1063,47 +1101,57 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         const here = user.location;
         switch(luckCards.number) {
             case 0:
-                user = moveSpaces(41 - here, user);
+                moveStagger(user, 41 - here);
                 break;
             case 1: 
-                user = moveSpaces(40 - here, user);
+                moveStagger(user, 40 - here);
                 break;
             case 2:
-                user = moveSpaces(40 + 15 - here, user);
+                here < 15 
+                    ? moveStagger(user, 15 - here)
+                    : moveStagger(user, 40 - (here - 15));
                 break;
             case 3:
-                user = moveSpaces(40 + 36 - here, user);
+                here < 36
+                    ? moveStagger(user, 36 - here)
+                    : moveStagger(user, 40 - (here - 36));
                 break;
             case 4:
-                user = moveSpaces(40 + 29 - here, user);
+                here < 29
+                    ? moveStagger(user, 29 - here)
+                    : moveStagger(user, 40 - (here - 29));
                 break;
             case 5:
-                user = moveSpaces(3, user);
+                moveStagger(user, 3);
                 break;
             case 6: 
-                user = moveSpaces(-3, user);
+                moveStagger(user, 3, true);
                 break;
             case 7:
+                const dir = Math.random() > 0.49
                 const ran = Math.ceil(Math.random() * 40);
-                user = moveSpaces(ran, user);
+                moveStagger(user, ran, dir);
                 break;
             case 8:
-                user = moveSpaces(40 + 24 - here, user);
+                here < 24
+                    ? moveStagger(user, 24 - here)
+                    : moveStagger(user, 40 - (here - 24));
                 break;
             case 9:
-                user = moveSpaces(40 + 4 - here, user);
+                moveStagger(user, 40 - (here - 4));
                 break;
             case 10:
-                user = moveSpaces(40 + 21 - here, user);
+                here < 21
+                    ? moveStagger(user, 21 - here)
+                    : moveStagger(user, 40 - (here - 21));
+                
                 break;
             case 11:
-                const ran2 = Math.floor(Math.random() * 7) - 3;
-                user = moveSpaces(ran2, user);
+                const dir2 = Math.random() > 0.49
+                const ran2 = Math.ceil(Math.random() * 3)
+                moveStagger(user, ran2, dir2);
                 break;
         }
-        locationEventController(user);
-        setLocalPlayer(user);
-        syncPlayer(user);
         toggleLuckCards(); 
     }
 
@@ -1112,18 +1160,18 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         let user = {...localPlayer};
         switch(luckCards.number) {
             case 0:
-                user.money -= 100
+                user.money -= 100;
                 pushToLog(user, 'pays', '', '', `100`);
                 break;
             case 1:
-                user.money += 100
+                user.money += 100;
                 pushToLog(user, 'receives', '', '', `100`);
                 break;
             case 2:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money -= 50
-                        user.money += 50
+                        player.money -= 50;
+                        user.money += 50;
                         pushToLog(user, 'receives', 'from', player.name, `50`);
                     }
                 });
@@ -1131,8 +1179,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             case 3:
                 board.players.forEach((player: Player) => {
                     if(user.name !== player.name) {
-                        player.money += 50
-                        user.money -= 50
+                        player.money += 50;
+                        user.money -= 50;
                         pushToLog(user, 'pays', 'to', player.name, `50`);
                     }
                 });
@@ -1159,7 +1207,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 user.cards.push('get out of jail');
                 pushToLog(user, 'receives', 'escape confinement card', '', '');
                 break;
-                        case 8:
+            case 8:
                 user.dice1.hasRolled = false;
                 user.dice2.hasRolled = false;
                 pushToLog(user, 'blessed by the anemo archon, ', 'can roll again', '', ``);
