@@ -39,7 +39,7 @@ const BuyPrompt = (
         players.forEach((player: Player) => {
             if(checkForGroup(player, group)) hasGroup.push(player); 
         });
-        return hasGroup;
+        return hasGroup.length ? hasGroup : false;
     }
 
     const mapGroups = (group: string | null) => {

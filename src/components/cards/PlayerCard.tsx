@@ -1,7 +1,9 @@
-import { Player, Square } from '../../Game';
+import { Player, Square, currency } from '../../Game';
 
 type Props = {
     player: Player;
+    moneyTradeOffer: number | undefined;
+    selectMoneyToTrade: ((e: any, user: Player) => void) | undefined;
     selectItemForTrade: ((user: Player, item: Square) => void) | undefined;
     removeItemFromTrade: ((user: Player, item: Square) => void) | undefined;
     checkTradeForItem: ((user: Player, item: Square) => boolean) | undefined;
@@ -10,6 +12,8 @@ type Props = {
 const PlayerCard = ( 
     {
         player, 
+        moneyTradeOffer,
+        selectMoneyToTrade,
         selectItemForTrade, 
         removeItemFromTrade,
         checkTradeForItem
@@ -25,6 +29,15 @@ const PlayerCard = (
             </p>
             <hr />
             <p className="player-owned">
+                {checkTradeForItem 
+                && <span>
+                    {currency}{' '}
+                    <input 
+                        type="number" 
+                        value={moneyTradeOffer} 
+                        onChange={(e) => selectMoneyToTrade && selectMoneyToTrade(e, player)}
+                    />
+                </span> }
                 {player.owned && player.owned.map((item, i) => {
                     return (
                         <span 

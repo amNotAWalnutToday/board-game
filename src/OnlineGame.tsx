@@ -585,6 +585,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             sender: {
                 player: localPlayer,
                 offer: {
+                    money: 0,
                     properties: []
                 },
                 accepted: false,
@@ -592,6 +593,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             receiver: {
                 player: gameBoard.players[1],
                 offer: {
+                    money: 0,
                     properties: []
                 },
                 accepted: false,
@@ -631,6 +633,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const resetTrade = (trade: Trade) => {
+        trade.sender.offer.money = 0;
+        trade.receiver.offer.money = 0;
         trade.sender.offer.properties = [];
         trade.receiver.offer.properties = [];
         trade.sender.accepted = false;
@@ -648,6 +652,26 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         
         uploadBoard();
         uploadTrade(true)
+    }
+
+    const selectMoneyToTrade = (e: any, user: Player) => {
+        if(yourName !== user.name) return;
+        if(trading.receiver.accepted || trading.sender.accepted) return;
+
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        const numAfterFirstZero = e.target.value.split('0').join('');
+        let selectedMoney =                 
+            e.target.value 
+                ? e.target.value.replace(/^[0 \D]\d*/, numAfterFirstZero ? numAfterFirstZero : '0')
+                : 0;
+        if(selectedMoney > user.money) selectedMoney = user.money;
+
+        if(isSender) trade.sender.offer.money = selectedMoney;
+        else trade.receiver.offer.money = selectedMoney;
+        setTrading(trade);
+
+        uploadTrade(true);
     }
 
     const selectItemForTrade = (user: Player, item: Square) => {
@@ -730,6 +754,11 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         let sender = getPlayer(`${trading.sender.player.name}`, board);
         let receiver = getPlayer(`${trading.receiver.player.name}`, board);
         if(!sender || !receiver) return;
+
+        sender.money += Number(trade.receiver.offer.money);
+        sender.money -= Number(trade.sender.offer.money);
+        receiver.money += Number(trade.sender.offer.money);
+        receiver.money -= Number(trade.receiver.offer.money);
 
         trade.sender.offer.properties.forEach((property: Square) => {
             sender = removePropertyFromPlayer(sender, property);
@@ -1320,6 +1349,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 receiver={trading.receiver} 
                 toggleTrade={toggleTrade}
                 acceptTrade={acceptTrade}
+                selectMoneyToTrade={selectMoneyToTrade}
                 selectItemForTrade={selectItemForTrade}
                 removeItemFromTrade={removeItemFromTrade}
                 checkTradeForItem={checkTradeForItem}

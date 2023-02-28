@@ -16,6 +16,8 @@ const Stats = ( {gameBoard, players, sendTrade, shouldClose, yourName}: Props ) 
                 <div key={i} className="player-stats" >
                     <PlayerCard 
                         player={item} 
+                        moneyTradeOffer={undefined}
+                        selectMoneyToTrade={undefined}
                         selectItemForTrade={undefined}
                         removeItemFromTrade={undefined}
                         checkTradeForItem={undefined}

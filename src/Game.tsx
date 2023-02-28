@@ -40,6 +40,7 @@ export type Player = {
 export type Trader = {
     player: Player,
     offer: {
+        money: number,
         properties: Square[],
     },
     accepted: boolean,
@@ -429,6 +430,7 @@ const Game = ( {settings}: Props ) => {
             sender: {
                 player: localPlayer,
                 offer: {
+                    money: 0,
                     properties: []
                 },
                 accepted: false /*not in use in local*/,
@@ -436,6 +438,7 @@ const Game = ( {settings}: Props ) => {
             receiver: {
                 player: gameBoard.players[1],
                 offer: {
+                    money: 0,
                     properties: []
                 },
                 accepted: false /*not in use in local*/,
@@ -464,6 +467,8 @@ const Game = ( {settings}: Props ) => {
     }
 
     const resetTrade = (trade: Trade) => {
+        trade.sender.offer.money = 0;
+        trade.receiver.offer.money = 0;
         trade.sender.offer.properties = [];
         trade.receiver.offer.properties = [];
         return trade;
@@ -475,6 +480,21 @@ const Game = ( {settings}: Props ) => {
         trade.show = true;
         trade.sender.player = localPlayer;
         trade.receiver.player = receiver;
+        setTrading(trade);
+    }
+
+    const selectMoneyToTrade = (e: any, user: Player) => {
+        const trade = {...trading};
+        const isSender = user.name === trade.sender.player.name;
+        const numAfterFirstZero = e.target.value.split('0').join('');
+        let selectedMoney =                 
+            e.target.value 
+                ? e.target.value.replace(/^[0 \D]\d*/, numAfterFirstZero ? numAfterFirstZero : '0')
+                : 0;
+        if(selectedMoney > user.money) selectedMoney = user.money;
+
+        if(isSender) trade.sender.offer.money = selectedMoney;
+        else trade.receiver.offer.money = selectedMoney;
         setTrading(trade);
     }
 
@@ -529,6 +549,11 @@ const Game = ( {settings}: Props ) => {
         let sender = getPlayer(`${trading.sender.player.name}`, board);
         let receiver = getPlayer(`${trading.receiver.player.name}`, board);
         if(!sender || !receiver) return;
+
+        trade.sender.player.money += Number(trade.receiver.offer.money);
+        trade.sender.player.money -= Number(trade.sender.offer.money);
+        trade.receiver.player.money += Number(trade.sender.offer.money);
+        trade.receiver.player.money -= Number(trade.receiver.offer.money);
 
         trade.sender.offer.properties.forEach((property: Square) => {
             sender = removePropertyFromPlayer(sender, property);
@@ -1106,6 +1131,7 @@ const Game = ( {settings}: Props ) => {
                     receiver={trading.receiver} 
                     toggleTrade={toggleTrade}
                     acceptTrade={acceptTrade}
+                    selectMoneyToTrade={selectMoneyToTrade}
                     selectItemForTrade={selectItemForTrade}
                     removeItemFromTrade={removeItemFromTrade}
                     checkTradeForItem={checkTradeForItem}

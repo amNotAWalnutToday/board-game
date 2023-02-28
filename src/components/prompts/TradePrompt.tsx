@@ -6,6 +6,7 @@ type Props = {
     receiver: Trader;
     toggleTrade: () => void;
     acceptTrade: () => void;
+    selectMoneyToTrade: ((e: any, user: Player) => void) | undefined;
     selectItemForTrade: (user: Player, item: Square) => void;
     removeItemFromTrade: (user: Player, item: Square) => void;
     checkTradeForItem: (user: Player, item: Square) => boolean;
@@ -18,6 +19,7 @@ const TradePrompt = (
         receiver, 
         toggleTrade, 
         acceptTrade,
+        selectMoneyToTrade,
         selectItemForTrade,
         removeItemFromTrade,
         checkTradeForItem,
@@ -33,6 +35,8 @@ const TradePrompt = (
                         <div className="player-stats">
                             <PlayerCard 
                                 player={sender.player} 
+                                moneyTradeOffer={sender.offer.money}
+                                selectMoneyToTrade={selectMoneyToTrade}
                                 selectItemForTrade={selectItemForTrade}
                                 removeItemFromTrade={removeItemFromTrade}
                                 checkTradeForItem={checkTradeForItem}
@@ -46,7 +50,9 @@ const TradePrompt = (
                         </div>
                         <div className="player-stats">
                             <PlayerCard 
-                                player={receiver.player} 
+                                player={receiver.player}
+                                moneyTradeOffer={receiver.offer.money} 
+                                selectMoneyToTrade={selectMoneyToTrade}
                                 selectItemForTrade={selectItemForTrade}
                                 removeItemFromTrade={removeItemFromTrade}
                                 checkTradeForItem={checkTradeForItem}
