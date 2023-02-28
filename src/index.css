@@ -383,6 +383,12 @@
   border-radius: 5px;
 }
 
+*::-webkit-resizer {
+  background: var(--light-background);
+  box-shadow: var(--light-shadow);
+  outline-offset: 1px;
+}
+
 .top { /*use when adding items under inspect*/
   grid-column: 2 / 3;
   grid-row: 2 / 3;

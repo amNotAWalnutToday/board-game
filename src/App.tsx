@@ -110,7 +110,7 @@ const App = (
       set(child(reference, 'joinedPlayers'), data + 1);
       const sessionSettings = await getSessionSettings(sessionId);
       setPlayerNumber(data + 1);
-      setSessionName('a');
+      setSessionName(sessionId);
       setSettings(sessionSettings);
     })
   }
