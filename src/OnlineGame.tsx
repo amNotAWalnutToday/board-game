@@ -213,7 +213,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             : false
     }
 
-    const checkSetForProperties = (group: string | null):boolean => {
+    const checkSetForProperties = (group: string | null): boolean => {
+        if(!group) return false;
         let properties = 0;
         gameBoard.squares.forEach((square: Square) => {
             if(square.group === group && square.properties > 0) properties += 1; 
@@ -221,7 +222,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         return properties > 0;
     }
 
-    const checkForSet = (user:Player, group: string | null):boolean => {
+    const checkForSet = (user:Player, group: string | null): boolean => {
         let deeds = 0;
         user.owned.forEach((square) => {
             if(square.group === group) deeds += 1; 
