@@ -37,16 +37,24 @@ const RouteSwitch = () => {
     const [sessionName, setSessionName] = useState<any>();
     const [playerNumber, setPlayerNumber] = useState<number>(0);
 
-    /*useEffect(() => {
-        const reference = ref(db, 'players/');
-        set(reference, {
-            player1: 'a player',
-            player2: settings.player2,
-            player3: settings.player3,
-            player4: settings.player4,
-        });
-        console.log(db);
-    }, []);*/
+    const secretLogoSelecter = (e: any, player: number) => {
+        const playerSettings = {...settings}
+        switch(player) {
+            case 1: 
+                playerSettings.player1.icon = e.target.value
+                break;
+            case 2:
+                playerSettings.player2.icon = e.target.value
+                break;
+            case 3:
+                playerSettings.player3.icon = e.target.value
+                break;
+            case 4:
+                playerSettings.player4.icon = e.target.value
+                break;
+        }
+        setSettings(playerSettings);
+    }
 
     const inputHandler = (e: any, player: number) => {
         const playerSettings = {...settings}
@@ -65,7 +73,9 @@ const RouteSwitch = () => {
                 break;
         }
         setSettings(playerSettings);
-        console.log(settings);
+        if(e.target.value === 'nilou' 
+        || e.target.value === 'dehya' 
+        || e.target.value === 'nahida') secretLogoSelecter(e, player);
     }
 
     const getDirectionForIcon = (direction: string, player: number):string => {

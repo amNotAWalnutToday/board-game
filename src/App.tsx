@@ -56,6 +56,13 @@ const App = (
     else return validate === 4 ? true : false;
   }
 
+  const validateName = () => {
+    for(const player in settings) {
+      if(!settings[player].name) return false;
+    }
+    return true;
+  }
+
   const createSession = () => {
     setIsHosting(true);
     const reference = ref(db, settings.player1.name);
@@ -315,12 +322,16 @@ const App = (
         </div>
         <Link 
           to={isHosting ? '/online-game' : '/game'}
-          className={validateIcons() ? 'buy-btn' : 'dont-buy-btn'} 
-          onClick={validateIcons() ? undefined : (e) => e.preventDefault()}
+          className={validateIcons() && validateName() ? 'buy-btn' : 'dont-buy-btn'} 
+          onClick={validateIcons() && validateName() ? undefined : (e) => e.preventDefault()}
         >
-          {validateIcons() ? 'Go' : 'No Duplicate Icons'}
+          {validateIcons() && validateName()
+            ? 'Go' 
+            : validateName() 
+              ? 'No Duplicate Icons'
+              : 'No empty names'}
         </Link>
-        <button className='play-btn host-btn' onClick={!isHosting && validateIcons() ? createSession : cancelSession}>
+        <button className='play-btn host-btn' onClick={!isHosting && validateIcons() && validateName() ? createSession : cancelSession}>
           {!isHosting ? 'Host' : "Stop Hosting"}
         </button>
       </div>}
