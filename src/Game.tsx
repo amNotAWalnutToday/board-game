@@ -240,6 +240,15 @@ const Game = ( {settings}: Props ) => {
             : false
     }
 
+    const checkSetForProperties = (group: string | null):boolean => {
+        let properties = 0;
+        gameBoard.squares.forEach((square: Square) => {
+            if(square.group === group && square.properties > 0) properties += 1; 
+        });
+        return properties > 0;
+    }
+
+
     const checkForSet = (user:Player, group: string | null):boolean => {
         let deeds = 0;
         user.owned.forEach((square) => {
@@ -494,6 +503,7 @@ const Game = ( {settings}: Props ) => {
     }
 
     const selectItemForTrade = (user: Player, item: Square) => {
+        if(checkSetForProperties(item.group)) return;
         const trade = {...trading};
         const isSender = user.name === trade.sender.player.name;
         if(checkTradeForItem(user, item)) return;
@@ -802,7 +812,7 @@ const Game = ( {settings}: Props ) => {
         let user = {...localPlayer};
         const square = getSquare(user);
         if(!square) return;
-        if(localPlayer.money > square.cost.deed) {
+        if(localPlayer.money >= square.cost.deed) {
             square.ownedBy = localPlayer.name; 
             user.money -= square.cost.deed;
             user.owned.push(square);
@@ -833,7 +843,7 @@ const Game = ( {settings}: Props ) => {
         && square.ownedBy !== null
         && square.ownedBy !== user.name) locationEventPayRent(user, square);
         else if(square.ownedBy !== user.name && square.cost.deed
-        && square.cost.deed < user.money) {
+        && square.cost.deed <= user.money) {
             setCanBuy(true);
             setBuyableSquare(square);
         }
@@ -883,6 +893,7 @@ const Game = ( {settings}: Props ) => {
     }
 
     const locationEventGoToJail = (user: Player) => {
+        if(checkJail(user)) return;
         const board = {...gameBoard};
         gameBoard.jail.push(user);
         user.location = 11;
@@ -1031,9 +1042,12 @@ const Game = ( {settings}: Props ) => {
                     changeTurn={changeTurn}
                     jailedPlayers={gameBoard.jail}
                     locationEventLeaveJail={locationEventLeaveJail}
+                    setStationRent={setStationRent}
+                    setUtilityRent={setUtilityRent}
                     checkJail={checkJail}
                     checkIfStation={checkIfStation}
                     checkIfUtility={checkIfUtility}
+                    checkSetForProperties={checkSetForProperties}
                     checkForSet={checkForSet}
                     sendTrade={sendTrade}
                     pushToLog={forceLog}
@@ -1123,6 +1137,4 @@ export default Game;
 //                          { placing properties } <= complete
 //
 // next step => replace currency symbols !important
-// 
-// fix winning in online
-// fix sort function after trade;
+//

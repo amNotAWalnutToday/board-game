@@ -15,9 +15,12 @@ type Props = {
     jailedPlayers: Player[];
     locationEventLeaveJail: (user: Player) => void;
     sendTrade: undefined | ((receiver: Player | undefined) => void);
+    setStationRent: (user?: Player) => void;
+    setUtilityRent: (user?: Player) => void;
     checkJail: (user: Player) => boolean | undefined;
     checkIfStation: (num: number | undefined) => boolean;
     checkIfUtility: (num: number | undefined) => boolean;
+    checkSetForProperties: (group: string | null) => boolean;
     checkForSet: (user: Player, group: string) => boolean;
     pushToLog: (user: Player, action: string, output:string, receiver: string, money: string) => void;
 
@@ -36,8 +39,11 @@ const GameBoard = (
         locationEventLeaveJail,
         sendTrade,
         checkJail,
+        setStationRent,
+        setUtilityRent,
         checkIfStation,
         checkIfUtility,
+        checkSetForProperties,
         checkForSet,
         pushToLog,
         yourName,
@@ -95,9 +101,10 @@ const GameBoard = (
 
     const sellHouse = (square: SquareType | undefined) => {
         if(!square) return;
-        if(square.properties === 0 
+        if(!checkSetForProperties(square.group)
+        && (square.properties === 0 
         || checkIfStation(square.number)
-        || checkIfUtility(square.number)) {
+        || checkIfUtility(square.number))) {
             for(let i = 0; i < localPlayer.owned.length; i++) {
                 if(square.name === localPlayer.owned[i].name) {
                     localPlayer.owned.splice(i, 1);
@@ -126,6 +133,9 @@ const GameBoard = (
             );
         }
         toggleSellHouse();
+
+        if(checkIfStation(square.number)) setStationRent();
+        if(checkIfUtility(square.number)) setUtilityRent();
     }
 
     const placeHouse = (square: SquareType | undefined) => {
