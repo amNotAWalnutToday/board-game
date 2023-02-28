@@ -943,7 +943,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
 
     const setUtilityRent = (user: Player = localPlayer) => {
         const board = {...gameBoard}
-        let utilities:0|1|2|3|4 = 0;
+        let utilities: 0|1|2|3|4 = 0;
         board.squares.forEach((square: Square) => {
             if(checkIfUtility(square.number) 
             && square.ownedBy === user.name) {
@@ -1087,6 +1087,19 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 const ran = Math.ceil(Math.random() * 40);
                 user = moveSpaces(ran, user);
                 break;
+            case 8:
+                user = moveSpaces(40 + 24 - here, user);
+                break;
+            case 9:
+                user = moveSpaces(40 + 4 - here, user);
+                break;
+            case 10:
+                user = moveSpaces(40 + 21 - here, user);
+                break;
+            case 11:
+                const ran2 = Math.floor(Math.random() * 7) - 3;
+                user = moveSpaces(ran2, user);
+                break;
         }
         locationEventController(user);
         setLocalPlayer(user);
@@ -1146,6 +1159,33 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 user.cards.push('get out of jail');
                 pushToLog(user, 'receives', 'escape confinement card', '', '');
                 break;
+                        case 8:
+                user.dice1.hasRolled = false;
+                user.dice2.hasRolled = false;
+                pushToLog(user, 'blessed by the anemo archon, ', 'can roll again', '', ``);
+                break;
+            case 9:
+                user.money += 1
+                pushToLog(user, 'sells a cabbage for', '', '', `1`);
+                break;
+            case 10:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money += 100;
+                    }
+                });
+                user.money += 100;
+                pushToLog({name: 'Everyone'}, 'receives', '', '', `100`);
+                break;
+            case 11:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money -= 100;
+                    }
+                });
+                user.money -= 100;
+                pushToLog({name: 'Everyone'}, 'pays', '', '', `100`);
+                break;
         }
         setLocalPlayer(user);
         syncPlayer(user);
@@ -1153,7 +1193,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
     }
 
     const locationEventChance = (type: string) => {
-        const ran = Math.floor(Math.random() * 8);
+        const ran = Math.floor(Math.random() * 12);
         setLuckCards({show: true, type: type, number: ran});
     }
     

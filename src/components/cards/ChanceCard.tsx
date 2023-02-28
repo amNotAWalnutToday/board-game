@@ -23,6 +23,10 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
             'Go rolling with Sayu and advance 3 Spaces.',
             'Adventure with Bennet in a dungeon and get lost, go backwards 3 spaces.',
             'Fall into a wormhole, teleport somewhere random.',
+            'Neko requests help cleaning up Asase Shrine, go help.',
+            'Challenge Dvalin at Stormterrors Lair.',
+            'Katheryn requests you for a commision at the adventurers guild (go to commisions)',
+            'Attempt to Follow Yelan and get lost, move 3 spaces in a random direction.'
         ]
     );
     const [chestCards, setChestCards] = useState<string[]>(
@@ -35,6 +39,10 @@ const ChanceCard = ( {luckCards, flipped, setFlipped}: Props ) => {
             'Catch Klee fish blasting with every other player, send them to solitary confinement!',
             'Get caught fish blasting with Klee, take a trip to Solitary Confinement!',
             'Get out of Solitary Confinement early for good behaviour.(get out of jail free card.)',
+            'Receive blessing from the anemo archon, roll again.',
+            'Inside the chest is but a single cabbage, sell it for 1 Mora',
+            'Work together to complete commisions, everyone gains 100 Mora.',
+            'Everyone contributes 100 Mora to hotpot party at the Komori Teahouse.'
         ]
     )
 

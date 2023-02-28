@@ -936,6 +936,19 @@ const Game = ( {settings}: Props ) => {
                 const ran = Math.ceil(Math.random() * 40);
                 user = moveSpaces(ran, user);
                 break;
+            case 8:
+                user = moveSpaces(40 + 24 - here, user);
+                break;
+            case 9:
+                user = moveSpaces(40 + 4 - here, user);
+                break;
+            case 10:
+                user = moveSpaces(40 + 21 - here, user);
+                break;
+            case 11:
+                const ran2 = Math.floor(Math.random() * 7) - 3;
+                user = moveSpaces(ran2, user);
+                break;
         }
         locationEventController(user);
         setLocalPlayer(user);
@@ -995,6 +1008,33 @@ const Game = ( {settings}: Props ) => {
                 user.cards.push('get out of jail');
                 pushToLog(user, 'receives', 'escape confinement card', '', '');
                 break;
+            case 8:
+                user.dice1.hasRolled = false;
+                user.dice2.hasRolled = false;
+                pushToLog(user, 'blessed by the anemo archon, ', 'can roll again', '', ``);
+                break;
+            case 9:
+                user.money += 1
+                pushToLog(user, 'sells a cabbage for', '', '', `1`);
+                break;
+            case 10:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money += 100;
+                    }
+                });
+                user.money += 100;
+                pushToLog({name: 'Everyone'}, 'receives', '', '', `100`);
+                break;
+            case 11:
+                board.players.forEach((player: Player) => {
+                    if(user.name !== player.name) {
+                        player.money -= 100;
+                    }
+                });
+                user.money -= 100;
+                pushToLog({name: 'Everyone'}, 'pays', '', '', `100`);
+                break;
         }
         setLocalPlayer(user);
         syncPlayer(user);
@@ -1002,7 +1042,7 @@ const Game = ( {settings}: Props ) => {
     }
 
     const locationEventChance = (type: string) => {
-        const ran = Math.floor(Math.random() * 8);
+        const ran = Math.floor(Math.random() * 12);
         setLuckCards({show: true, type: type, number: ran});
     }
     
