@@ -373,32 +373,6 @@ const Game = ( {settings}: Props ) => {
         }
     );
 
-    /*const changeTurn:any = () => {
-        const board = {...gameBoard}
-        const players = [...board.players]
-        let currentTurn:any;
-        players.forEach((player:Player) => {
-            if(player.name === board.turn) currentTurn = player;
-        });
-        if(currentTurn.turnOrder < 4) {
-            const nextTurn = currentTurn.turnOrder + 1;
-            players.forEach((player: Player) => {
-                if(player.turnOrder === nextTurn) currentTurn = player;
-            });
-        } else {
-            players.forEach((player: Player) => {
-                if(player.turnOrder === 1) currentTurn = player;
-            })
-        }
-        currentTurn.dice1.hasRolled = false;
-        currentTurn.dice2.hasRolled = false;
-        board.turn = currentTurn.name;
-        lose(currentTurn);
-        setLocalPlayer(currentTurn);
-        setGameBoard(board);
-        console.log(gameBoard.players);
-    }*/
-
     const changeTurn:any = () => {
         if(isMoving) return;
         if(localPlayer.money <= 0 && localPlayer.owned.length !== 0) return;
