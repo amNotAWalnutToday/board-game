@@ -75,7 +75,13 @@ const RouteSwitch = () => {
         setSettings(playerSettings);
         if(e.target.value === 'nilou' 
         || e.target.value === 'dehya' 
-        || e.target.value === 'nahida') secretLogoSelecter(e, player);
+        || e.target.value === 'nahida'
+        || e.target.value === 'hutao'
+        || e.target.value === 'keqing'
+        || e.target.value === 'kazuha'
+        || e.target.value === 'aether'
+        || e.target.value === 'lumine'
+        || e.target.value === 'paimon') secretLogoSelecter(e, player);
     }
 
     const getDirectionForIcon = (direction: string, player: number):string => {

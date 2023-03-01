@@ -59,6 +59,7 @@ const Square = (
                         checkJail={checkJail}
                         changeTurn={changeTurn} 
                         index={currentPlayers[i].turnOrder} 
+                        currentPlayers={currentPlayers}
                     />
                 </div>
             )
