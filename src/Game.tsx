@@ -396,7 +396,8 @@ const Game = ( {settings}: Props ) => {
             setLocalPlayer(players[currentTurn + 1]);
         }
         board = removeLost(board);
-        setGameBoard(board);      
+        setGameBoard(board);
+        setTimesRolledThisTurn(0);
     }
 
     const removeLost = (board: board) => {
@@ -653,9 +654,24 @@ const Game = ( {settings}: Props ) => {
     }
 
     const [isMoving, setIsMoving] = useState<boolean>(false);
+    const [timesRolledThisTurn, setTimesRolledThisTurn] = useState<number>(0);
     
-    const moveStagger = (user: Player, rolledNum: number, isReverse: boolean = false) => {
-        if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
+    const resetTurn = () => {
+        resetDice();
+        setTimesRolledThisTurn(timesRolledThisTurn => timesRolledThisTurn + 1);
+    }
+
+    const moveStagger = (
+        user: Player, 
+        rolledNum: number, 
+        isReverse: boolean = false,
+        fromChance: boolean = false
+    ) => {
+        //if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
+        if(timesRolledThisTurn >= 2 && !fromChance) {
+            pushToLog(user, 'gets caught', 'Gliding without a license','','');
+            return locationEventGoToJail(user);
+        }
         setIsMoving(true);
         let times = rolledNum 
             ? rolledNum
@@ -679,6 +695,7 @@ const Game = ( {settings}: Props ) => {
                 locationEventController(user)
                 const currentSquare = getSquare(user);
                 setIsMoving(false);
+                
                 pushToLog(user, 'arrives at', currentSquare?.name, '', '');
             }
             if(times > 0) timer();
@@ -704,8 +721,16 @@ const Game = ( {settings}: Props ) => {
         return user;
     }
 
+    const resetDice = () => {
+        const players = [...gameBoard.players];
+        players.forEach((player: Player) => {
+            player.dice1.hasRolled = false;
+            player.dice2.hasRolled = false;
+        });
+    }
+
     const rollDice = (diceNum: number) => {
-        if(gameBoard.turn !== localPlayer.name) return;
+        if(gameBoard.turn !== localPlayer.name || isMoving || canBuy) return;
         const ran = Math.ceil(Math.random() * 6);
         let user = {...localPlayer};
         if(user.dice1.hasRolled && diceNum === 1) return;
@@ -718,7 +743,14 @@ const Game = ( {settings}: Props ) => {
             user.dice2.hasRolled = true;
         }
         if(checkJail(user)) return locationEventJailRollCheck(user);
-        moveStagger(user, user.dice1.number + user.dice2.number);
+        if(user.dice1.hasRolled && user.dice2.hasRolled) {
+            moveStagger(user, user.dice1.number + user.dice2.number);
+
+            user.dice1.number === user.dice2.number 
+            && user.dice1.number + user.dice2.number + user.location !== 31 
+            && !checkJail(user)
+                && resetTurn();
+        }
     }
 
     const closeBuyPrompt = () => setCanBuy(false);
@@ -837,9 +869,9 @@ const Game = ( {settings}: Props ) => {
     const locationEventMerch = (user: Player) => {
         const square = getSquare(user);
 
-        if(!square 
-        || !localPlayer.dice1.hasRolled 
-        || !localPlayer.dice2.hasRolled) return;
+        if(!square || isMoving
+        /*|| !localPlayer.dice1.hasRolled 
+        || !localPlayer.dice2.hasRolled*/) return;
 
         if(square.ownedBy !== 'market'
         && square.ownedBy !== null
@@ -900,6 +932,7 @@ const Game = ( {settings}: Props ) => {
         board.jail.push(user);
         user.location = 11;
         setLocalPlayer(user);
+        syncPlayer(user);
         pushToLog(user, 'gets arrested to', 'Solitary Confinement', '', '');
     }
 
@@ -913,55 +946,55 @@ const Game = ( {settings}: Props ) => {
         const here = user.location;
         switch(luckCards.number) {
             case 0:
-                moveStagger(user, 41 - here);
+                moveStagger(user, 41 - here, false, true);
                 break;
             case 1: 
-                moveStagger(user, 40 - here);
+                moveStagger(user, 40 - here, false, true);
                 break;
             case 2:
                 here < 15 
-                    ? moveStagger(user, 15 - here)
-                    : moveStagger(user, 40 - (here - 15));
+                    ? moveStagger(user, 15 - here, false, true)
+                    : moveStagger(user, 40 - (here - 15), false, true);
                 break;
             case 3:
                 here < 36
-                    ? moveStagger(user, 36 - here)
-                    : moveStagger(user, 40 - (here - 36));
+                    ? moveStagger(user, 36 - here, false, true)
+                    : moveStagger(user, 40 - (here - 36), false, true);
                 break;
             case 4:
                 here < 29
-                    ? moveStagger(user, 29 - here)
-                    : moveStagger(user, 40 - (here - 29));
+                    ? moveStagger(user, 29 - here, false, true)
+                    : moveStagger(user, 40 - (here - 29), false, true);
                 break;
             case 5:
-                moveStagger(user, 3);
+                moveStagger(user, 3, false, true);
                 break;
             case 6: 
-                moveStagger(user, 3, true);
+                moveStagger(user, 3, true, true);
                 break;
             case 7:
                 const dir = Math.random() > 0.49
                 const ran = Math.ceil(Math.random() * 40);
-                moveStagger(user, ran, dir);
+                moveStagger(user, ran, dir, true);
                 break;
             case 8:
                 here < 24
-                    ? moveStagger(user, 24 - here)
-                    : moveStagger(user, 40 - (here - 24));
+                    ? moveStagger(user, 24 - here, false, true)
+                    : moveStagger(user, 40 - (here - 24), false, true);
                 break;
             case 9:
-                moveStagger(user, 40 - (here - 4));
+                moveStagger(user, 40 - (here - 4), false, true);
                 break;
             case 10:
                 here < 21
-                    ? moveStagger(user, 21 - here)
-                    : moveStagger(user, 40 - (here - 21));
+                    ? moveStagger(user, 21 - here, false, true)
+                    : moveStagger(user, 40 - (here - 21), false, true);
                 
                 break;
             case 11:
                 const dir2 = Math.random() > 0.49
                 const ran2 = Math.ceil(Math.random() * 3)
-                moveStagger(user, ran2, dir2);
+                moveStagger(user, ran2, dir2, true);
                 break;
         }
         toggleLuckCards(); 
@@ -1022,6 +1055,7 @@ const Game = ( {settings}: Props ) => {
             case 8:
                 user.dice1.hasRolled = false;
                 user.dice2.hasRolled = false;
+                setTimesRolledThisTurn(timesRolledThisTurn - 1);
                 pushToLog(user, 'blessed by the anemo archon, ', 'can roll again', '', ``);
                 break;
             case 9:
@@ -1058,7 +1092,8 @@ const Game = ( {settings}: Props ) => {
     }
     
     const locationEventController = (user: Player) => {
-        if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
+        //if(!localPlayer.dice1.hasRolled || !localPlayer.dice2.hasRolled) return;
+        if(isMoving) return;
         const exceptions = [
             user.location === 1,
             user.location === 11,
