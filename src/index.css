@@ -132,7 +132,6 @@
     width: 250vw;
     height: 250vh;
     justify-content: flex-start;
-    gap: 5rem;
   }
 
   .underlay {
@@ -168,7 +167,6 @@
   gap: 0.1rem;
   padding: 0.1rem;
   margin-top: 1rem;
-  /*background-color: var(--inner-board);*/
   transition: all 0.4s ease-out;
   box-shadow: var(--heavy-shadow);
 }
@@ -182,6 +180,7 @@
   width: 840px;
   height: 100px;
   overflow-y: auto;
+  resize: vertical;
   margin-bottom: 0.5rem;
   border-radius: 5px;
   box-shadow: var(--light-shadow);
