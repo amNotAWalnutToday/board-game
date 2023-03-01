@@ -324,21 +324,37 @@ const GameBoard = (
                 className="test2">
                     stats
             </button>
-            {checkJail(localPlayer) && localPlayer.cards.length 
+            {checkJail(localPlayer) 
                 ? <button 
                     className='use-card-btn'
-                    onClick={() => {
-                            locationEventLeaveJail(localPlayer);
-                            localPlayer.cards.pop();
-                            pushToLog(
-                                localPlayer, 
-                                'used card to leave', 
-                                'Solitary Confinement','',''
-                            );
-                        }
+                    onClick={
+                        localPlayer.cards.length 
+                            ? () => {
+                                locationEventLeaveJail(localPlayer);
+                                localPlayer.cards.pop();
+                                pushToLog(
+                                    localPlayer, 
+                                    'used card to leave', 
+                                    'Solitary Confinement','',''
+                                );
+                            }
+                            : () => {
+                                locationEventLeaveJail(localPlayer);
+                                localPlayer.money -= 50;
+                                pushToLog(
+                                    localPlayer, 
+                                    'to leave early, was fined', 
+                                    'by Solitary Confinement',
+                                    '',
+                                    '50'
+                                );
+                            }
                     }
                 >
-                    Get Out Of Jail
+                    {localPlayer.cards.length 
+                        ? 'Get Out Of Jail Card'
+                        : 'Pay 50 Mora fine' 
+                    }
                 </button>
                 : undefined
             }
