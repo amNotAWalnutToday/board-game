@@ -668,7 +668,8 @@ const Game = ( {settings}: Props ) => {
         fromChance: boolean = false
     ) => {
         //if(!user.dice1.hasRolled || !user.dice2.hasRolled) return;
-        if(timesRolledThisTurn >= 2 && !fromChance) {
+        if(timesRolledThisTurn >= 2 && !fromChance 
+        && user.dice1.number === user.dice2.number) {
             pushToLog(user, 'gets caught', 'Gliding without a license','','');
             return locationEventGoToJail(user);
         }
