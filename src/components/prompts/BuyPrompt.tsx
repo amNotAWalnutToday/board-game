@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Square, Player } from '../../Game';
 import CompanyCard from '../cards/CompanyCard';
 import PropertyCard from '../cards/PropertyCard';
@@ -25,7 +26,8 @@ const BuyPrompt = (
         checkIfUtility,
         buyType,
     }: Props) => {
-
+    const [buyAmount, setBuyAmount] = useState<number>(1);
+    
     const checkForGroup = (user: Player, group: string | null) => {
         let hasGroup;
         user.owned.forEach((square: Square) => {
@@ -95,10 +97,32 @@ const BuyPrompt = (
                     </p>
                     : undefined
                     }
+                    {inspectionTarget 
+                    && inspectionTarget?.ownedBy !== 'market'
+                    && inspectionTarget?.properties !== 4
+                        ?<div className='amount-range'>
+                            <label>{buyAmount}</label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={inspectionTarget && 5 - inspectionTarget?.properties}
+                                value={buyAmount}
+                                onChange={(e) => setBuyAmount(Number(e.target.value))}
+                            />
+                            <label>{inspectionTarget && 5 - inspectionTarget?.properties}</label>
+                        </div>
+                        : undefined
+                    }
                     <div className="btn-group">
                         <button 
                             className="buy-btn" 
-                            onClick={() => buyProperty(inspectionTarget)} 
+                            onClick={() => {
+                                for(let i = buyAmount; i > 0; i--){
+                                    buyProperty(inspectionTarget)
+                                }
+                                setBuyAmount(1);
+                            }
+                        } 
                         >
                             { buyType === 'property'
                                 ? <span>
@@ -111,7 +135,7 @@ const BuyPrompt = (
                                     ? <span>
                                         Place House 
                                         <span className="m-symbol"/>
-                                        {inspectionTarget?.cost.house}
+                                        {inspectionTarget?.cost.house * buyAmount}
                                     </span>
                                     : <span>
                                         Place Hotel 

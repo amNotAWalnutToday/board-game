@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Square, Player } from '../../Game';
 import CompanyCard from '../cards/CompanyCard';
 import PropertyCard from '../cards/PropertyCard';
@@ -23,6 +24,7 @@ const SellPrompt = (
         checkIfUtility,
         buyType,
     }: Props) => {
+    const [sellAmount, setSellAmount] = useState<number>(1);
     return (
         <>
             <div className="underlay" onClick={dontBuy} />
@@ -49,10 +51,33 @@ const SellPrompt = (
                             <span className="m-symbol"/> {localPlayer.money}
                         </span>
                     </p>
+                    {inspectionTarget
+                    && inspectionTarget?.properties < 5
+                    && inspectionTarget?.properties > 0
+                        ? 
+                        <div className='amount-range'>
+                            <label>{sellAmount}</label>
+                            <input
+                                type="range"
+                                min={0}
+                                max={inspectionTarget?.properties}
+                                value={sellAmount}
+                                onChange={(e) => setSellAmount(Number(e.target.value))}
+                            />
+                            <label>{inspectionTarget?.properties}</label>
+                        </div>
+                        : undefined
+                    }
                     <div className="btn-group">
                         <button 
                             className="dont-buy-btn" 
-                            onClick={() => buyProperty(inspectionTarget)} 
+                            onClick={() => {
+                                    for(let i = sellAmount; i > 0; i--){
+                                        buyProperty(inspectionTarget)
+                                    }
+                                    setSellAmount(1);
+                                }
+                            } 
                         >
                             { (buyType === 'sell' 
                             && inspectionTarget
@@ -72,7 +97,7 @@ const SellPrompt = (
                                         Sell House
                                         <span className="m-symbol"/>
                                             {inspectionTarget?.cost.house
-                                                ? inspectionTarget?.cost.house / 2
+                                                ? (inspectionTarget?.cost.house / 2) * sellAmount
                                                 : undefined
                                             }
                                     </span>

@@ -733,6 +733,27 @@ li .house-group {
   overflow-y: scroll;
 }
 
+.buy-menu {
+  min-width: 625px;
+  max-width: 625px;
+}
+
+.amount-range {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 1rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: var(--light-shadow);
+  border-radius: 0.25em;
+}
+
+input[type="range"] {
+  cursor: grab;
+  accent-color: goldenrod;
+  width: 100%; 
+}
+
 .title-menu .btn-group button {
   color: var(--navy);
   width: 50%;
