@@ -1175,7 +1175,7 @@ const Game = ( {settings}: Props ) => {
                 />
             }
             {gameover
-            && <Gameover localPlayer={localPlayer} />}
+            && <Gameover localPlayer={localPlayer} closeSession={undefined} />}
             <Log gameLog={gameLog} />
         </div>
     )

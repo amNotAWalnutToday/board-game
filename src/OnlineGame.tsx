@@ -506,12 +506,17 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         set(reference, data);
     }
 
-    useBeforeUnload(() => {
+    const closeSession = () => {
         if(playerNumber !== 1) return; //remove later when done
         const reference = ref(db, `${settings.player1.name}`);
         typeof sessionName === 'string'
             ? remove(reference)
             : remove(sessionName);
+        sessionName = undefined;
+    }
+
+    useBeforeUnload(() => {
+        closeSession();
     })
 
     useEffect(() => {
@@ -1377,7 +1382,12 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 checkLocalIfSenderOrReceiver={checkLocalIfSenderOrReceiver}
             />
         }
-        {gameover && <Gameover localPlayer={localPlayer} />}
+        {gameover 
+        && <Gameover 
+                localPlayer={localPlayer} 
+                closeSession={closeSession} 
+            />
+        }
         <Log gameLog={gameLog} />
     </div>
     );

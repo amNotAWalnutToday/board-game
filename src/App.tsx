@@ -110,6 +110,7 @@ const App = (
 
   const joinSession = async (sessionId: string) => {
     if(sessionName) return;
+    //await getSessions();
     const reference = ref(db, `${sessionId}/`);
     await get(child(reference, 'joinedPlayers')).then(async (snapshot) => {
       let data = await snapshot.val();
@@ -121,6 +122,16 @@ const App = (
       setSettings(sessionSettings);
     })
   }
+  
+  const leaveSession = async (sessionId: string) => {
+    const reference = ref(db, `${sessionId}/`);
+    await get(child(reference, 'joinedPlayers')).then(async (snapshot) => {
+      let data = await snapshot.val();
+      set(child(reference, 'joinedPlayers'), data - 1);
+      setPlayerNumber(0);
+      setSessionName();
+    });
+  }
 
   const mapSessions = () => {
     if(!allSessions || !allSessions.length) return <p>There are no sessions currently</p>
@@ -128,7 +139,10 @@ const App = (
       return (
         <button 
           key={i}
-          onClick={() => joinSession(item)} 
+          onClick={() => sessionName 
+            ? sessionName === item && leaveSession(item) 
+            : joinSession(item)
+          } 
         >
           {item}
         </button>

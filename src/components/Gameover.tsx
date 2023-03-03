@@ -5,9 +5,10 @@ import Stats from './Stats';
 
 type Props = {
     localPlayer: Player;
+    closeSession: (() => void) | undefined;
 }
 
-const Gameover = ( {localPlayer}: Props ) => {
+const Gameover = ( {localPlayer, closeSession}: Props ) => {
     return (
         <>
             <div className="underlay"/>
@@ -23,7 +24,13 @@ const Gameover = ( {localPlayer}: Props ) => {
                             yourName={undefined}
                         />
                         <div className='btn-group' >
-                            <Link to="/" className='buy-btn'>Return To Main Menu</Link>
+                            <Link 
+                                to="/" 
+                                className='buy-btn'
+                                onClick={closeSession}
+                            >
+                                Return To Main Menu
+                            </Link>
                         </div>
                     </div>
                 </div>
