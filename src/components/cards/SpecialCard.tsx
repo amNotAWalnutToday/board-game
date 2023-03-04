@@ -15,7 +15,7 @@ const SpecialCard = (
         toggleInspect,
     }: Props ) => {
     const freeParkingText = "On landing here receive money that has collected from taxes";
-    const goToJailText = "Go directly to jail, do not pass go, do not receive 200!";
+    const goToJailText = "Trade places with klee in solitary confinement so she can visit the irodori festival in inazuma(The Samsara will not restart so do not collect 200 Mora)";
 
     const getVisitersNames = () => {
         const names:string[] = [];
@@ -59,8 +59,12 @@ const SpecialCard = (
                     ? "Visiting" : ''}
                     {inspectionTarget?.number === 21
                     ? freeParkingText : ''}
-                    {inspectionTarget?.name === 'go to jail'
-                    ? goToJailText : ''}
+                    {inspectionTarget?.name === 'Go to Solitary'
+                    ? <span className='go-solitary' >
+                        <span className='festival-stand' />
+                        {goToJailText}
+                    </span> 
+                    : ''}
                 </li>
                 {inspectionTarget?.number === 11
                 ? getVisitersNames() 

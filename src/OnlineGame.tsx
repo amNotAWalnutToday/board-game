@@ -153,7 +153,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             createSquare('Grand Narukami Shrine', 28, 'market', 0, {deed: 260, house: 150, hotel: 150}, [22,110,330,800,975,1150], 'yellow'),
             createSquare('Yae Publishing House', 29, 'market', 0, {deed: 150, house: 100, hotel: 100}, [1,2,3,4,5,5]),
             createSquare('Inazuma City', 30, 'market', 0, {deed: 260, house: 150, hotel: 150}, [24,120,360,850,1025,1200], 'yellow'),
-            createSquare('go to jail', 31),
+            createSquare('Go to Solitary', 31),
             createSquare('Tanit Camps', 32, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
             createSquare('Aaru Village', 33, 'market', 0, {deed: 300, house: 200, hotel: 200}, [26,130,390,900,1100,1275], 'green'),
             createSquare('Luxurious Chest', 34),

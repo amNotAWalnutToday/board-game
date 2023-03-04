@@ -97,6 +97,17 @@ const Square = (
             <div className="players">
                 {mapPlayers()}
             </div>
+            {square.number === 36
+            || square.number === 26
+            || square.number === 16
+            || square.number === 6
+                ? <div 
+                    className={
+                        `port ${square.number === 6 ? 'port-small' : '' }`
+                    }
+                />
+                : undefined
+            }
             {square.ownedBy === "market" || !square.ownedBy
                 ? square.cost.deed > 0 && square.ownedBy === 'market'
                     ? <p><span className="m-symbol"/>{square.cost.deed}</p>
@@ -104,12 +115,14 @@ const Square = (
                 : <div className="house-group" >{mapProperties()}</div>}
             {/*specific exceptions*/}
             {square.number === 1 && <span className='samsara' />}
+            {square.number === 11 && <span className='door' ></span> }
             {square.number === 21
                 ? <p className='money'>
                     <span className="m-symbol"/>{square.cost.deed}
                 </p>
                 : undefined
             }
+            {square.number === 31 && <span className='festival-stand'/> }
             {square.number === 5 || square.number === 39
                 ? <p className='tax'><span className="m-symbol"/>{square.cost.deed}</p>
                 : undefined
