@@ -9,6 +9,7 @@ import ChancePrompt from './components/prompts/ChancePrompt';
 import BuyPrompt from './components/prompts/BuyPrompt';
 import TradePrompt from './components/prompts/TradePrompt';
 import Log from './components/Log';
+import Announcement from './components/Announcement';
 
 interface board {
     players: any,
@@ -25,7 +26,7 @@ type Props = {
 }
 
 const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
-    const [loading, setLoading] = useState(true);
+    const [showTurnAnnouncement, setShowTurnAnnouncement] = useState<boolean>(true);
     const [luckCards, setLuckCards] = useState(
         {
             show: false,
@@ -429,6 +430,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         if(!currentPlayer) return;
         setLocalPlayer(currentPlayer); 
         setGameBoard(board);
+        console.log(yourName, gameBoard.turn);
+        if(!trading.show) setShowTurnAnnouncement(true);
     }
 
     const getBoard = async () => {
@@ -791,11 +794,6 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
 
         uploadBoard();
     }
-
-    useEffect(() => {
-        setTimeout(() => setLoading(false), 1000);
-        
-    }, []);
 
     const forceLog = (
         user: any, 
@@ -1347,6 +1345,13 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 pushToLog={forceLog}
 
                 yourName={yourName}
+            />
+        }
+        {showTurnAnnouncement
+        && <Announcement 
+                localPlayer={localPlayer} 
+                setShowTurnAnnouncement={setShowTurnAnnouncement}
+                yourTurn={gameBoard.turn === yourName}
             />
         }
         {canBuy 

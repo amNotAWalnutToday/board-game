@@ -704,6 +704,55 @@ li .house-group {
   font-size: 24px;
 }
 
+.announcement {
+  position: absolute;
+  top: 35%;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 675px;
+  height: 100px;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+  border: 1px inset gold;
+  outline: 2px outset goldenrod;
+  background-color: #1119;
+  box-shadow: var(--light-shadow);
+  border-radius: 5px;
+  animation: enter 0.35s 1 linear;
+  transition: all ease;
+}
+
+.leave {
+  animation: exit 0.35s 1 linear;
+}
+
+@keyframes enter {
+  from {
+    transform: translateX(-255px) scaleY(0) scaleX(0.5) ;
+    opacity: 0%;
+  }
+
+  to {
+    transform: translateX(0px) scaleY(1) scaleX(1);
+    opacity: 100%;
+  }
+}
+
+@keyframes exit {
+  from {
+    transform:scaleY(1);
+    opacity: 100%;
+  }
+
+  to {
+    transform: scaleY(0);
+    opacity: 0%;
+  }
+}
+
 .prompt,
 .buy-popup {
   position: absolute;
