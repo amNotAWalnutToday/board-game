@@ -134,11 +134,7 @@
     justify-content: flex-start;
   }
 
-  .underlay {
-    width: 250vw !important;
-    height: 250vh !important;
-  }
-
+  .underlay,
   .buy-popup,
   .prompt {
     width: 250vw !important;
@@ -148,15 +144,16 @@
 
 @media (max-height: 800px) and (orientation: landscape) {
   .game-screen {
-    width: 100vw;
-    height: 150vh;
-    justify-content: center;
-    gap: 5rem;
+    width: 135vw;
+    height: 135vh;
+    justify-content: flex-start;
   }
-
+  
+  .buy-popup,
+  .prompt,
   .underlay {
-    width: 100vw !important;
-    height: 150vh !important;
+    width: 135vw !important;
+    height: 135vh !important;
   }
 }
 
