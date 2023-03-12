@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Player } from '../../Game';
+import { Player, currency } from '../../Game';
 import ChanceCard from '../cards/ChanceCard';
 
 type Props = {
@@ -28,7 +28,7 @@ const ChancePrompt = ( {localPlayer, luckCards, useChance, useChest}: Props ) =>
                     />
                     <p className='text-plain' >
                         Your Money: 
-                        <span className='money'> £{localPlayer.money}</span>
+                        {' '}{currency}{localPlayer.money}
                     </p>
                     <div className="btn-group">
                         <button 

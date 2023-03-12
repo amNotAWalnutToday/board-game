@@ -559,7 +559,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         setGameBoard(board);
         setTimesRolledThisTurn(0);
         resetDice();
-        setTimeout(() => uploadBoard(board), 1000);  
+        setTimeout(() => uploadBoard(board), 100);  
         uploadLog();
     }
 
