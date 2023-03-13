@@ -430,7 +430,6 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         if(!currentPlayer) return;
         setLocalPlayer(currentPlayer); 
         setGameBoard(board);
-        console.log(yourName, gameBoard.turn);
         if(!trading.show) setShowTurnAnnouncement(true);
     }
 
@@ -1393,7 +1392,10 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
                 closeSession={closeSession} 
             />
         }
-        <Log gameLog={gameLog} />
+        <Log 
+            gameLog={gameLog} 
+            yourName={yourName}
+        />
     </div>
     );
 }

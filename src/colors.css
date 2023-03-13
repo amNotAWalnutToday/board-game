@@ -98,7 +98,7 @@
   .player-stats .tax:last-child,
   .trade-btn-group .money,
   .trade-btn-group .tax,
-  .game-log .tax {
+  .game-log .tax:not(.log-player) {
     font-weight: bold;
     font-size: 24px;
     -webkit-text-stroke: 1px black;

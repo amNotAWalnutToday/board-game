@@ -2,10 +2,13 @@
   --dark-background: linear-gradient(#000000, #444444);
   --light-background: linear-gradient(#888888, #444444);
   --inner-board: darkcyan;
+  --box: #1119;
   --positive-btn: linear-gradient(springgreen ,limegreen);
   --negative-btn: linear-gradient(crimson, darkred);
   --light-shadow: 0px 1px 5px 1px black;
   --heavy-shadow: 0px 0px 5px 5px black;
+  --inset-border: 1px inset gold;
+  --outset-outline: 2px outset goldenrod; 
 
   --white: white;
   --brown: brown;
@@ -49,7 +52,9 @@
   align-items: center;
   gap: 3rem;
   padding: 2.5rem 5rem 5rem 5rem;
-  background: var(--light-background);
+  background: var(--box);
+  border: var(--inset-border);
+  outline: var(--outset-outline);
   box-shadow: var(--heavy-shadow);
   border-radius: 5px;
   min-width: 350px;
@@ -172,13 +177,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  background-color: #88888888;
   padding: 0.5rem 2rem;
   width: 840px;
   height: 100px;
   overflow-y: auto;
   resize: vertical;
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  background: var(--box);
+  border: var(--inset-border);
+  outline: var(--outset-outline);
   border-radius: 5px;
   box-shadow: var(--light-shadow);
 }
@@ -633,7 +641,6 @@ li .house-group {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  /*box-shadow: 1px -1px 25px 1px white;*/
   box-shadow: var(--light-shadow);
   z-index: 1;
 }

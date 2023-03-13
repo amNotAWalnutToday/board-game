@@ -3,9 +3,10 @@ import { LogMessage } from '../Game';
 
 type Props = {
     gameLog: LogMessage[],
+    yourName: undefined | string,
 }
 
-const Log = ( {gameLog}: Props ) => {
+const Log = ( {gameLog, yourName}: Props ) => {
     const container:any = useRef();
 
     useEffect(() => {
@@ -20,8 +21,16 @@ const Log = ( {gameLog}: Props ) => {
         return gameLog.map((item, i) => {
             return (
                 <p key={i} >
-                    <span className="text-plain" >{item.player} </span>
-                    {item.action}
+                    <span className={
+                        yourName === item.player
+                        || yourName === undefined 
+                            ? 'money log-player' 
+                            : 'tax log-player'
+                        } 
+                    >
+                        {item.player}{' '} 
+                    </span>
+                    <span className="text-plain" >{item.action}</span>
                     {item.money 
                     && <span 
                             className={`${item.player2 === 'Commisions' 
