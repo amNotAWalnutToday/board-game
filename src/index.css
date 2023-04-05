@@ -138,8 +138,7 @@ body {
 
 @media (max-width: 500px) and (orientation: portrait) {
   .title-menu {
-    height: fit-content;
-    padding-top: 1rem;
+    height: clamp(100vh, 110vh, 150vh);
     padding-bottom: 5rem;
   }
   .game-screen {
@@ -158,6 +157,14 @@ body {
   .settings {
     flex-direction: column-reverse;
     padding-bottom: 1rem;
+  }
+
+  .settings .special-card {
+    flex-direction: column-reverse;
+  }
+
+  .settings .btn-group button:not(.refresh-btn) {
+    margin: 1rem 0.5rem 0rem 0.5rem;
   }
 }
 
