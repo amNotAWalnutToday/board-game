@@ -1,15 +1,18 @@
 {
   "files": {
-    "main.css": "/board-game/static/css/main.b8754f66.css",
-    "main.js": "/board-game/static/js/main.5f8ebb83.js",
+    "main.css": "/board-game/static/css/main.422b3e4e.css",
+    "main.js": "/board-game/static/js/main.83630173.js",
     "static/media/sume.png": "/board-game/static/media/sume.49f40d16cbcf5cde0e27.png",
     "static/media/li.png": "/board-game/static/media/li.6674fab161d09e162887.png",
     "static/media/mondo.png": "/board-game/static/media/mondo.05fb059a41e5c135b77d.png",
     "static/media/ina.png": "/board-game/static/media/ina.68e36a196658d5ee4ad9.png",
+    "static/media/door.png": "/board-game/static/media/door.18eaa719c6714c6fbc8c.png",
     "static/media/wish.png": "/board-game/static/media/wish.320c6c1e68f20efda0a9.png",
+    "static/media/festival-stall-1.png": "/board-game/static/media/festival-stall-1.303afdc4c8fc2b2ab1f3.png",
     "static/media/hu-tao.png": "/board-game/static/media/hu-tao.c4910e5a53508018582f.png",
     "static/media/money.png": "/board-game/static/media/money.fa61d22a7f7a7947b5b6.png",
     "static/media/samsara.png": "/board-game/static/media/samsara.01ddf9101b3e46072e95.png",
+    "static/media/boat.png": "/board-game/static/media/boat.9c22bc5d837b911486be.png",
     "static/media/luxurious-chest.png": "/board-game/static/media/luxurious-chest.921cd12055212207ae9c.png",
     "static/media/common-chest.png": "/board-game/static/media/common-chest.c4aa10e69c0770241cb8.png",
     "static/media/exquisite-chest.png": "/board-game/static/media/exquisite-chest.fc9324124f968afd3809.png",
@@ -30,11 +33,11 @@
     "static/media/dehya.png": "/board-game/static/media/dehya.4d1ef23d4e999505a888.png",
     "static/media/nahida.png": "/board-game/static/media/nahida.aa3f491bbc1e7b57210b.png",
     "index.html": "/board-game/index.html",
-    "main.b8754f66.css.map": "/board-game/static/css/main.b8754f66.css.map",
-    "main.5f8ebb83.js.map": "/board-game/static/js/main.5f8ebb83.js.map"
+    "main.422b3e4e.css.map": "/board-game/static/css/main.422b3e4e.css.map",
+    "main.83630173.js.map": "/board-game/static/js/main.83630173.js.map"
   },
   "entrypoints": [
-    "static/css/main.b8754f66.css",
-    "static/js/main.5f8ebb83.js"
+    "static/css/main.422b3e4e.css",
+    "static/js/main.83630173.js"
   ]
 }
