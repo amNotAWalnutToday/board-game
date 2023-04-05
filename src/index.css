@@ -36,13 +36,17 @@
   font-family: arial;
 }
 
+body {
+  background: var(--dark-background);
+}
+
 .title-menu {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: var(--dark-background);
+ 
   color: white;
 }
 
@@ -133,6 +137,11 @@
 }
 
 @media (max-width: 500px) and (orientation: portrait) {
+  .title-menu {
+    height: fit-content;
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+  }
   .game-screen {
     width: 250vw;
     height: 250vh;
@@ -144,6 +153,11 @@
   .prompt {
     width: 250vw !important;
     height: 250vh !important;
+  }
+
+  .settings {
+    flex-direction: column-reverse;
+    padding-bottom: 1rem;
   }
 }
 
