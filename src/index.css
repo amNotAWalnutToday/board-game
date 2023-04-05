@@ -575,17 +575,22 @@
 }
 
 .prompt-menu .player-owned span:not(:first-child):hover,
-.pseudo-select,
 a:hover,
-button:hover,
+button:hover:not(.pseudo-select),
 .dice:hover {
   filter: brightness(80%);
   cursor: pointer;
 }
 
+.pseudo-select {
+  filter: brightness(60%);
+  box-shadow: 0px 0px 1px 1px black !important;
+  transition: box-shadow 0.2s ease-out;
+}
+
 a,
 button {
-  transition: filter 0.2s ease-out;
+  transition: filter 0.2s ease-in;
 }
 
 .square {
@@ -697,7 +702,6 @@ li .house-group {
 .play-btn,
 .use-card-btn,
 .logo-carousel button,
-.title-menu .btn-group button:not(.refresh-btn),
 .test2,
 .end-turn {
   background: var(--orange);
@@ -706,6 +710,10 @@ li .house-group {
   border: none;
   box-shadow: var(--light-shadow);
   font-size: 24px;
+}
+
+.settings .btn-group button:not(.refresh-btn) {
+  padding: 0.5rem 0.25rem;
 }
 
 .announcement {

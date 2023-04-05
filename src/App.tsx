@@ -207,14 +207,18 @@ const App = (
       {showSettings 
       && 
       <div className='settings' >
-        <div className='special-card'>
+        <div style={{transform: 'translateX(-10px)'}} >
           <button 
+              style={{transform: 'translate(-55px, 25px)'}}
               className='back-btn' 
               onClick={toggleShowSettings}
               disabled={isHosting ? true : false}
             >
               <span className='return'/>
             </button>
+            <h2 style={{fontSize: '30px', width: '130%'}} >Game Settings</h2>
+        </div>
+        <div className='special-card'>
           <div className='card-name plain' >
             {!isHosting 
             ? 
@@ -291,12 +295,12 @@ const App = (
               : 'Disable' 
             }
           </button>
-          <div className='btn-group' >
+          <div className='btn-group player-settings-btn-grp' >
             <button 
               className={
                 currentPlayer === 1 
-                  ? 'pseudo-select' 
-                  : ''
+                  ? `pseudo-select buy-btn` 
+                  : 'buy-btn'
               } 
               onClick={() => setCurrentPlayer(1)} 
             >
@@ -305,8 +309,8 @@ const App = (
             <button 
               className={
                 currentPlayer === 2 
-                  ? 'pseudo-select' 
-                  : ''
+                  ? 'pseudo-select buy-btn' 
+                  : 'buy-btn'
               } 
               onClick={() => setCurrentPlayer(2)} 
             >
@@ -315,8 +319,8 @@ const App = (
             <button
               className={
                 currentPlayer === 3
-                  ? 'pseudo-select' 
-                  : ''
+                  ? `pseudo-select ${settings.player3.disable ? 'dont-buy-btn' : 'buy-btn'}` 
+                  : `${settings.player3.disable ? 'dont-buy-btn' : 'buy-btn'}`
               } 
               onClick={() => setCurrentPlayer(3)} 
             >
@@ -325,8 +329,8 @@ const App = (
             <button 
               className={
                 currentPlayer === 4
-                  ? 'pseudo-select' 
-                  : ''
+                  ? `pseudo-select ${settings.player4.disable ? 'dont-buy-btn' : 'buy-btn'}`
+                  : `${settings.player4.disable ? 'dont-buy-btn' : 'buy-btn'}`
               } 
               onClick={() => setCurrentPlayer(4)} 
             >
