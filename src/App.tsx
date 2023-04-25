@@ -83,10 +83,10 @@ const App = (
   }
 
   useEffect(() => {
-    getSessions()
+    getSessions(true);
   }, []);
 
-  const getSessions = async () => {
+  const getSessions = async (isInit: boolean) => {
     if(!canRefresh) return;
     const reference = ref(db);
     const sessions:any[] = [];
@@ -97,6 +97,8 @@ const App = (
       }
       setAllSessions(sessions);
     });
+
+    if(isInit) return;
     setTimeout(() => setCanRefresh(true), 15000);
     setCanRefresh(false);
   }
@@ -184,7 +186,7 @@ const App = (
             <h1>Sessions</h1>
             <button 
               className='refresh-btn' 
-              onClick={getSessions}
+              onClick={() => getSessions(false)}
               disabled={canRefresh && !sessionName ? false : true}
             >
               <span className='refresh'/>
