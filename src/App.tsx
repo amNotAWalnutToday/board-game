@@ -139,6 +139,7 @@ const App = (
       return (
         <button 
           key={i}
+          className='play-btn'
           onClick={() => sessionName 
             ? sessionName === item && leaveSession(item) 
             : joinSession(item)
