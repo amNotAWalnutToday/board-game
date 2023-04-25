@@ -132,7 +132,7 @@ body {
 .game-screen {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 100vw;
   height: 100vh;
@@ -148,7 +148,6 @@ body {
   .game-screen {
     width: 250vw;
     height: 250vh;
-    justify-content: flex-start;
   }
 
   .underlay,
@@ -601,7 +600,7 @@ body {
 
 .prompt-menu .player-owned span:not(:first-child):hover,
 a:hover,
-button:hover:not(.pseudo-select),
+button:hover:not(.pseudo-select):not(:disabled),
 .dice:hover {
   filter: brightness(80%);
   cursor: pointer;
@@ -715,6 +714,7 @@ li .house-group {
 }
 
 .end-turn {
+  color: white !important;
   grid-row: 9 / 11;
   grid-column: 10 / 11;
 }
@@ -993,6 +993,51 @@ a.dont-buy-btn {
   to {
     opacity: 100%;
     transform: scale(1);
+  }
+}
+
+.notify::before {
+  position: absolute;
+  display: block;
+  visibility: hidden;
+  content: '';
+  height: 50px;
+  width: 50px;
+  background: url('./imgs/arrow-pointer.png');
+  background-repeat: no-repeat;
+  animation: arrow-bounce 1s infinite alternate 10s;
+}
+
+.end-turn,
+.notify {
+  background-color: var(--box);
+  outline: var(--outset-outline);
+  border: var(--inset-border);
+  outline-width: 2px;
+  outline-offset: 0px;
+}
+
+.notify {
+  animation: notify 1s infinite alternate 10s;
+}
+
+@keyframes notify {
+  from {
+    outline-offset: 0px;
+  }
+  to {
+    outline-offset: 5px;
+  }
+}
+
+@keyframes arrow-bounce {
+  from {
+    visibility: visible;
+    transform: translate(17.5px, -100px);
+  }
+  to {
+    visibility: visible;
+    transform: translate(17.5px, -50px) ;
   }
 }
 

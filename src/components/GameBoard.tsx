@@ -23,7 +23,7 @@ type Props = {
     checkSetForProperties: (group: string | null) => boolean;
     checkForSet: (user: Player, group: string) => boolean;
     pushToLog: (user: Player, action: string, output:string, receiver: string, money: string) => void;
-
+    
     yourName: string | undefined;
 }
 
@@ -281,7 +281,7 @@ const GameBoard = (
                 </ul>
             </div>
             <button 
-                    className="end-turn" 
+                    className={`end-turn ${localPlayer.dice1.hasRolled && localPlayer.dice2.hasRolled ? 'notify' : ''}`} 
                     onClick={changeTurn} 
                     value="end-turn" 
                 >
