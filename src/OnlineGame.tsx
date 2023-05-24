@@ -163,7 +163,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             createSquare('Wish', 37),
             createSquare('Pardis Dhyai', 38, 'market', 0, {deed: 350, house: 200, hotel: 200}, [35,175,550,1100,1300,1500], 'navy'),
             createSquare('Knowledge Capsule Scam', 39, 'free parking', 0, {deed: 100, house: 0, hotel: 0}),
-            createSquare('Sumeru City', 40, 'market', 0, {deed: 400, house: 200, hotel: 200}, [50,200,669,1400,1700,2000], 'navy'),
+            createSquare('Sumeru City', 40, 'market', 0, {deed: 2000, house: 200, hotel: 200}, [50,200,669,1400,1700,2000], 'navy'),
         ];
         for(let i = 0; i < squares.length; i++) {
             if(squares[i].number === num) return squares[i];
@@ -556,6 +556,8 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
         }
         board = removeLost(board);
         setGameBoard(board);
+        if(playerNumber === gameBoard.players.length
+        && gameBoard.squares[39].cost.deed > 400) setSquare40Price();
         setTimesRolledThisTurn(0);
         resetDice();
         setTimeout(() => uploadBoard(board), 100);  
@@ -1047,6 +1049,13 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
             } 
         });
         setGameBoard(board);
+    }
+
+    const setSquare40Price = () => {
+        const board = {...gameBoard}
+        let newPrice = board.squares[39].cost.deed -= 100;
+        board.squares[39].cost.deed = newPrice;
+        setGameBoard((prev) => ({...prev, ...board}));
     }
 
     const locationEventBuy = () => {
