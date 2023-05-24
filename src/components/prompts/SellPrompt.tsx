@@ -54,6 +54,8 @@ const SellPrompt = (
                     {inspectionTarget
                     && inspectionTarget?.properties < 5
                     && inspectionTarget?.properties > 0
+                    && !checkIfStation(inspectionTarget?.number)
+                    && !checkIfUtility(inspectionTarget?.number)
                         ? 
                         <div className='amount-range'>
                             <label>{sellAmount}</label>
