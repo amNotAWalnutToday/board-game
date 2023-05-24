@@ -1303,7 +1303,7 @@ const OnlineGame = ( {settings, sessionName, playerNumber}: Props ) => {
 
     const locationEventChance = (type: string) => {
         const ran = Math.floor(Math.random() * 12);
-        setLuckCards({show: true, type: type, number: ran});
+        setLuckCards((prev) => ({...prev, show: true, type: type, number: ran}));
     }
     
     const locationEventController = (user: Player) => {
