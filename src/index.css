@@ -195,6 +195,8 @@ body {
   margin-top: 1rem;
   transition: all 0.4s ease-out;
   box-shadow: var(--heavy-shadow);
+  border: var(--inset-border);
+  outline: var(--outset-outline);
 }
 
 .game-log {
@@ -449,6 +451,7 @@ body {
   grid-column: 2/3;
   grid-row: 3/4;
   z-index: 2;
+  transform: translateY(0.25rem);
 }
 
 .selected {
@@ -486,7 +489,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  background: var(--light-background);
   border: none;
   border-radius: 5px;
   box-shadow: var(--light-shadow);
@@ -497,7 +499,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 60px;
-  background: var(--light-background);
   border: none;
   border-radius: 5px;
   box-shadow: var(--light-shadow);
@@ -714,7 +715,6 @@ li .house-group {
 }
 
 .end-turn {
-  color: white !important;
   grid-row: 9 / 11;
   grid-column: 10 / 11;
 }
@@ -1008,8 +1008,10 @@ a.dont-buy-btn {
   animation: arrow-bounce 1s infinite alternate 10s;
 }
 
+.board-btn,
 .end-turn,
 .notify {
+  color: var(--white);
   background-color: var(--box);
   outline: var(--outset-outline);
   border: var(--inset-border);

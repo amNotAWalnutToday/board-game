@@ -291,7 +291,7 @@ const GameBoard = (
             ? undefined
             :<button 
                 onClick={() => toggleMode('place')}  
-                className="top place-mode-btn" 
+                className="top place-mode-btn board-btn" 
                 >
                     <span className="house-group">
                         <span className='house' ></span>
@@ -306,7 +306,7 @@ const GameBoard = (
             ? undefined
             :<button 
                 onClick={() => toggleMode('sell')} 
-                className='bottom sell-property-btn money' 
+                className='bottom sell-property-btn money board-btn' 
                 >
                     <span className="m-symbol"/>
             </button>}
@@ -321,12 +321,12 @@ const GameBoard = (
             />}
             <button 
                 onClick={!showStats ? toggleStats : toggleShouldClose} 
-                className="test2">
+                className="board-btn test2">
                     stats
             </button>
             {checkJail(localPlayer) 
                 ? <button 
-                    className='use-card-btn'
+                    className='use-card-btn board-btn'
                     onClick={
                         localPlayer.cards.length 
                             ? () => {
