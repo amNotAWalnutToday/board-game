@@ -93,7 +93,7 @@ const App = (
     get(child(reference, '/')).then(async (snapshot) => {
       const data = await snapshot.val();
       for(const session in data) {
-        sessions.push(data[session].sessionId);
+        if(data[session].sessionId) sessions.push(data[session].sessionId);
       }
       setAllSessions(sessions);
     });
