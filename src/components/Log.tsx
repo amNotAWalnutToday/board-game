@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LogMessage } from '../Game';
 
 type Props = {
@@ -7,7 +7,17 @@ type Props = {
 }
 
 const Log = ( {gameLog, yourName}: Props ) => {
+    const [isLocked, setIsLocked] = useState<boolean>(true);
+
     const container:any = useRef();
+
+    const moveLog = (e:any) => {
+        container.current.style.position = 'absolute';
+        container.current.style.zIndex = '10';
+        container.current.style.resize = 'both';
+        container.current.style.top = `${e.screenY - 50}px`;
+        container.current.style.left = `${e.screenX - 25}px`;
+    }
 
     useEffect(() => {
         container.current.scrollTo(
@@ -56,7 +66,18 @@ const Log = ( {gameLog, yourName}: Props ) => {
     }
 
     return (
-        <div className="game-log" ref={container}>
+        <div 
+            className="game-log" 
+            ref={container} 
+            onDragEnd={moveLog}
+            draggable={isLocked ? false : true}
+        >
+            <button 
+                className="lock-btn" 
+                onClick={() => setIsLocked(!isLocked)}
+            >
+                <span className={isLocked ? 'lock-icon' : 'unlock-icon'} ></span>
+            </button>
             {mapLog()}
         </div>
     )
