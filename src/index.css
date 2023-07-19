@@ -195,8 +195,6 @@ body {
   margin-top: 1rem;
   transition: all 0.4s ease-out;
   box-shadow: var(--heavy-shadow);
-  border: var(--inset-border);
-  outline: var(--outset-outline);
 }
 
 .game-log {
