@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/board-game/static/css/main.0b13c61e.css",
-    "main.js": "/board-game/static/js/main.a24d9031.js",
+    "main.css": "/board-game/static/css/main.69d2796e.css",
+    "main.js": "/board-game/static/js/main.0b836fb8.js",
     "static/media/sume.png": "/board-game/static/media/sume.49f40d16cbcf5cde0e27.png",
     "static/media/li.png": "/board-game/static/media/li.6674fab161d09e162887.png",
     "static/media/mondo.png": "/board-game/static/media/mondo.05fb059a41e5c135b77d.png",
@@ -33,11 +33,11 @@
     "static/media/dehya.png": "/board-game/static/media/dehya.4d1ef23d4e999505a888.png",
     "static/media/nahida.png": "/board-game/static/media/nahida.aa3f491bbc1e7b57210b.png",
     "index.html": "/board-game/index.html",
-    "main.0b13c61e.css.map": "/board-game/static/css/main.0b13c61e.css.map",
-    "main.a24d9031.js.map": "/board-game/static/js/main.a24d9031.js.map"
+    "main.69d2796e.css.map": "/board-game/static/css/main.69d2796e.css.map",
+    "main.0b836fb8.js.map": "/board-game/static/js/main.0b836fb8.js.map"
   },
   "entrypoints": [
-    "static/css/main.0b13c61e.css",
-    "static/js/main.a24d9031.js"
+    "static/css/main.69d2796e.css",
+    "static/js/main.0b836fb8.js"
   ]
 }
