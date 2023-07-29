@@ -65,8 +65,8 @@ body {
   outline: var(--outset-outline);
   box-shadow: var(--heavy-shadow);
   border-radius: 5px;
-  min-width: 350px;
-  max-width: 350px;
+  min-width: 840px;
+  max-width: 840px;
 }
 
 .title-menu a {
@@ -142,7 +142,8 @@ body {
 
 @media (max-width: 500px) and (orientation: portrait) {
   .title-menu {
-    height: clamp(100vh, 110vh, 150vh);
+    height: 250vh;/*clamp(100vh, 110vh, 150vh);*/
+    width: 250vw;
     padding-bottom: 5rem;
   }
   .game-screen {
